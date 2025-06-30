@@ -37,7 +37,7 @@ export class OrdersComponent {
 
   constructor() {
     this.ordersService.search.page = 1;
-    this.authService.isSuperAdmin() ?  this.ordersService.getAll() : this.ordersService.getAllByUser();
+    this.authService.isAdmin() ?  this.ordersService.getAll() : this.ordersService.getAllByUser();
   }
 
   saveOrder(order: IOrder) {

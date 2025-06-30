@@ -51,8 +51,7 @@ export const routes: Routes = [
         canActivate:[AdminRoleGuard],
         data: { 
           authorities: [
-            IRoleType.admin, 
-            IRoleType.superAdmin
+            IRoleType.admin
           ],
           name: 'Users',
           showInSidebar: true
@@ -64,8 +63,8 @@ export const routes: Routes = [
         data: { 
           authorities: [
             IRoleType.admin, 
-            IRoleType.superAdmin,
-            IRoleType.user
+            IRoleType.father,
+            IRoleType.son
           ],
           name: 'Dashboard',
           showInSidebar: true
@@ -77,8 +76,8 @@ export const routes: Routes = [
         data: { 
           authorities: [
             IRoleType.admin, 
-            IRoleType.superAdmin,
-            IRoleType.user
+            IRoleType.father,
+            IRoleType.son
           ],
           name: 'profile',
           showInSidebar: false
@@ -90,8 +89,8 @@ export const routes: Routes = [
         data: { 
           authorities: [
             IRoleType.admin, 
-            IRoleType.superAdmin,
-            IRoleType.user,
+            IRoleType.father,
+            IRoleType.son,
           ],
           name: 'games',
           showInSidebar: true
@@ -103,8 +102,8 @@ export const routes: Routes = [
         data: { 
           authorities: [
             IRoleType.admin, 
-            IRoleType.superAdmin,
-            IRoleType.user,
+            IRoleType.father,
+            IRoleType.son,
           ],
           name: 'orders',
           showInSidebar: true
@@ -116,8 +115,8 @@ export const routes: Routes = [
         data: { 
           authorities: [
             IRoleType.admin, 
-            IRoleType.superAdmin,
-            IRoleType.user,
+            IRoleType.father,
+            IRoleType.son,
           ],
           name: 'preference list',
           showInSidebar: true
@@ -129,8 +128,8 @@ export const routes: Routes = [
         data: { 
           authorities: [
             IRoleType.admin, 
-            IRoleType.superAdmin,
-            IRoleType.user,
+            IRoleType.father,
+            IRoleType.son,
           ],
           name: 'Sport Team',
           showInSidebar: true

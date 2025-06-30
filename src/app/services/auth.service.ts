@@ -70,8 +70,8 @@ export class AuthService {
     return this.user.authorities ?  this.user?.authorities.some(authority => authority.authority == role) : false;
   }
 
-  public isSuperAdmin(): boolean {
-    return this.user.authorities ?  this.user?.authorities.some(authority => authority.authority == IRoleType.superAdmin) : false;
+  public isAdmin(): boolean {
+    return this.user.authorities ?  this.user?.authorities.some(authority => authority.authority == IRoleType.admin) : false;
   }
 
   public hasAnyRole(roles: any[]): boolean {
@@ -119,8 +119,8 @@ export class AuthService {
       if (allowedUser) break;
     }
     // se valida que el usuario tenga un rol de administración
-    if (userAuthorities?.some(item => item.authority == IRoleType.admin || item.authority == IRoleType.superAdmin)) {
-      isAdmin = userAuthorities?.some(item => item.authority == IRoleType.admin || item.authority == IRoleType.superAdmin);
+    if (userAuthorities?.some(item => item.authority == IRoleType.admin)) {
+      isAdmin = userAuthorities?.some(item => item.authority == IRoleType.admin);
     }          
     return allowedUser && isAdmin;
   }
