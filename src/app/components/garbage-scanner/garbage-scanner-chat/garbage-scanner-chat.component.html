@@ -1,0 +1,39 @@
+<div class="questions-container" *ngIf="currentResult">
+
+  <div class="questions-header mb-4">
+    <h6 class="text-muted mb-2">
+      <i class="fas fa-question-circle me-2"></i>
+      ¿Qué te gustaría saber?
+    </h6>
+    <p class="small text-muted mb-0">Haz clic en una pregunta para obtener información específica</p>
+  </div>
+
+  <div class="questions-grid mb-4">
+    <button *ngFor="let question of predefinedQuestions" 
+            class="question-btn" 
+            [style.border-color]="question.color"
+            (click)="askQuestion(question)"
+            [disabled]="isLoading">
+      <i [class]="'fas ' + question.icon" [style.color]="question.color"></i>
+      <span>{{question.label}}</span>
+    </button>
+  </div>
+
+  <div class="answer-section" *ngIf="currentAnswer">
+    <div class="answer-card">
+      <div class="answer-header">
+        <i class="fas fa-robot text-success me-2"></i>
+        <strong>Respuesta IA</strong>
+      </div>
+      <div class="answer-content">
+        <div class="loading-indicator" *ngIf="isLoading">
+          <div class="spinner-border spinner-border-sm text-success me-2" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          Generando respuesta...
+        </div>
+        <div *ngIf="!isLoading" [innerHTML]="formatAnswer(currentAnswer)"></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -15,6 +15,7 @@ import { OrdersComponent } from './pages/orders/orders.component';
 import { PreferenceListPageComponent } from './pages/preferenceList/preference-list.component';
 import { SportTeamComponent } from './pages/sport-team/sport-team.component';
 import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
+import { GarbageScannerPageComponent } from './pages/garbage-scanner/garbage-scanner.component';
 
 export const routes: Routes = [
   {
@@ -138,6 +139,19 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'Sport Team',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'garbage-scanner',
+        component: GarbageScannerPageComponent,
+        data: { 
+          authorities: [
+            IRoleType.admin, 
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Escáner de Basura',
           showInSidebar: true
         }
       },
