@@ -10,7 +10,7 @@
         </div>
         <div class="login-main">
           <form (ngSubmit)="handleSignup($event)" autocomplete="off" #frm="ngForm">
-            <div class="mb-3">
+            <div class="mb-3 text-center">
               <h4>Registro</h4>
             </div>
 
@@ -102,9 +102,11 @@
             </div>
 
             <div class="form-group mb-0">
-              <button class="btn btn-primary btn-block w-100" type="submit">
-                Registrar
-              </button>
+              <div class="text-center">
+                <button class="btn btn-primary" type="submit">
+                  Registrar
+                </button>
+              </div>
               @if(signUpError) {
                 <p class="text-danger">{{signUpError}}</p>
               } @else if (validSignup){
