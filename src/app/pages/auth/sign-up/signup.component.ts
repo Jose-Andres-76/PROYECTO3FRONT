@@ -4,11 +4,12 @@ import { FormsModule, NgModel } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { IUser } from '../../../interfaces';
+import { LogoTituloComponent } from '../../../components/logo-titulo/logo-titulo.component';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink,LogoTituloComponent],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })
