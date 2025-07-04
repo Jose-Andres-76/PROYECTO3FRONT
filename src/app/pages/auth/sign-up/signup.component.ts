@@ -19,6 +19,7 @@ export class SigUpComponent {
   @ViewChild('name') nameModel!: NgModel;
   @ViewChild('lastname') lastnameModel!: NgModel;
   @ViewChild('email') emailModel!: NgModel;
+  @ViewChild('age') ageModel!: NgModel;
   @ViewChild('password') passwordModel!: NgModel;
 
   public user: IUser = {};
@@ -37,6 +38,9 @@ export class SigUpComponent {
     }
     if (!this.emailModel.valid) {
       this.emailModel.control.markAsTouched();
+    }
+    if (!this.ageModel.valid) {
+      this.ageModel.control.markAsTouched();
     }
     if (!this.passwordModel.valid) {
       this.passwordModel.control.markAsTouched();

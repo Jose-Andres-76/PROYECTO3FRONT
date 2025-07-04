@@ -11,16 +11,13 @@
         <div class="login-main">
           <form (ngSubmit)="handleSignup($event)" autocomplete="off" #frm="ngForm">
             <div class="mb-3">
-              <h4>Sign up account</h4>
-              <small style="color: #4f4f4f">
-                Enter your email & password to login
-              </small>
+              <h4>Registrate</h4>
             </div>
 
             <div class="d-flex align-items-center mb-3">
               <div class="form-group px-1">
                 <label for="name" class="form-label mb-2">
-                  Name
+                  Nombre
                 </label>
                 <input #name="ngModel" type="text" class="form-control" id="name" name="name"
                   placeholder="User" [(ngModel)]="user.name" [ngClass]="{
@@ -28,12 +25,12 @@
                     'is-valid': name.valid && name.touched
                   }" required />
                 <div *ngIf="name.invalid" class="invalid-feedback">
-                  Please add a valid name
+                  Por favor ingrese un nombre valido
                 </div>
               </div>
               <div class="form-group px-1">
                 <label for="lastname" class="form-label mb-2">
-                  Lastname
+                  Apellido
                 </label>
                 <input #lastname="ngModel" type="text" class="form-control" id="lastname" name="lastname"
                   placeholder="demo" [(ngModel)]="user.lastname" [ngClass]="{
@@ -41,7 +38,7 @@
                     'is-valid': lastname.valid && lastname.touched
                   }" required />
                 <div *ngIf="lastname.invalid" class="invalid-feedback">
-                  Please add a valid lastname
+                  Por favor ingrese un apellido valido
                 </div>
               </div>
             </div>
@@ -56,7 +53,21 @@
                   'is-valid': email.valid && email.touched
                 }" required />
               <div *ngIf="email.invalid" class="invalid-feedback">
-                Please add a valid email
+                Por favor ingrese un email valido
+              </div>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="age" class="form-label mb-2">
+                Edad
+              </label>
+              <input #age="ngModel" type="number" class="form-control" id="age" name="age"
+                placeholder="20" [(ngModel)]="user.age" [ngClass]="{
+                  'is-invalid': age.invalid && age.touched,
+                  'is-valid': age.valid && age.touched
+                }" required />
+              <div *ngIf="age.invalid" class="invalid-feedback">
+                Por favor ingrese una edad valida
               </div>
             </div>
 
@@ -69,7 +80,7 @@
                   'is-valid': password.valid && password.touched
                 }" required />
                 <div *ngIf="password.invalid" class="invalid-feedback">
-                  Please add a valid password
+                 Por favor ingrese una contraseña valida
                 </div>
               </div>
             </div>
