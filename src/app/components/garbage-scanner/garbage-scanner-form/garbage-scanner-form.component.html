@@ -11,6 +11,7 @@
   <app-analyzed-result 
     *ngIf="hasResult"
     [imageSrc]="selectedImage || capturedImage"
+    [analysisResult]="analysisResult"
     (scanNewRequested)="onScanNewRequested()">
   </app-analyzed-result>
 

@@ -15,7 +15,7 @@
       </div>
 
       <!-- Results Display -->
-      <div class="card border-0 shadow mt-4" *ngIf="currentResult">
+      <div class="card border-0 shadow mt-4" *ngIf="currentResult && false">
         <div class="card-header" [style.background]="getTypeInfo(currentResult.clase).color">
           <div class="row align-items-center text-white">
             <div class="col">
@@ -58,8 +58,8 @@
         </div>
       </div>
 
-      <!-- AI Questions Assistant -->
-      <div class="card border-0 shadow mt-4" *ngIf="currentResult">
+      <!-- AI Questions Assistant - OCULTADO: Ahora está integrado en analyzed-result -->
+      <div class="card border-0 shadow mt-4" *ngIf="currentResult && false">
         <div class="card-header bg-success text-white">
           <h5 class="card-title mb-0">
             <i class="fas fa-robot me-2"></i>

@@ -1,13 +1,8 @@
-import { Component, ElementRef, ViewChild, Input, Output, EventEmitter, OnDestroy, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { ClasificacionBasuraService, ClasificacionResponse } from '../../../services/clasificacion-basura.service';
 import { AlertService } from '../../../services/alert.service';
-import { CameraService } from '../../../services/camera.service';
-import { FileUtilsService } from '../../../services/file-utils.service';
-import { GeminiChatService, ChatMessage } from '../../../services/gemini-chat.service';
 
-// Import new components
 import { ScannerTabsComponent } from './components/scanner-tabs/scanner-tabs.component';
 import { ImageUploadComponent } from './components/image-upload/image-upload.component';
 import { CameraCaptureComponent } from './components/camera-capture/camera-capture.component';
@@ -20,7 +15,6 @@ import { AnalyzedResultComponent } from './components/analyzed-result/analyzed-r
   standalone: true,
   imports: [
     CommonModule, 
-    FormsModule,
     ScannerTabsComponent,
     ImageUploadComponent,
     CameraCaptureComponent,
@@ -46,6 +40,7 @@ export class GarbageScannerFormComponent implements OnDestroy {
   public selectedImage: string | null = null;
   public capturedImage: string | null = null;
   public selectedFile: File | null = null;
+  public analysisResult: ClasificacionResponse | null = null;
 
   ngOnDestroy() {
   }
@@ -81,6 +76,7 @@ export class GarbageScannerFormComponent implements OnDestroy {
     this.capturedImage = null;
     this.selectedFile = null;
     this.hasResult = false;
+    this.analysisResult = null;
   }
 
   private async analyzeImage() {
@@ -104,6 +100,7 @@ export class GarbageScannerFormComponent implements OnDestroy {
 
       if (response) {
         this.hasResult = true;
+        this.analysisResult = response;
         this.onScanComplete.emit(response);
       } else {
         throw new Error('No response received from analysis service');
@@ -131,9 +128,5 @@ export class GarbageScannerFormComponent implements OnDestroy {
       u8arr[n] = bstr.charCodeAt(n);
     }
     return new Blob([u8arr], { type: mime });
-  }
-
-  private showError(message: string) {
-    this.alertService.displayAlert('error', message);
   }
 }
