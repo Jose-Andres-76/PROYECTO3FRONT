@@ -43,9 +43,9 @@ export class ClasificacionBasuraService {
     console.log('Producto:', producto, 'Mensaje:', mensaje);
     
     const params = new URLSearchParams();
-    params.append('producto', producto);
-    params.append('mensaje', mensaje);
-    const url = 'gemini/conversar';
+    params.append('product', producto);
+    params.append('message', mensaje);
+    const url = 'gemini/chat';
 
     const request = this.http.post(url, params.toString(), {
       headers: {
