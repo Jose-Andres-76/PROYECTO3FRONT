@@ -53,12 +53,17 @@
         Email
       </label>
       <input #email="ngModel" type="email" class="form-control" id="email" name="email"
-        placeholder="ejemplo.email@gmail.com" [(ngModel)]="user.email" [ngClass]="{
+        placeholder="ejemplo.email@gmail.com" [(ngModel)]="user.email" [pattern]="emailPattern" [ngClass]="{
           'is-invalid': email.invalid && email.touched,
           'is-valid': email.valid && email.touched
         }" required />
-      <div *ngIf="email.invalid" class="invalid-feedback">
-        Por favor ingrese un email valido
+      <div *ngIf="email.invalid && email.touched" class="invalid-feedback">
+        <div *ngIf="email.errors?.['required']">
+          Por favor ingrese un email
+        </div>
+        <div *ngIf="email.errors?.['pattern']">
+          <p>Por favor ingrese un email válido (ejemplo: usuario arroba dominio.com)</p>
+        </div>
       </div>
     </div>
     <div class="form-group px-1 flex-grow-1">
@@ -70,7 +75,7 @@
           'is-invalid': age.invalid && age.touched,
           'is-valid': age.valid && age.touched
         }" required />
-      <div *ngIf="age.invalid" class="invalid-feedback">
+      <div *ngIf="age.invalid && age.touched" class="invalid-feedback">
         Por favor ingrese una edad valida
       </div>
     </div>
@@ -79,13 +84,23 @@
   <div class="form-group mb-5">
     <label for="password" class="form-label mb-2">Contraseña</label>
     <div class="form-input position-relative">
-      <input #password="ngModel" type="password" class="form-control" id="password" name="password"
-      placeholder="Mínimo 8 caracteres" [(ngModel)]="user.password" [ngClass]="{
+      <input #password="ngModel" [type]="showPassword ? 'text' : 'password'" class="form-control" id="password" name="password"
+      placeholder="Mínimo 8 caracteres" [(ngModel)]="user.password" [pattern]="passwordPattern" [ngClass]="{
         'is-invalid': password.invalid && password.touched,
         'is-valid': password.valid && password.touched
       }" required />
-      <div *ngIf="password.invalid" class="invalid-feedback">
-       Por favor ingrese una contraseña valida
+      <button type="button" class="btn btn-outline-secondary position-absolute end-0 top-0 h-100 px-3 border-0" 
+              (click)="togglePasswordVisibility()" 
+              style="z-index: 10; font-size: 14px;">
+        {{showPassword ? 'Ocultar' : 'Mostrar'}}
+      </button>
+      <div *ngIf="password.invalid && password.touched" class="invalid-feedback">
+        <div *ngIf="password.errors?.['required']">
+          Por favor ingrese una contraseña
+        </div>
+        <div *ngIf="password.errors?.['pattern']">
+          La contraseña debe tener al menos 8 caracteres, incluyendo: una mayúscula, una minúscula, un número y un carácter especial
+        </div>
       </div>
     </div>
   </div>

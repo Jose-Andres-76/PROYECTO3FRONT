@@ -15,6 +15,10 @@ import { IUser } from '../../../../interfaces';
 export class SignUpFormComponent {
   public signUpError!: String;
   public validSignup!: boolean;
+  public passwordPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=\\[\\]{}|\\\\:;"\'<>,.?/~`]).{8,}$';
+  public emailPattern = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$';
+  public showPassword: boolean = false;
+  
   @ViewChild('name') nameModel!: NgModel;
   @ViewChild('lastname') lastnameModel!: NgModel;
   @ViewChild('email') emailModel!: NgModel;
@@ -26,6 +30,10 @@ export class SignUpFormComponent {
   constructor(private router: Router, 
     private authService: AuthService
   ) {}
+
+  public togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
 
   public handleSignup(event: Event) {
     event.preventDefault();
@@ -44,7 +52,7 @@ export class SignUpFormComponent {
     if (!this.passwordModel.valid) {
       this.passwordModel.control.markAsTouched();
     }
-    if (this.emailModel.valid && this.passwordModel.valid) {
+    if (this.nameModel.valid && this.lastnameModel.valid && this.emailModel.valid && this.ageModel.valid && this.passwordModel.valid) {
       this.authService.signup(this.user).subscribe({
         next: () => this.validSignup = true,
         error: (err: any) => (this.signUpError = err.description),
