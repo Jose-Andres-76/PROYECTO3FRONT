@@ -1,5 +1,6 @@
 .login-container {
   height: 100vh;
+  // background-image: url("../../../../assets/img/login/login-bg.jpg");
   background-position: left;
   background-size: cover;
   background-repeat: no-repeat;
@@ -49,71 +50,3 @@
   }
 }
 
-.login-main {
-  .form-control {
-    background-color: #f3f3f3;
-    border: none;
-    height: 45px;
-  }
-
-  .google-btn {
-    background-color: #4285F4;
-    color: #fff;
-    border: none;
-    height: 45px;
-    font-weight: 500;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin: 0 auto;
-    max-width: 300px;
-    .google-icon {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 14px;
-      color: #fff;
-    }
-    &:hover {
-      background-color: darken(#4285F4, 7%);
-      color: #fff;
-    }
-  }
-
-  .btn-primary {
-    background-color: #218c5a;
-    border-color: #218c5a;
-    margin: 0 auto;
-    max-width: 300px;
-    width: 100%;
-    height: 45px;
-    font-weight: 500;
-    border-radius: 6px;
-    &:hover {
-   
-      background-color: darken(#218c5a, 7%);
-      border-color: darken(#218c5a, 7%);
-    }
-  }
-
-  hr {
-    border-top: 1px solid #ccc;
-    margin: 0;
-  }
-
-  h4 {
-    font-size: 28px;
-    font-weight: 600;
-  }
-
-  .form-control::placeholder {
-    color: #bdbdbd;
-  }
-}
