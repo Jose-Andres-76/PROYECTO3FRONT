@@ -110,3 +110,10 @@ export interface IPlayer {
   id?: number;
   name?: string;
 }
+
+export interface IFamily {
+  son: any;
+  id?: number;
+  idSon?: IUser;
+  idFather?: IUser;
+}
