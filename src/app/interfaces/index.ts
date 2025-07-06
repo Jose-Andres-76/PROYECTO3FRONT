@@ -15,7 +15,13 @@ export interface IUser {
   lastname?: string;
   email?: string;
   password?: string;
+  longitude?: string;
+  latitude?: string;
+  age?: number;
   active?: boolean;
+  urlImage?: string;
+  publicIdCloudinary?: string;
+  points?: number;
   createdAt?: string;
   updatedAt?: string;
   authorities?: IAuthority[];
