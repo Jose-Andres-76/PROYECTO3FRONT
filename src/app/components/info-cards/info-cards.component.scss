@@ -1,0 +1,39 @@
+.info-section {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 40px 20px;
+  background-color: #e3e6ea;
+}
+
+.info-card {
+  background-color: white;
+  width: 300px;
+  padding: 25px;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+@media (max-width: 768px) {
+  .info-card {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-section {
+    padding: 30px 10px;
+  }
+
+  .info-card {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
