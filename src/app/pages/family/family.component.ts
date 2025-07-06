@@ -38,6 +38,6 @@ export class FamilyComponent {
 
     constructor() {
         this.familyService.search.page = 1;
-        this.familyService.getAll();
+        this.familyService.getMyFamilies();
     }
 }
