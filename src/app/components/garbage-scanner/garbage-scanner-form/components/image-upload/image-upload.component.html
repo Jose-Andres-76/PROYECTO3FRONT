@@ -1,0 +1,15 @@
+<div class="upload-section">
+  <app-upload-area 
+    (fileSelected)="onFileSelected($event)">
+  </app-upload-area>
+  
+  <app-image-preview 
+    [imageSrc]="selectedImage"
+    [title]="'Vista Previa'"
+    [analyzeButtonText]="'Analizar Imagen'"
+    [clearIcon]="'fa-times'"
+    [isLoading]="isLoading"
+    (analyzeRequested)="onAnalyze()"
+    (clearRequested)="onClear()">
+  </app-image-preview>
+</div>

@@ -1,0 +1,31 @@
+<div class="upload-area" 
+     (click)="triggerFileInput()"
+     (dragover)="onDragOver($event)"
+     (dragleave)="onDragLeave($event)"
+     (drop)="onFileDrop($event)"
+     [class.drag-over]="isDragOver">
+  
+  <input #fileInput 
+         type="file" 
+         accept="image/*" 
+         class="d-none" 
+         (change)="onFileSelected($event)">
+  
+  <div class="upload-content text-center">
+    <div class="upload-icon mb-3">
+      <i class="fas fa-cloud-upload-alt"></i>
+    </div>
+    <h5 class="upload-title mb-2">Arrastra una imagen aquí</h5>
+    <p class="upload-subtitle text-muted mb-3">o haz clic para seleccionar desde tu dispositivo</p>
+    <div class="supported-formats mb-3">
+      <small class="text-muted">
+        <i class="fas fa-info-circle me-1"></i>
+        Formatos soportados: JPG, PNG, WebP (Max: 10MB)
+      </small>
+    </div>
+    <button type="button" class="btn btn-success btn-lg">
+      <i class="fas fa-upload me-2"></i>
+      Seleccionar Imagen
+    </button>
+  </div>
+</div>

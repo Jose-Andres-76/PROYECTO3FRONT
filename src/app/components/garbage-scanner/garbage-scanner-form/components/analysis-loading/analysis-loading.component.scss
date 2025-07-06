@@ -1,0 +1,19 @@
+:host {
+  --border-radius: 15px;
+}
+
+.analysis-loading {
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+  border-radius: var(--border-radius);
+  margin: 2rem 0;
+  padding: 2rem;
+}
+
+.progress {
+  height: 8px;
+  border-radius: 10px;
+  background: #e9ecef;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  max-width: 300px;
+  margin: 0 auto;
+}
