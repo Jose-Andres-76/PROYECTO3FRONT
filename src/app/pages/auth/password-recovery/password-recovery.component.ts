@@ -65,7 +65,6 @@ export class PasswordRecoveryComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        this.logErrorDetails(error, 'SEND_RECOVERY_CODE');
         
         let errorMessage = 'Error al enviar el código. Intenta nuevamente.';
         
@@ -115,15 +114,12 @@ export class PasswordRecoveryComponent implements OnInit {
         this.isResetting = false;
         this.alertService.displayAlert('success', 'Contraseña restablecida exitosamente');
         this.modalService.closeAll();
-        
-        // Redirigir al login
         setTimeout(() => {
           this.router.navigateByUrl('/login');
         }, 1000);
       },
       error: (error) => {
         this.isResetting = false;
-        this.logErrorDetails(error, 'RESET_PASSWORD');
         
         if (error.status === 200 && error.message?.includes('parsing')) {
           this.isResetting = false;
@@ -171,24 +167,5 @@ export class PasswordRecoveryComponent implements OnInit {
       confirmPassword: ''
     };
     this.resetError = '';
-  }
-
-  private logErrorDetails(error: any, context: string) {
-    console.log(`=== ERROR DETAILS (${context}) ===`);
-    console.log('Full error object:', error);
-    console.log('error.error:', error.error);
-    console.log('error.message:', error.message);
-    console.log('error.status:', error.status);
-    console.log('error.statusText:', error.statusText);
-    console.log('typeof error.error:', typeof error.error);
-    console.log('================================');
-  }
-
-  // Método ya no necesario con reactive forms
-  // Se maneja directamente en el FormGroup
-
-  private isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
   }
 }
