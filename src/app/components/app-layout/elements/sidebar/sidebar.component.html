@@ -2,7 +2,7 @@
   <a routerLink="/">
     <img
       class="img-fluid"
-      src="../../../../../assets/icons/logo@2x.png"
+      src="../../../../../assets/icons/logo-eco-asistente.png"
       width="50"
       alt="Logo"
     />
@@ -64,19 +64,25 @@
 
                 <li class="sidebar-main-title">
                   <div>
-                    <h6>General</h6>
+                    <h6>Menú</h6>
                   </div>
                 </li>
 
                 @for (route of permittedRoutes; track $index) {
                   @if (route.data && route.data['showInSidebar']) {
-                  <li class="sidebar-list">
-                    <a
-                      routerLink="{{route.path}}"
-                      routerLinkActive="active"
-                      class="sidebar-link sidebar-title"
-                    >
-                        <span>{{route.data['name']}}</span>
+                    <li class="sidebar-list">
+                      <a
+                        routerLink="{{route.path}}"
+                        routerLinkActive="active"
+                        class="sidebar-link sidebar-title d-flex align-items-center gap-2"
+                      >
+                        <img
+                          [src]="route.data['iconPath']"
+                          alt="{{ route.data['name'] }} icon"
+                          width="20"
+                          height="20"
+                        />
+                        <span>{{ route.data['name'] }}</span>
                       </a>
                     </li>
                   }
