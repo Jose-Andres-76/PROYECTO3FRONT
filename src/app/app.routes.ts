@@ -16,6 +16,7 @@ import { PreferenceListPageComponent } from './pages/preferenceList/preference-l
 import { SportTeamComponent } from './pages/sport-team/sport-team.component';
 import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
 import { GarbageScannerPageComponent } from './pages/garbage-scanner/garbage-scanner.component';
+import { CollectionCentersComponent } from './components/collection-centers/collection-centers.component';
 
 export const routes: Routes = [
   {
@@ -159,7 +160,22 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'Escáner de Basura',
-          showInSidebar: true
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/magnifying-glass-solid (1).svg'
+        }
+      },
+      {
+        path: 'collection-centers',
+        component: CollectionCentersComponent,
+        data: { 
+          authorities: [
+            IRoleType.admin, 
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Centros de Acopio',
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/compass-regular.svg'
         }
       },
     ],
