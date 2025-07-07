@@ -1,6 +1,6 @@
 .hero-section {
   position: relative;
-  background-image: url('//src/assets/landing/landin.png'); 
+  background-image: url('/assets/img/landingpage/Landing.png'); 
   background-size: cover;
   background-position: center;
   min-height: 600px;
@@ -48,7 +48,7 @@
   color: white;
   border: none;
   padding: 15px 50px;
-  border-radius: 50px;
+  border-radius: 10px;
   font-size: 1em;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -116,3 +116,5 @@
     font-size: 0.9em;
   }
 }
+
+
