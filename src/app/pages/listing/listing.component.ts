@@ -10,27 +10,33 @@ import { ModalService } from "../../services/modal.service";
 import { FormBuilder } from "@angular/forms";
 import { UserFormComponent } from "../../components/user/user-from/user-form.component";
 import { IFamily } from "../../interfaces";
+import { AuthService } from "../../services/auth.service";
+import { FamilyFormComponent } from "../../components/families/family-form/family-form.component";
 
 @Component({
   selector: 'app-family',
     standalone: true,
     imports: [
         FamilyListComponent,
-        // UserListComponent,
-        // UserFormComponent,
+        FamilyFormComponent,
         PaginationComponent,
         ModalComponent,
         LoaderComponent
     ],
-    templateUrl: './family.component.html',
-    styleUrl: './family.component.scss'
+    templateUrl: './listing.component.html',
+    styleUrl: './listing.component.scss'
 })
-export class FamilyComponent {
+export class ListingComponent {
   public familyService = inject(FamilyService);
+  public authService = inject(AuthService);
   public modalService = inject(ModalService);
+  
   @ViewChild('addFamilyModal') public addFamilyModal: any;
-  public fb: FormBuilder = inject(FormBuilder);    
-  userForm = this.fb.group({
+  public fb: FormBuilder = inject(FormBuilder); 
+
+  public user = this.authService.getUser();
+
+  familyForm = this.fb.group({
     id: [''],
     idSon: [''],
     idFather: [''],
@@ -38,6 +44,8 @@ export class FamilyComponent {
 
     constructor() {
         this.familyService.search.page = 1;
-        this.familyService.getMyFamilies();
+        this.familyService.getAll();
     }
+
+    
 }

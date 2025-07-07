@@ -15,7 +15,7 @@ import { OrdersComponent } from './pages/orders/orders.component';
 import { PreferenceListPageComponent } from './pages/preferenceList/preference-list.component';
 import { SportTeamComponent } from './pages/sport-team/sport-team.component';
 import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
-import { FamilyComponent } from './pages/family/family.component';
+import { ListingComponent } from './pages/listing/listing.component';
 
 export const routes: Routes = [
   {
@@ -144,7 +144,7 @@ export const routes: Routes = [
       },
       {
         path: 'family',
-        component: FamilyComponent,
+        component: ListingComponent,
         data: { 
           authorities: [
             IRoleType.admin, 

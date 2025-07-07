@@ -117,3 +117,13 @@ export interface IFamily {
   idSon?: IUser;
   idFather?: IUser;
 }
+
+export interface IReward {
+  id?: number;
+  familyId?: IFamily;
+  cost?: number;
+  description?: string;
+  status?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
