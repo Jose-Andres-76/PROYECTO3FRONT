@@ -33,6 +33,14 @@ export class UserService extends BaseService<IUser> {
     });
   }
 
+  // @PostMapping
+  //   @PreAuthorize("hasAnyRole('ADMIN', 'FATHER')")
+  //   public ResponseEntity<?> addUser(@RequestBody User user, HttpServletRequest request) {
+  //       user.setPassword(passwordEncoder.encode(user.getPassword()));
+  //       userRepository.save(user);
+  //       return new GlobalResponseHandler().handleResponse("User updated successfully",
+  //               user, HttpStatus.OK, request);
+  //   }
 
   save(user: IUser) {
     this.add(user).subscribe({
@@ -41,7 +49,7 @@ export class UserService extends BaseService<IUser> {
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'An error occurred adding the user','center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'An error occurred saving the user','center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
     });

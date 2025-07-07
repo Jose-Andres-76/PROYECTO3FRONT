@@ -30,11 +30,10 @@ export class UsersComponent {
   public fb: FormBuilder = inject(FormBuilder);
   userForm = this.fb.group({
     id: [''],
-    email: ['', Validators.required, Validators.email],
+    email: ['',[Validators.required, Validators.email]],
     name: ['', Validators.required],
     lastname: ['', Validators.required],
-    password: ['', Validators.required],
-    updatedAt: ['', Validators.required],
+    password: ['', Validators.required]
   })
 
   constructor() {
@@ -52,7 +51,6 @@ export class UsersComponent {
     this.userForm.controls['email'].setValue(user.email ? user.email : '');
     this.userForm.controls['name'].setValue(user.name ? JSON.stringify(user.name) : '');
     this.userForm.controls['lastname'].setValue(user.lastname ? JSON.stringify(user.lastname) : '');
-    this.userForm.controls['password'].setValue(user.password ? JSON.stringify(user.password) : '');
     this.modalService.displayModal('md', this.addUsersModal);
   }
 

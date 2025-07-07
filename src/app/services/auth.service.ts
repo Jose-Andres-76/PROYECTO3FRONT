@@ -24,6 +24,13 @@ export class AuthService {
 
     if (this.expiresIn)
       localStorage.setItem('expiresIn',JSON.stringify(this.expiresIn));
+
+    //get the user id
+    if (this.user && this.user.id) {
+      localStorage.setItem('user_id', JSON.stringify(this.user.id));
+    } else {
+      localStorage.removeItem('user_id');
+    }
   }
 
   private load(): void {

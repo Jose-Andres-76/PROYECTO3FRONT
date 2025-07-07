@@ -9,9 +9,10 @@ import { inject } from "@angular/core";
 import { ModalService } from "../../services/modal.service";
 import { FormBuilder } from "@angular/forms";
 import { UserFormComponent } from "../../components/user/user-from/user-form.component";
-import { IFamily } from "../../interfaces";
+import { IFamily, IFamilyCreate, IUser } from "../../interfaces";
 import { AuthService } from "../../services/auth.service";
 import { FamilyFormComponent } from "../../components/families/family-form/family-form.component";
+import { SignUpFormForFamilyComponent } from "../../components/auth/sign-up/sign-up-form-for-family/sign-up-form-for-family.component";
 
 @Component({
   selector: 'app-family',
@@ -21,7 +22,8 @@ import { FamilyFormComponent } from "../../components/families/family-form/famil
         FamilyFormComponent,
         PaginationComponent,
         ModalComponent,
-        LoaderComponent
+        LoaderComponent,
+        SignUpFormForFamilyComponent
     ],
     templateUrl: './listing.component.html',
     styleUrl: './listing.component.scss'
@@ -35,6 +37,8 @@ export class ListingComponent {
   public fb: FormBuilder = inject(FormBuilder); 
 
   public user = this.authService.getUser();
+  public isCreatingFamily = false;
+  public newSonUser: IUser | null = null;
 
   familyForm = this.fb.group({
     id: [''],
@@ -47,5 +51,84 @@ export class ListingComponent {
         this.familyService.getAll();
     }
 
-    
+    openAddFamilyModal() {
+        this.isCreatingFamily = true;
+        this.newSonUser = null;
+        this.modalService.displayModal('lg', this.addFamilyModal);
+    }
+
+    onSonUserCreated(userData: IUser) {
+        console.log('User created successfully:', userData);
+        console.log('User ID for family creation:', userData.id);
+        
+        if (!userData.id) {
+            console.error('No user ID provided for family creation');
+            return;
+        }
+        
+        this.newSonUser = userData;
+        
+        setTimeout(() => {
+            this.createFamily();
+        }, 1000);
+    }
+
+    createFamily() {
+        if (!this.newSonUser || !this.user) {
+            console.error('Missing required data for family creation');
+            console.log('newSonUser:', this.newSonUser);
+            console.log('current user:', this.user);
+            return;
+        }
+
+        if (!this.newSonUser.id) {
+            console.error('Son user does not have an ID');
+            return;
+        }
+
+        if (!this.user.id) {
+            console.error('Current user does not have an ID');
+            return;
+        }
+
+        // Create family object that matches the backend expectations
+        // Backend expects 'father' and 'son' properties with User objects containing 'id'
+        const newFamily = {
+            father: {
+                id: this.user.id
+            },
+            son: {
+                id: this.newSonUser.id
+            }
+        };
+
+        console.log('Creating family with father ID:', this.user.id);
+        console.log('Creating family with son ID:', this.newSonUser.id);
+        console.log('Creating family with family object:', newFamily);
+        this.familyService.save(newFamily);
+    }
+
+    // Close the modal and reset state
+    closeAddFamilyModal() {
+        this.isCreatingFamily = false;
+        this.newSonUser = null;
+        this.modalService.closeAll();
+    }
+
+    saveFamily(family: IFamily) {
+        // Update this to match backend expectations if used elsewhere
+        if (this.user?.id) {
+            const familyToSave = {
+                father: {
+                    id: this.user.id
+                },
+                son: family.idSon // This would need to be adjusted based on how this method is called
+            };
+            this.familyService.save(familyToSave);
+        }
+    }
+
+    updateFamily(family: IFamily) {
+        this.familyService.update(family);
+    }
 }

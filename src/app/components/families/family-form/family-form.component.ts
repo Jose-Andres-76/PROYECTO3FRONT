@@ -23,7 +23,6 @@ export class FamilyFormComponent {
 
   callSave() {
     let item: IFamily = {
-      son: null, // Add the required 'son' property
       idFather: this.form.controls['idFather'].value,
       idSon: this.form.controls['idSon'].value
     };
