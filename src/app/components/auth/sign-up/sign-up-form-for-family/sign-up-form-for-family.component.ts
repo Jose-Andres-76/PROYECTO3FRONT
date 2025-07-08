@@ -63,11 +63,8 @@ export class SignUpFormForFamilyComponent {
           console.log('Full signup response:', response);
           this.validSignup = true;
           
-          // Create the user object with the ID from the response
-          // Try different possible response structures to extract the user ID
           let userId = null;
           
-          // Check for various possible response structures
           if (response?.id) {
             userId = response.id;
           } else if (response?.data?.id) {
@@ -78,14 +75,12 @@ export class SignUpFormForFamilyComponent {
             userId = response.authUser.id;
           }
           
-          // Create the complete user object with all form data and the ID
           const createdUser: IUser = {
             id: userId,
             name: this.user.name,
             lastname: this.user.lastname,
             email: this.user.email,
             age: this.user.age,
-            // Include any additional data from the response
             ...response.data,
             ...response.user,
             ...response.authUser
@@ -94,7 +89,6 @@ export class SignUpFormForFamilyComponent {
           console.log('Created user with ID:', createdUser.id);
           console.log('Emitting created user:', createdUser);
           
-          // Ensure we have a valid user ID before emitting
           if (createdUser.id) {
             this.userCreated.emit(createdUser);
           } else {

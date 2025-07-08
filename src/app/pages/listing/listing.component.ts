@@ -91,8 +91,6 @@ export class ListingComponent {
             return;
         }
 
-        // Create family object that matches the backend expectations
-        // Backend expects 'father' and 'son' properties with User objects containing 'id'
         const newFamily = {
             father: {
                 id: this.user.id
@@ -108,7 +106,6 @@ export class ListingComponent {
         this.familyService.save(newFamily);
     }
 
-    // Close the modal and reset state
     closeAddFamilyModal() {
         this.isCreatingFamily = false;
         this.newSonUser = null;
@@ -116,13 +113,12 @@ export class ListingComponent {
     }
 
     saveFamily(family: IFamily) {
-        // Update this to match backend expectations if used elsewhere
         if (this.user?.id) {
             const familyToSave = {
                 father: {
                     id: this.user.id
                 },
-                son: family.idSon // This would need to be adjusted based on how this method is called
+                son: family.idSon
             };
             this.familyService.save(familyToSave);
         }

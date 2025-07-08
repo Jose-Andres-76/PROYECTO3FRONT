@@ -113,15 +113,12 @@ export interface IPlayer {
 
 export interface IFamily {
   id?: number;
-  // For displaying in the UI (when received from backend)
   son?: IUser;
   father?: IUser;
-  // For backward compatibility with existing forms
   idSon?: IUser;
   idFather?: IUser;
 }
 
-// Separate interface for creating families (sending to backend)
 export interface IFamilyCreate {
   father: {
     id: number;
