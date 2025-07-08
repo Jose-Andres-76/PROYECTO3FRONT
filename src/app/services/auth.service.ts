@@ -101,6 +101,11 @@ export class AuthService {
     return this.http.post<ILoginResponse>('auth/signup', user);
   }
 
+
+  public signupSon(user: IUser): Observable<ILoginResponse> {
+    return this.http.post<ILoginResponse>('auth/signup/son', user);
+  }
+
   public logout() {
     this.accessToken = '';
     localStorage.removeItem('access_token');
