@@ -1,0 +1,62 @@
+<div class="camera-section">
+  <div class="camera-container">
+    <!-- Video Stream -->
+    <div class="video-container">
+      <video #videoElement 
+             autoplay 
+             playsinline 
+             muted 
+             class="camera-video"
+             [style.display]="isCameraActive ? 'block' : 'none'">
+      </video>
+      <div class="camera-overlay" *ngIf="isCameraActive">
+        <div class="scanning-frame"></div>
+      </div>
+      
+      <!-- Camera Placeholder -->
+      <div class="camera-placeholder" *ngIf="!isCameraActive">
+        <div class="placeholder-content text-center">
+          <i class="fas fa-camera display-4 text-muted mb-3"></i>
+          <h5 class="text-muted mb-2">Cámara No Activa</h5>
+          <p class="text-muted">Presiona "Activar Cámara" para comenzar</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Camera Controls -->
+    <div class="camera-controls mt-3">
+      <div class="row g-2">
+        <div class="col" *ngIf="!isCameraActive">
+          <button class="btn btn-success btn-lg w-100" (click)="startCamera()">
+            <i class="fas fa-video me-2"></i>
+            Activar Cámara
+          </button>
+        </div>
+        <div class="col-8" *ngIf="isCameraActive">
+          <button class="btn btn-success btn-lg w-100" (click)="captureImage()">
+            <i class="fas fa-camera me-2"></i>
+            Capturar Foto
+          </button>
+        </div>
+        <div class="col-4" *ngIf="isCameraActive">
+          <button class="btn btn-outline-secondary btn-lg w-100" (click)="stopCamera()">
+            <i class="fas fa-stop"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Captured Image Preview -->
+    <app-image-preview 
+      [imageSrc]="capturedImage"
+      [title]="'Foto Capturada'"
+      [analyzeButtonText]="'Analizar Foto'"
+      [clearIcon]="'fa-redo'"
+      [isLoading]="isLoading"
+      (analyzeRequested)="onAnalyze()"
+      (clearRequested)="onClear()">
+    </app-image-preview>
+  </div>
+
+  <canvas #canvasElement class="d-none"></canvas>
+</div>

@@ -1,0 +1,77 @@
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <!-- Scanner Form -->
+    <div class="col-lg-8 col-xl-6 mb-4">
+      <div class="card border-0 shadow">
+        <div class="card-body">
+          <app-garbage-scanner-form
+            #scannerForm
+            (onScanComplete)="handleScanComplete($event)"
+            (onScanStart)="handleScanStart()"
+            (onReset)="handleReset()"
+            [isLoading]="isScanning">
+          </app-garbage-scanner-form>
+        </div>
+      </div>
+
+      <!-- Results Display -->
+      <div class="card border-0 shadow mt-4" *ngIf="currentResult && false">
+        <div class="card-header" [style.background]="getTypeInfo(currentResult.clase).color">
+          <div class="row align-items-center text-white">
+            <div class="col">
+              <h5 class="card-title mb-0">
+                <span class="me-2">{{getTypeInfo(currentResult.clase).icon}}</span>
+                {{getTypeInfo(currentResult.clase).name}}
+              </h5>
+            </div>
+            <div class="col-auto">
+              <span class="badge" 
+                    [class.bg-success]="currentResult.es_reciclable" 
+                    [class.bg-warning]="!currentResult.es_reciclable">
+                <i class="fas" [class.fa-recycle]="currentResult.es_reciclable" [class.fa-trash]="!currentResult.es_reciclable" class="me-1"></i>
+                {{currentResult.es_reciclable ? 'Reciclable' : 'No Reciclable'}}
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card-body">
+          <!-- Confidence Level -->
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="fw-bold">Confianza:</span>
+              <span class="fw-bold text-success">{{(currentResult.confianza * 100).toFixed(1)}}%</span>
+            </div>
+            <div class="progress">
+              <div class="progress-bar" 
+                   [class]="'bg-' + getConfidenceColor(currentResult.confianza)"
+                   [style.width.%]="currentResult.confianza * 100">
+              </div>
+            </div>
+          </div>
+
+          <!-- Information Message -->
+          <div class="alert alert-success" *ngIf="currentResult.mensaje">
+            <i class="fas fa-info-circle me-2"></i>
+            {{currentResult.mensaje}}
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Questions Assistant - OCULTADO: Ahora está integrado en analyzed-result -->
+      <div class="card border-0 shadow mt-4" *ngIf="currentResult && false">
+        <div class="card-header bg-success text-white">
+          <h5 class="card-title mb-0">
+            <i class="fas fa-robot me-2"></i>
+            Preguntas sobre Reciclaje
+          </h5>
+        </div>
+        <div class="card-body">
+          <app-garbage-scanner-chat
+            [currentResult]="currentResult">
+          </app-garbage-scanner-chat>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -14,12 +14,19 @@ import { GamesComponent } from './pages/games/games.component';
 import { OrdersComponent } from './pages/orders/orders.component';
 import { PreferenceListPageComponent } from './pages/preferenceList/preference-list.component';
 import { SportTeamComponent } from './pages/sport-team/sport-team.component';
+import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
+import { GarbageScannerPageComponent } from './pages/garbage-scanner/garbage-scanner.component';
 
 export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
     canActivate: [GuestGuard],
+  },
+  {
+    path: 'password-recovery',
+    component: PasswordRecoveryComponent,
+
   },
   {
     path: 'signup',
@@ -54,7 +61,8 @@ export const routes: Routes = [
             IRoleType.admin
           ],
           name: 'Users',
-          showInSidebar: true
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
       {
@@ -67,7 +75,8 @@ export const routes: Routes = [
             IRoleType.son
           ],
           name: 'Dashboard',
-          showInSidebar: true
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
       {
@@ -80,7 +89,8 @@ export const routes: Routes = [
             IRoleType.son
           ],
           name: 'profile',
-          showInSidebar: false
+          showInSidebar: false,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
       {
@@ -93,7 +103,8 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'games',
-          showInSidebar: true
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
       {
@@ -106,7 +117,8 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'orders',
-          showInSidebar: true
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
       {
@@ -119,7 +131,8 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'preference list',
-          showInSidebar: true
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
       {
@@ -132,6 +145,20 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'Sport Team',
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
+        }
+      },
+      {
+        path: 'garbage-scanner',
+        component: GarbageScannerPageComponent,
+        data: { 
+          authorities: [
+            IRoleType.admin, 
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Escáner de Basura',
           showInSidebar: true
         }
       },

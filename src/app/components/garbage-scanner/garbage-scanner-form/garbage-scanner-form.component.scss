@@ -1,0 +1,21 @@
+:host {
+  --primary-green: #28a745;
+  --light-green: #e8f5e8;
+  --dark-green: #1e7e34;
+  --border-radius: 15px;
+  --box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  --transition: all 0.3s ease;
+}
+
+.scanner-form {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.btn-lg {
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
