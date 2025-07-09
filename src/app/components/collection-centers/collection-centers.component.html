@@ -1,5 +1,15 @@
-<h2 class="text-center mb-3">Centros de Acopio</h2>
+<h2>Centros de Acopio</h2>
 
-<div class="d-flex justify-content-center mt-5">
-  <app-map-collection-centers></app-map-collection-centers>
+<app-map-collection-centers [centers]="allCenters"></app-map-collection-centers>
+
+
+<div class="centers-filter">
+  <label for="provincia">Filtrar por provincia:</label>
+  <select id="provincia" [(ngModel)]="selectedProvincia">
+    <option *ngFor="let p of provincias" [value]="p">{{ p }}</option>
+  </select>
+
+  <ul class="centers-list">
+    <li *ngFor="let center of filteredCenters">{{ center.name }}</li>
+  </ul>
 </div>

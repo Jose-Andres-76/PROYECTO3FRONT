@@ -76,7 +76,7 @@ export const routes: Routes = [
             IRoleType.son
           ],
           name: 'Dashboard',
-          showInSidebar: true,
+          showInSidebar: false,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
@@ -104,7 +104,7 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'games',
-          showInSidebar: true,
+          showInSidebar: false,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
@@ -118,7 +118,7 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'orders',
-          showInSidebar: true,
+          showInSidebar: false,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
@@ -132,7 +132,7 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'preference list',
-          showInSidebar: true,
+          showInSidebar: false,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
@@ -146,7 +146,7 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'Sport Team',
-          showInSidebar: true,
+          showInSidebar: false,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },

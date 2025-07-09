@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 
 // Configuración de íconos Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'assets/icons/leaflet/marker-icon-2x.png',
-  iconUrl: 'assets/icons/leaflet/marker-icon.png',
-  shadowUrl: 'assets/icons/leaflet/marker-shadow.png'
+  iconRetinaUrl: '/assets/icons/leaflet/marker-icon-2x.png',
+  iconUrl: '/assets/icons/leaflet/marker-icon.png',
+  shadowUrl: '/assets/icons/leaflet/marker-shadow.png'
 });
 
 @Component({
@@ -19,11 +19,7 @@ L.Icon.Default.mergeOptions({
 export class MapCollectionCentersComponent implements OnInit {
   private map?: L.Map;
 
-  private centers = [
-    { name: 'Centro de Reciclaje Municipalidad de San José', lat: 9.9333, lng: -84.0833 },
-    { name: 'Ministerio de Salud', lat: 9.9281, lng: -84.0907 },
-    { name: 'Servicios Ecológicos', lat: 9.9345, lng: -84.0875 },
-  ];
+  @Input() centers: { name: string; lat: number; lng: number; provincia: string }[] = [];
 
   ngOnInit(): void {
     requestAnimationFrame(() => {
@@ -32,8 +28,8 @@ export class MapCollectionCentersComponent implements OnInit {
     });
   }
 
-    private initMap(): void {
-    this.map = L.map('map').setView([9.9281, -84.0907], 12);
+  private initMap(): void {
+    this.map = L.map('map').setView([9.9281, -84.0907], 8);
 
     this.map.whenReady(() => {
       setTimeout(() => this.map?.invalidateSize(), 200);
