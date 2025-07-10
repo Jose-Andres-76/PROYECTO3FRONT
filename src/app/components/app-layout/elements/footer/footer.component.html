@@ -3,9 +3,19 @@
     <img src="/assets/img/logo/logoEco.png" class="footer-logo" />
     <p class="brand-name">Eco Asistente IA</p>
     <p>Correo de información</p>
-    <form class="footer-form">
-      <input type="email" placeholder="micorreo@ejemplo.com" />
-      <button type="submit">Enviar información</button>
+    <form class="footer-form" (ngSubmit)="onSubmit()" #footerForm="ngForm">
+      <input
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        placeholder="micorreo@ejemplo.com"
+        required
+        email
+        [disabled]="isSubmitting"
+      />
+      <button type="submit" [disabled]="footerForm.invalid || isSubmitting">
+        {{ isSubmitting ? 'Enviando...' : 'Enviar información' }}
+      </button>
     </form>
     <div class="footer-social">
       <i class="icon fa fa-facebook"></i>
