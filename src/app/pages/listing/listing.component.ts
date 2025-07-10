@@ -1,10 +1,12 @@
 import { Component, ViewChild } from "@angular/core";
 import { UserListComponent } from "../../components/user/user-list/user-list.component";
 import { FamilyListComponent } from "../../components/families/family-list/family-list.component";
+import { RewardListComponent } from "../../components/reward/reward-list/reward-list.component";
 import { ModalComponent } from "../../components/modal/modal.component";
 import { LoaderComponent } from "../../components/loader/loader.component";
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { FamilyService } from "../../services/family.service";
+import { RewardService } from "../../services/reward.service";
 import { inject } from "@angular/core";
 import { ModalService } from "../../services/modal.service";
 import { FormBuilder } from "@angular/forms";
@@ -19,6 +21,7 @@ import { SignUpFormForFamilyComponent } from "../../components/auth/sign-up/sign
     standalone: true,
     imports: [
         FamilyListComponent,
+        RewardListComponent,
         FamilyFormComponent,
         PaginationComponent,
         ModalComponent,
@@ -30,6 +33,7 @@ import { SignUpFormForFamilyComponent } from "../../components/auth/sign-up/sign
 })
 export class ListingComponent {
   public familyService = inject(FamilyService);
+  public rewardService = inject(RewardService);
   public authService = inject(AuthService);
   public modalService = inject(ModalService);
   
@@ -49,6 +53,9 @@ export class ListingComponent {
     constructor() {
         this.familyService.search.page = 1;
         this.familyService.getAll();
+        
+        this.rewardService.search.page = 1;
+        this.rewardService.getMyRewards();
     }
 
     openAddFamilyModal() {

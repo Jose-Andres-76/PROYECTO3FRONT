@@ -12,16 +12,31 @@
             </div>
         </div>
         <div class="col-12">
-            
-        <app-family-list
-            (callDeleteAction)="familyService.delete($event)"
-            [families]="familyService.families$()"
-        />
-        @if(familyService.families$().length) {
-            <app-pagination
-            [service]="familyService"
+            <app-family-list
+                (callDeleteAction)="familyService.delete($event)"
+                [families]="familyService.families$()"
             />
-        }
+            @if(familyService.families$().length) {
+                <app-pagination
+                [service]="familyService"
+                />
+            }
+        </div>
+        
+        <!-- Rewards Section -->
+        <div class="col-12 mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Family Rewards</h2>
+            </div>
+            <app-reward-list
+                (callDeleteAction)="rewardService.delete($event)"
+                [rewards]="rewardService.rewards$()"
+            />
+            @if(rewardService.rewards$().length) {
+                <app-pagination
+                [service]="rewardService"
+                />
+            }
         </div>
     </div>
 } @loading (minimum 1.5s){
