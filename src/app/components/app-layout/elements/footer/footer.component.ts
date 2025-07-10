@@ -25,13 +25,13 @@ export class FooterComponent {
         next: (response) => {
           console.log('Email sent successfully:', response);
           alert('Correo enviado correctamente');
-          this.email = ''; // Clear the form
+          this.email = ''; // Clean the form for next submission
           this.isSubmitting = false;
         },
         error: (error) => {
           console.error('Error sending email:', error);
           let errorMessage = 'Error al enviar el correo';
-          
+          //Set of messages for different error statuses
           if (error.status === 404) {
             errorMessage = 'Servicio no encontrado. Verifica que el backend esté ejecutándose.';
           } else if (error.status === 400) {
