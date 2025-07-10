@@ -4,12 +4,12 @@
 
 
 <div class="centers-filter">
-  <label for="provincia">Filtrar por provincia:</label>
-  <select id="provincia" [(ngModel)]="selectedProvincia">
-    <option *ngFor="let p of provincias" [value]="p">{{ p }}</option>
+  <label for="province">Filtrar por provincia:</label>
+  <select id="province" [(ngModel)]="selectedProvince">
+    <option *ngFor="let p of provinces" [value]="p">{{ p }}</option>
   </select>
 
   <ul class="centers-list">
-    <li *ngFor="let center of filteredCenters">{{ center.name }}</li>
+    <li *ngFor="let center of filteredCenters">{{ center.name +":   "+ center.address}}</li>
   </ul>
 </div>

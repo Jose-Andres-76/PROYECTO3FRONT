@@ -19,7 +19,7 @@ L.Icon.Default.mergeOptions({
 export class MapCollectionCentersComponent implements OnInit {
   private map?: L.Map;
 
-  @Input() centers: { name: string; lat: number; lng: number; provincia: string }[] = [];
+  @Input() centers: { name: string; lat: number; lng: number; province: string; address: string }[] = [];
 
   ngOnInit(): void {
     requestAnimationFrame(() => {
