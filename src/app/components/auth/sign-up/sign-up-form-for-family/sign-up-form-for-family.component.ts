@@ -58,7 +58,7 @@ export class SignUpFormForFamilyComponent {
     if (this.nameModel.valid && this.lastnameModel.valid && this.emailModel.valid && this.ageModel.valid && this.passwordModel.valid) {
       console.log('Attempting to signup user:', this.user);
       
-      this.authService.signup(this.user).subscribe({
+      this.authService.signupSon(this.user).subscribe({
         next: (response: any) => {
           console.log('Full signup response:', response);
           this.validSignup = true;
