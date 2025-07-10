@@ -1,0 +1,35 @@
+:host {
+  --primary-green: #28a745;
+  --light-green: #e8f5e8;
+  --dark-green: #1e7e34;
+  --transition: all 0.3s ease;
+}
+
+.nav-pills {
+  background: #f8f9fa;
+  padding: 0.5rem;
+  border-radius: 8px;
+
+  .nav-link {
+    border-radius: 25px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: var(--transition);
+    border: 2px solid transparent;
+    color: #6c757d !important;
+    background: #f8f9fa !important;
+
+    &:hover {
+      color: var(--primary-green) !important;
+      background: var(--light-green) !important;
+      border-color: var(--primary-green);
+    }
+
+    &.active {
+      background: linear-gradient(135deg, var(--primary-green), var(--dark-green)) !important;
+      border-color: var(--primary-green);
+      box-shadow: 0 5px 15px rgba(40,167,69,0.3);
+      color: white !important;
+    }
+  }
+}

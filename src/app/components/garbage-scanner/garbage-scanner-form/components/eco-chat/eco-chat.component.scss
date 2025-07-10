@@ -1,0 +1,25 @@
+:host{--primary-green:#28a745;--light-green:#e8f5e8;--dark-green:#1e7e34}
+.chat-section .chat-container .card{border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.1);border:none}
+.chat-section .chat-container .card-header{background:linear-gradient(135deg,var(--primary-green),var(--dark-green));color:white;padding:1rem 1.5rem}
+.chat-messages{height:400px;overflow-y:auto;background:#f8f9fa}
+.messages-container{padding:1rem}
+.message{display:flex;margin-bottom:1rem;align-items:flex-end}
+.message.user-message{justify-content:flex-end}
+.message.user-message .message-bubble{background:linear-gradient(135deg,var(--primary-green),var(--dark-green));color:white;margin-left:3rem}
+.message.ai-message{justify-content:flex-start}
+.message.ai-message .message-bubble{background:white;color:#333;border:1px solid #e9ecef;margin-right:3rem}
+.message-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 0.5rem;background:var(--light-green);color:var(--primary-green)}
+.user-message .message-avatar{background:var(--primary-green);color:white}
+.message-content{flex:1}
+.message.user-message .message-content{text-align:right}
+.message-bubble{padding:0.75rem 1rem;border-radius:18px}
+.typing-dots{display:flex;gap:4px}
+.typing-dots span{width:8px;height:8px;background:#6c757d;border-radius:50%;animation:typing 1.4s infinite}
+.message-time{font-size:0.75rem;color:#6c757d;margin-top:0.25rem}
+.chat-section .chat-container .card-footer{background:white;border-top:1px solid #e9ecef;padding:1rem 1.5rem}
+.card-footer .input-group .form-control{border-radius:25px 0 0 25px;border:2px solid #e9ecef;padding:0.75rem 1rem}
+.card-footer .input-group .form-control:focus{border-color:var(--primary-green)}
+.card-footer .input-group .btn{border-radius:0 25px 25px 0;padding:0.75rem 1.25rem;border:2px solid var(--primary-green)}
+@keyframes typing{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.chat-messages::-webkit-scrollbar{width:6px}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--primary-green)}

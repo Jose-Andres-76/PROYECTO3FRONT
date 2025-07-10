@@ -15,7 +15,13 @@ export interface IUser {
   lastname?: string;
   email?: string;
   password?: string;
+  longitude?: string;
+  latitude?: string;
+  age?: number;
   active?: boolean;
+  urlImage?: string;
+  publicIdCloudinary?: string;
+  points?: number;
   createdAt?: string;
   updatedAt?: string;
   authorities?: IAuthority[];
@@ -103,4 +109,28 @@ export interface ISportTeam {
 export interface IPlayer {
   id?: number;
   name?: string;
+}
+
+export interface IWaste {
+  id?: number;
+  userId?: number;
+  user?: IUser;
+  productType?: string;
+  answer?: string;
+  createdAt?: Date;
+}
+
+export interface IWasteCreateRequest {
+  userId: number;
+  productType?: string;
+  answer?: string;
+}
+
+export interface IWasteUpdateRequest {
+  productType?: string;
+  answer?: string;
+}
+
+export interface IWasteStats {
+  totalCount: number;
 }
