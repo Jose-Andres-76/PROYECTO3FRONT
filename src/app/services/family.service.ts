@@ -157,6 +157,7 @@ export class FamilyService extends BaseService<IFamily> {
     delete(family: IFamily) {
         this.delCustomSource(`${family.id}`).subscribe({
             next: (response: any) => {
+                console.log('Delete response:', response);
                 this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
                 this.getAll();
             },

@@ -130,41 +130,11 @@ export interface IFamilyCreate {
 
 export interface IReward {
   id?: number;
-  familyId?: IFamily;
+  familyId?: IFamily; 
   cost?: number;
   description?: string;
   status?: boolean;
 }
-
-// @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     @Column(nullable = false)
-//     private Long id;
-
-//     @ManyToOne(fetch = FetchType.EAGER)
-//     @JoinColumn(name = "family_id", referencedColumnName = "id", nullable = false)
-//     private Family familyId;
-
-//     @ManyToOne(fetch = FetchType.EAGER)
-//     @JoinColumn(name = "game_id", referencedColumnName = "id", nullable = false)
-//     private Game gameId;
-
-//     @Column(nullable = false)
-//     private int points;
-
-//     @Column(nullable = false)
-//     private boolean challengeStatus;
-
-//     @Column(nullable = false)
-//     private String description;
-
-//     @CreationTimestamp
-//     @Column(updatable = false, name = "created_at")
-//     private java.util.Date createdAt;
-
-//     @UpdateTimestamp
-//     @Column(name = "updated_at")
-//     private java.util.Date updatedAt;
 
 interface IChallenge {
   id?: number;
