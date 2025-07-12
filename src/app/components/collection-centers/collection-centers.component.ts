@@ -107,14 +107,6 @@ export class CollectionCentersComponent {
     lat: 9.938523846869684, lng: -84.08405815880285, province: 'San José', 
     address: 'Calle 12, Merced, San José centro' 
   },
-
-  // Cartago
-  { 
-    name: 'HC Recycle', 
-    lat: 9.844667145090039, lng: -83.95770200298266, province: 'Cartago', 
-    address: 'Cartago (pending exact addresss)' 
-  },
-
   // Limón
   { 
     name: 'Municipalidad de Limón', 
@@ -267,7 +259,5 @@ export class CollectionCentersComponent {
   this.mapComponent?.zoomToLocation(center.lat, center.lng);
   }
 
-
-  
 }
 
