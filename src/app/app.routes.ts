@@ -14,10 +14,16 @@ import { GamesComponent } from './pages/games/games.component';
 import { OrdersComponent } from './pages/orders/orders.component';
 import { PreferenceListPageComponent } from './pages/preferenceList/preference-list.component';
 import { SportTeamComponent } from './pages/sport-team/sport-team.component';
+import { LandingComponent } from './pages/landing/landing.component';
 import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
 import { GarbageScannerPageComponent } from './pages/garbage-scanner/garbage-scanner.component';
+import { GoogleCallbackComponent } from './pages/auth/google-callback/google-callback.component';
 
 export const routes: Routes = [
+  {
+    path: '',
+    component: LandingComponent,
+  },
   {
     path: 'login',
     component: LoginComponent,
@@ -32,6 +38,10 @@ export const routes: Routes = [
     path: 'signup',
     component: SigUpComponent,
     canActivate: [GuestGuard],
+  },
+  {
+    path: 'auth/google/callback',
+    component: GoogleCallbackComponent,
   },
   {
     path: 'access-denied',
@@ -164,4 +174,5 @@ export const routes: Routes = [
       },
     ],
   },
+   { path: '**', redirectTo: '' }
 ];
