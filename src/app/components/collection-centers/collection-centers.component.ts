@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MapCollectionCentersComponent } from '../../components/collection-centers/map-collection-centers/map-collection-centers.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-collection-centers',
@@ -250,11 +251,23 @@ export class CollectionCentersComponent {
     lat: 9.5206, lng: -84.3243, province: 'Puntarenas', 
     address: 'Parrita centro' 
   }
-];
+  ];
 
   get filteredCenters() {
     return this.selectedProvince
       ? this.allCenters.filter(c => c.province === this.selectedProvince)
       : [];
   }
+
+  @ViewChild(MapCollectionCentersComponent)
+  mapComponent!: MapCollectionCentersComponent;
+
+  goToMap(center: any, event: Event) {
+  event.preventDefault();
+  this.mapComponent?.zoomToLocation(center.lat, center.lng);
+  }
+
+
+  
 }
+

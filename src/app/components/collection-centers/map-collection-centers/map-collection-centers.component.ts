@@ -45,4 +45,11 @@ export class MapCollectionCentersComponent implements OnInit {
         .bindPopup(`<b>${c.name}</b>`)
     );
   }
+
+  zoomToLocation(lat: number, lng: number): void {
+    if (this.map) {
+      this.map.setView([lat, lng], 15);
+    }
+  }
+
 }

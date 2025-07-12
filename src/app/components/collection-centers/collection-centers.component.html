@@ -9,7 +9,11 @@
     <option *ngFor="let p of provinces" [value]="p">{{ p }}</option>
   </select>
 
-  <ul class="centers-list">
-    <li *ngFor="let center of filteredCenters">{{ center.name +":   "+ center.address}}</li>
-  </ul>
+ <ul class="centers-list">
+  <li *ngFor="let center of filteredCenters">
+    <a href="#" (click)="goToMap(center, $event)">
+      {{ center.name }}: {{ center.address }}
+    </a>
+  </li>
+</ul>
 </div>
