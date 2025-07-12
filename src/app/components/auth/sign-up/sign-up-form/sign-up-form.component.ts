@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
@@ -12,7 +12,7 @@ import { IUser } from '../../../../interfaces';
   templateUrl: './sign-up-form.component.html',
   styleUrl: './sign-up-form.component.scss'
 })
-export class SignUpFormComponent {
+export class SignUpFormComponent implements OnInit, AfterViewInit {
   public signUpError!: String;
   public validSignup!: boolean;
   public passwordPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=\\[\\]{}|\\\\:;"\'<>,.?/~`]).{8,}$';
@@ -24,12 +24,23 @@ export class SignUpFormComponent {
   @ViewChild('email') emailModel!: NgModel;
   @ViewChild('age') ageModel!: NgModel;
   @ViewChild('password') passwordModel!: NgModel;
+  @ViewChild('googleButtonContainer') googleButtonContainer!: ElementRef;
 
   public user: IUser = {};
 
   constructor(private router: Router, 
     private authService: AuthService
   ) {}
+
+  ngOnInit(): void {
+    this.authService.initializeGoogleSignIn();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.googleButtonContainer) {
+      this.authService.renderGoogleSignInButton(this.googleButtonContainer.nativeElement);
+    }
+  }
 
   public togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;

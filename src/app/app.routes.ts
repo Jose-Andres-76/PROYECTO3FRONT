@@ -17,6 +17,7 @@ import { SportTeamComponent } from './pages/sport-team/sport-team.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
 import { GarbageScannerPageComponent } from './pages/garbage-scanner/garbage-scanner.component';
+import { GoogleCallbackComponent } from './pages/auth/google-callback/google-callback.component';
 
 export const routes: Routes = [
   {
@@ -37,6 +38,10 @@ export const routes: Routes = [
     path: 'signup',
     component: SigUpComponent,
     canActivate: [GuestGuard],
+  },
+  {
+    path: 'auth/google/callback',
+    component: GoogleCallbackComponent,
   },
   {
     path: 'access-denied',
