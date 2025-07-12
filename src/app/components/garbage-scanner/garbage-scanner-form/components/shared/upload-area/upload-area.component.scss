@@ -1,0 +1,52 @@
+:host {
+  --primary-green: #28a745;
+  --light-green: #e8f5e8;
+  --border-radius: 15px;
+  --box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  --transition: all 0.3s ease;
+}
+
+.upload-area {
+  border: 3px dashed #dee2e6;
+  border-radius: var(--border-radius);
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+
+  &:hover, &.drag-over {
+    border-color: var(--primary-green);
+    background: var(--light-green);
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow);
+  }
+}
+
+.upload-icon {
+  font-size: 4rem;
+  color: var(--primary-green);
+  margin-bottom: 1rem;
+}
+
+.upload-title {
+  color: #495057;
+  font-weight: 600;
+}
+
+.upload-subtitle {
+  color: #6c757d;
+}
+
+.supported-formats {
+  color: #6c757d;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--primary-green), #1e7e34);
+  border: none;
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  font-weight: 500;
+}

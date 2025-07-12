@@ -1,0 +1,42 @@
+<div class="scanner-form">
+  <!-- Tab Navigation -->
+  <app-scanner-tabs 
+    [activeTab]="activeTab" 
+    [isAnalyzing]="isAnalyzing" 
+    [hasResult]="hasResult"
+    (tabChanged)="onTabChanged($event)">
+  </app-scanner-tabs>
+
+  <!-- Analyzed Result Display -->
+  <app-analyzed-result 
+    *ngIf="hasResult"
+    [imageSrc]="selectedImage || capturedImage"
+    [analysisResult]="analysisResult"
+    (scanNewRequested)="onScanNewRequested()">
+  </app-analyzed-result>
+
+  <!-- Upload Section -->
+  <app-image-upload 
+    *ngIf="activeTab === 'upload' && !isAnalyzing && !hasResult"
+    (imageSelected)="onImageSelected($event)"
+    (analyzeRequested)="onAnalyzeRequested()"
+    (clearRequested)="onClearRequested()">
+  </app-image-upload>
+
+  <!-- Camera Section -->
+  <app-camera-capture 
+    *ngIf="activeTab === 'camera' && !isAnalyzing && !hasResult"
+    (imageCaptured)="onImageCaptured($event)"
+    (analyzeRequested)="onAnalyzeRequested()"
+    (clearRequested)="onClearRequested()">
+  </app-camera-capture>
+
+  <!-- Analysis Loading State -->
+  <app-analysis-loading *ngIf="isAnalyzing">
+  </app-analysis-loading>
+
+  <!-- Chat Section -->
+  <app-eco-chat 
+    *ngIf="activeTab === 'chat' && !isAnalyzing && !hasResult">
+  </app-eco-chat>
+</div>

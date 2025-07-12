@@ -1,0 +1,23 @@
+<div class="nav nav-pills nav-fill mb-4" role="tablist" *ngIf="!isAnalyzing && !hasResult">
+  <button class="nav-link" 
+          [class.active]="activeTab === 'upload'"
+          (click)="selectTab('upload')"
+          type="button">
+    <i class="fas fa-upload me-2"></i>
+    Subir Imagen
+  </button>
+  <button class="nav-link" 
+          [class.active]="activeTab === 'camera'"
+          (click)="selectTab('camera')"
+          type="button">
+    <i class="fas fa-camera me-2"></i>
+    Usar Cámara
+  </button>
+  <button class="nav-link" 
+          [class.active]="activeTab === 'chat'"
+          (click)="selectTab('chat')"
+          type="button">
+    <i class="fas fa-comments me-2"></i>
+    Chat IA
+  </button>
+</div>

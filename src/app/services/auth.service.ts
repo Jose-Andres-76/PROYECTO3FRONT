@@ -3,6 +3,8 @@ import { IAuthority, ILoginResponse, IResponse, IRoleType, IUser } from '../inte
 import { Observable, firstValueFrom, of, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
+declare const google: any;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -123,5 +125,94 @@ export class AuthService {
       isAdmin = userAuthorities?.some(item => item.authority == IRoleType.admin);
     }          
     return allowedUser && isAdmin;
+  }
+
+  public initializeGoogleSignIn(): void {
+    if (typeof google !== 'undefined') {
+      google.accounts.id.initialize({
+        client_id: '866761172100-vand4bvk8gn2ap732uijdikpmuano2e8.apps.googleusercontent.com', // Replace with your complete Google Client ID
+        callback: this.handleGoogleSignIn.bind(this),
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+    }
+  }
+
+  public renderGoogleSignInButton(element: HTMLElement): void {
+    if (typeof google !== 'undefined') {
+      google.accounts.id.renderButton(element, {
+        theme: 'outline',
+        size: 'large',
+        text: 'signin_with',
+        shape: 'rectangular',
+        logo_alignment: 'left',
+        width: '100%',
+      });
+    }
+  }
+
+  public handleGoogleSignIn(response: any): void {
+    if (response.credential) {
+      // Decode the JWT token to get user info
+      const payload = this.decodeJwtPayload(response.credential);
+      
+      // Send the token data to your backend
+      const tokenData = {
+        email: payload.email,
+        name: payload.given_name,
+        lastname: payload.family_name,
+        sub: payload.sub,
+        picture: payload.picture
+      };
+
+      this.verifyGoogleToken(tokenData).subscribe({
+        next: (response: any) => {
+          this.accessToken = response.token;
+          this.expiresIn = response.expiresIn;
+          this.user = response.authUser || {
+            email: tokenData.email,
+            name: tokenData.name,
+            lastname: tokenData.lastname,
+            urlImage: tokenData.picture,
+            authorities: []
+          };
+          this.save();
+          
+          // Redirect to dashboard
+          window.location.href = '/app/dashboard';
+        },
+        error: (error) => {
+          console.error('Google Sign-In error:', error);
+        }
+      });
+    }
+  }
+
+  public verifyGoogleToken(tokenData: any): Observable<ILoginResponse> {
+    return this.http.post<ILoginResponse>('auth/google/verify', tokenData);
+  }
+
+  private decodeJwtPayload(token: string): any {
+    try {
+      const payload = token.split('.')[1];
+      const decodedPayload = atob(payload);
+      return JSON.parse(decodedPayload);
+    } catch (error) {
+      console.error('Error decoding JWT:', error);
+      return null;
+    }
+  }
+
+  public signInWithGoogle(): void {
+    if (typeof google !== 'undefined') {
+      google.accounts.id.prompt();
+    }
+  }
+
+  public handleGoogleCallback(token: string, expiresIn: number): void {
+    this.accessToken = token;
+    this.expiresIn = expiresIn;
+    // The user data should be included in the callback or fetched separately
+    this.save();
   }
 }
