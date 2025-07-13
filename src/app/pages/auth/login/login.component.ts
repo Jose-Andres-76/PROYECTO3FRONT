@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild, OnInit, AfterViewInit, ElementRef } from '@angular/core';
-import { FormsModule, NgModel } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { FormsModule, NgModel} from '@angular/forms';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { LogoTituloComponent } from '../../../components/logo-titulo/logo-titulo.component';
+
 
 @Component({
   selector: 'app-login',
@@ -24,11 +25,26 @@ export class LoginComponent implements OnInit, AfterViewInit {
   };
 
   constructor(
-    private router: Router, 
+    private router: Router,
+    private route: ActivatedRoute,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['expired'] === 'true') {
+        this.loginError = 'Your session has expired. Please log in again.';
+        setTimeout(() => {
+          this.loginError = '';
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { expired: null },
+            queryParamsHandling: 'merge',
+            replaceUrl: true
+          });
+        }, 5000);
+      }
+    });
     this.authService.initializeGoogleSignIn();
   }
 
