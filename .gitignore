@@ -130,3 +130,6 @@ dist
 .pnp.*
 
 .angular
+
+#Ignore Enviroment files
+/src/environments/environment.ts
