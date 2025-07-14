@@ -1,0 +1,35 @@
+.eco-dashboard {
+  padding: 2rem;
+
+  .cards {
+    display: flex;
+    gap: 2rem;
+
+    .card {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      flex: 1;
+
+      .image {
+        background: #eee;
+        height: 150px;
+        margin-bottom: 1rem;
+      }
+
+      button {
+        margin-top: 1rem;
+      }
+    }
+  }
+
+  .footer {
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .coins {
+      font-weight: bold;
+    }
+  }
+}

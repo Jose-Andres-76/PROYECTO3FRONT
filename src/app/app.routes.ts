@@ -18,6 +18,10 @@ import { LandingComponent } from './pages/landing/landing.component';
 import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
 import { GarbageScannerPageComponent } from './pages/garbage-scanner/garbage-scanner.component';
 import { GoogleCallbackComponent } from './pages/auth/google-callback/google-callback.component';
+import { EcoDashboardComponent } from './pages/eco/eco.component';
+import { EcoRewardsComponent } from './components/eco-rewards/eco-rewards.component';
+import { EcoChallengesComponent } from './components/eco-challenges/eco-challenges.component';
+
 
 export const routes: Routes = [
   {
@@ -170,6 +174,47 @@ export const routes: Routes = [
           ],
           name: 'Escáner de Basura',
           showInSidebar: true
+        }
+      },
+            {
+        path: 'Eco',
+        component: EcoDashboardComponent,
+        data: { 
+          authorities: [
+            IRoleType.admin, 
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Modulo infantil',
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
+        }
+      },
+       {
+        path: 'rewards', 
+        component: EcoRewardsComponent, 
+        data: {
+          authorities: [
+            IRoleType.admin,
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Recompensas Eco', 
+          showInSidebar: true 
+          
+        }
+      },
+      {
+        path: 'challenges', 
+        component: EcoChallengesComponent, 
+        data: {
+          authorities: [
+            IRoleType.admin,
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Retos Eco', 
+          showInSidebar: true 
         }
       },
     ],

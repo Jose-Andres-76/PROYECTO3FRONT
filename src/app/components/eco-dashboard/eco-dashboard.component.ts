@@ -1,0 +1,26 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common'; 
+import { FormsModule } from '@angular/forms'; 
+
+@Component({
+  selector: 'app-eco-dashboard',
+  templateUrl: './eco-dashboard.component.html',
+  styleUrls: ['./eco-dashboard.component.scss'],
+  standalone: true,
+  imports: [CommonModule, FormsModule]
+})
+export class EcoDashboardComponent {
+  user = {
+    name: 'Invitado'
+  };
+
+  coins = 1200;
+
+  playGame(game: string) {
+    console.log(`Iniciando juego: ${game}`);
+  }
+
+  viewRewards() {
+    console.log('Ver recompensas');
+  }
+}

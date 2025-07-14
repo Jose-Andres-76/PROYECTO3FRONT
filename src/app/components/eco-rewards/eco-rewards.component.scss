@@ -1,0 +1,29 @@
+.eco-rewards {
+  padding: 2rem;
+
+  .cards {
+    display: flex;
+    gap: 2rem;
+
+    .card {
+      border: 1px solid #0b7357;
+      padding: 1rem;
+      flex: 1;
+      min-height: 200px;
+    }
+
+    .placeholder {
+      border: 2px dashed #ccc;
+    }
+  }
+
+  .footer {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+
+    .coins {
+      font-weight: bold;
+    }
+  }
+}

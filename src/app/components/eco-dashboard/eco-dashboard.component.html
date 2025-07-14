@@ -1,0 +1,31 @@
+<div class="eco-dashboard">
+  <h1>Bienvenido user.name</h1>
+  <p>Listo para empezar? Elije tu minijuego!</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="image"></div>
+      <h2>Eco Trivia</h2>
+      <p>Responde preguntas para ganar.</p>
+      <button (click)="playGame('trivia')">Jugar ahora</button>
+    </div>
+    <div class="card">
+      <div class="image"></div>
+      <h2>Eco Completador</h2>
+      <p>Completa frases correctamente.</p>
+      <button (click)="playGame('completador')">Jugar ahora</button>
+    </div>
+    <div class="card">
+      <div class="image"></div>
+      <h2>Eco Arrastrador</h2>
+      <p>Arrastra desechos a su lugar.</p>
+      <button (click)="playGame('arrastrador')">Jugar ahora</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="coins">💰 {{ coins }}</span>
+    <button (click)="viewRewards()">Ver Recompensas</button>
+  </div>
+</div>
+

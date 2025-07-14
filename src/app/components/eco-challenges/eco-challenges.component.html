@@ -1,0 +1,27 @@
+<div class="eco-challenges">
+  <h1>Retos</h1>
+  <p>Revisa que retos debes completar!</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Realizada</th>
+        <th>Descripción</th>
+        <th>Puntos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let challenge of challenges">
+        <td><input type="checkbox" [(ngModel)]="challenge.done"></td>
+        <td>{{ challenge.description }}</td>
+        <td>{{ challenge.points }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    <span class="coins">💰 {{ coins }}</span>
+    <button (click)="viewRewards()">Ver Recompensas</button>
+  </div>
+</div>
+
