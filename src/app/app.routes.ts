@@ -201,7 +201,8 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'Family',
-          showInSidebar: true
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/people-roof-solid.svg'
         }
       }
     ],
