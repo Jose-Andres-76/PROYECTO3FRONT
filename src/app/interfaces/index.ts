@@ -119,18 +119,11 @@ export interface IFamily {
   idFather?: IUser;
 }
 
-export interface IFamilyCreate {
-  father: {
-    id: number;
-  };
-  son: {
-    id: number;
-  };
-}
-
 export interface IReward {
   id?: number;
-  familyId?: IFamily; 
+  family: {  
+    id: number;
+  }; 
   cost?: number;
   description?: string;
   status?: boolean;

@@ -39,6 +39,7 @@ export class RewardFormComponent implements OnInit {
 
   private initializeForm(): void {
     this.rewardForm = this.fb.group({
+      id: [this.reward?.id || ''],
       description: [
         this.reward?.description || '', 
         [Validators.required, Validators.minLength(3)]
@@ -48,7 +49,7 @@ export class RewardFormComponent implements OnInit {
         [Validators.required, Validators.min(1)]
       ],
       familyId: [
-        this.reward?.familyId?.id || '', 
+        this.reward?.family?.id || '', 
         [Validators.required]
       ],
       status: [
@@ -58,39 +59,34 @@ export class RewardFormComponent implements OnInit {
   }
 
   public callSave(): void {
-    if (this.rewardForm.valid) {
-      const formValue = this.rewardForm.value;
-      
-      const rewardData: IReward = {
-        description: formValue.description,
-        cost: Number(formValue.cost),
-        familyId: { id: Number(formValue.familyId) },
-        status: formValue.status
-      };
-
-      if (this.reward?.id) {
-        // Update existing reward
-        rewardData.id = this.reward.id;
-        this.callUpdateMethod.emit(rewardData);
-        this.rewardService.update(rewardData);
-      } else {
-        // Create new reward
-        this.callSaveMethod.emit(rewardData);
-        this.rewardService.save(rewardData);
-      }
+    let item: IReward = {
+      description: this.rewardForm.controls['description'].value,
+      cost: this.rewardForm.controls['cost'].value,
+      family: {  // Change from 'familyId' to 'family'
+        id: this.rewardForm.controls['familyId'].value  // Keep as object with id property
+      },
+      status: this.rewardForm.controls['status'].value
+    };
+    if (this.rewardForm.controls['id'].value) {
+      item.id = this.rewardForm.controls['id'].value;
+    }
+    if (item.id) {
+      this.callUpdateMethod.emit(item);
     } else {
-      this.rewardForm.markAllAsTouched();
+      this.callSaveMethod.emit(item);
     }
   }
 
   public getFamilyDisplayName(family: IFamily): string {
-    if (family.father && family.son) {
-      return `${family.father.name} ${family.father.lastname} - ${family.son.name} ${family.son.lastname}`;
-    } else if (family.father) {
-      return `${family.father.name} ${family.father.lastname} (Father)`;
-    } else if (family.son) {
-      return `${family.son.name} ${family.son.lastname} (Son)`;
-    }
+    const getPersonName = (person: any) => person ? `${person.name} ${person.lastname}` : '';
+  
+    const fatherName = getPersonName(family.father);
+    const sonName = getPersonName(family.son);
+
+    if (fatherName && sonName) return `${fatherName} - ${sonName}`;
+    if (fatherName) return `${fatherName} (Father)`;
+    if (sonName) return `${sonName} (Son)`;
+
     return `Family ${family.id}`;
   }
 }

@@ -25,6 +25,7 @@ export class RewardService extends BaseService<IReward> {
 
     public totalItems: any = [];
     private alertService: AlertService = inject(AlertService);
+
     constructor() {
         super();
         console.log('RewardService initialized');
@@ -49,8 +50,9 @@ export class RewardService extends BaseService<IReward> {
     }
 
     getMyRewards(): void {
+        console.log('Fetching my rewards...');
+
         this.monitorUserChanges();
-        
         const userId = this.authService.getUser()?.id;
         if (!userId) {
             this.alertService.displayAlert('error', 'User not found', 'center', 'top', ['error-snackbar']);

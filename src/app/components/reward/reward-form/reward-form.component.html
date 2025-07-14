@@ -38,7 +38,7 @@
       class="form-control">
       <option value="">Select a family member</option>
       @for (family of familyService.families$(); track family.id) {
-        <option [value]="family.id">{{getFamilyDisplayName(family)}}</option>
+        <option [ngValue]="family.id">{{getFamilyDisplayName(family)}}</option>
       }
     </select>
     @if (rewardForm.controls['familyId'].invalid && (rewardForm.controls['familyId'].dirty || rewardForm.controls['familyId'].touched)) {

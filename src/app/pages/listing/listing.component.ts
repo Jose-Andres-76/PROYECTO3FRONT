@@ -11,10 +11,8 @@ import { RewardService } from "../../services/reward.service";
 import { inject } from "@angular/core";
 import { ModalService } from "../../services/modal.service";
 import { FormBuilder, Validators } from "@angular/forms";
-import { UserFormComponent } from "../../components/user/user-from/user-form.component";
-import { IFamily, IFamilyCreate, IUser, IReward } from "../../interfaces";
+import { IFamily, IUser, IReward } from "../../interfaces";
 import { AuthService } from "../../services/auth.service";
-import { FamilyFormComponent } from "../../components/families/family-form/family-form.component";
 import { SignUpFormForFamilyComponent } from "../../components/auth/sign-up/sign-up-form-for-family/sign-up-form-for-family.component";
 import { FamilyMemberFormComponent } from "../../components/families/family-member-form/family-member-form.component";
 import { UserService } from "../../services/user.service";
@@ -26,7 +24,6 @@ import { UserService } from "../../services/user.service";
         FamilyListComponent,
         RewardListComponent,
         RewardFormComponent,
-        FamilyFormComponent,
         PaginationComponent,
         ModalComponent,
         LoaderComponent,
@@ -87,7 +84,6 @@ export class ListingComponent {
         this.rewardService.getMyRewards();
     }
 
-    // Family methods (existing)
     openAddFamilyModal() {
         this.isCreatingFamily = true;
         this.newSonUser = null;
@@ -207,7 +203,6 @@ export class ListingComponent {
         }, 500);
     }
 
-    // Reward methods
     openAddRewardModal() {
         this.selectedReward = null;
         this.modalService.displayModal('md', this.addRewardModal);
@@ -226,6 +221,11 @@ export class ListingComponent {
     saveReward(reward: IReward) {
         console.log('=== LISTING COMPONENT SAVE REWARD ===');
         console.log('Received reward object:', reward);
+        
+        if (!reward.family || !reward.family.id) {  // Change to check 'family' instead of 'familyId'
+            console.error('Reward must have a valid family with id');
+            return;
+        }
         
         this.rewardService.save(reward);
         this.modalService.closeAll();

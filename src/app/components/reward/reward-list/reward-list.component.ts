@@ -22,9 +22,6 @@ export class RewardListComponent {
   @Output() callDeleteAction: EventEmitter<IReward> = new EventEmitter<IReward>();
 
   getSonName(reward: IReward): string {
-    console.log('Reward object:', reward);
-    console.log('familyId:', reward.familyId);
-
     const sonName = (reward as any).family?.son?.name || 'N/A';
     
     console.log('Son name:', sonName);
