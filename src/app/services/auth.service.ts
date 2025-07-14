@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { IAuthority, ILoginResponse, IResponse, IRoleType, IUser } from '../interfaces';
 import { Observable, firstValueFrom, of, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 declare const google: any;
 
@@ -142,7 +143,7 @@ export class AuthService {
   public initializeGoogleSignIn(): void {
     if (typeof google !== 'undefined') {
       google.accounts.id.initialize({
-        client_id: '866761172100-vand4bvk8gn2ap732uijdikpmuano2e8.apps.googleusercontent.com', // Replace with your complete Google Client ID
+        client_id: environment.googleClientId, // Use the Google Client ID from environment right here
         callback: this.handleGoogleSignIn.bind(this),
         auto_select: false,
         cancel_on_tap_outside: true,
