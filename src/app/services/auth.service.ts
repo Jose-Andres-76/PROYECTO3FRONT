@@ -26,6 +26,13 @@ export class AuthService {
 
     if (this.expiresIn)
       localStorage.setItem('expiresIn',JSON.stringify(this.expiresIn));
+
+    //get the user id
+    if (this.user && this.user.id) {
+      localStorage.setItem('user_id', JSON.stringify(this.user.id));
+    } else {
+      localStorage.removeItem('user_id');
+    }
   }
 
   private load(): void {
@@ -94,6 +101,11 @@ export class AuthService {
 
   public signup(user: IUser): Observable<ILoginResponse> {
     return this.http.post<ILoginResponse>('auth/signup', user);
+  }
+
+
+  public signupSon(user: IUser): Observable<ILoginResponse> {
+    return this.http.post<ILoginResponse>('auth/signup/son', user);
   }
 
   public logout() {

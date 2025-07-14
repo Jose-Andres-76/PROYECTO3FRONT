@@ -1,0 +1,129 @@
+@defer {
+    <div class="row p-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>{{user?.lastname}} Family</h2>
+                <button 
+                    type="button" 
+                    class="btn btn-primary"
+                    (click)="openAddFamilyModal()">
+                    <i class="fas fa-plus"></i> Add Family Member
+                </button>
+            </div>
+        </div>
+        <div class="col-12">
+            <app-family-list
+                (callDeleteAction)="deleteFamily($event)"
+                (callModalAction)="callEdition($event)"
+                [families]="familyService.families$()"
+            />
+            @if(familyService.families$().length) {
+                <app-pagination
+                [service]="familyService"
+                />
+            }
+        </div>
+        
+        <!-- Rewards Section -->
+        <div class="col-12 mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Family Rewards</h2>
+                <button 
+                    type="button" 
+                    class="btn btn-success"
+                    (click)="openAddRewardModal()">
+                    <i class="fas fa-plus"></i> Add Reward
+                </button>
+            </div>
+            <app-reward-list
+                (callDeleteAction)="rewardService.delete($event)"
+                (callModalAction)="callRewardEdition($event)"
+                [rewards]="rewardService.rewards$()"
+            />
+            @if(rewardService.rewards$().length) {
+                <app-pagination
+                [service]="rewardService"
+                />
+            }
+        </div>
+    </div>
+} @loading (minimum 1.5s){
+    <app-loader></app-loader>
+} 
+
+<ng-template #addFamilyModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Add Family Member</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeAddFamilyModal()">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        @if(!newSonUser) {
+            <app-sign-up-form-for-family
+                (userCreated)="onSonUserCreated($event)"
+                (signupCancelled)="closeAddFamilyModal()"
+            />
+        } @else {
+            <div class="text-center">
+                <h4>Family Member Created Successfully!</h4>
+                <p>{{newSonUser.name}} {{newSonUser.lastname}} has been added to your family.</p>
+                <button type="button" class="btn btn-success" (click)="closeAddFamilyModal()">
+                    <i class="fas fa-check"></i> Done
+                </button>
+            </div>
+        }
+    </div>
+</ng-template>
+
+<ng-template #editFamilyMemberModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Edit Family Member</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="alert alert-info mb-3">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Note:</strong> Password is required for security. Enter the current password.
+        </div>
+        <app-family-member-form
+            [memberForm]="memberForm"
+            (callUpdateMethod)="updateFamilyMember($event)"
+        />
+    </div>
+</ng-template>
+
+<!-- Add Reward Modal -->
+<ng-template #addRewardModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Add New Reward</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-reward-form
+            title="Add New Reward"
+            (callSaveMethod)="saveReward($event)"
+        />
+    </div>
+</ng-template>
+
+<!-- Edit Reward Modal -->
+<ng-template #editRewardModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Edit Reward</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-reward-form
+            title="Edit Reward"
+            [reward]="getSelectedReward()"
+            (callUpdateMethod)="updateReward($event)"
+        />
+    </div>
+</ng-template>

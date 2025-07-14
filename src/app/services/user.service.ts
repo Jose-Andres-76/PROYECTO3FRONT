@@ -33,7 +33,6 @@ export class UserService extends BaseService<IUser> {
     });
   }
 
-
   save(user: IUser) {
     this.add(user).subscribe({
       next: (response: any) => {
@@ -41,7 +40,7 @@ export class UserService extends BaseService<IUser> {
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'An error occurred adding the user','center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'An error occurred saving the user','center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
     });
@@ -57,6 +56,36 @@ export class UserService extends BaseService<IUser> {
         this.alertService.displayAlert('error', 'An error occurred updating the user','center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
+    });
+  }
+
+  updateFamilyMember(user: IUser) {
+    // Create a user object with the provided role
+    const userToUpdate = {
+        id: user.id,
+        name: user.name,
+        lastname: user.lastname,
+        email: user.email,
+        password: user.password,
+        points: user.points,
+        role: user.role || {
+            id: 2,
+            name: 'ROLE_SON',
+            description: 'Son Role'
+        }
+    };
+    
+    console.log('Updating family member via service:', userToUpdate);
+    
+    this.editCustomSource(`${user.id}`, userToUpdate).subscribe({
+        next: (response: any) => {
+            console.log('Update response:', response);
+            this.alertService.displayAlert('success', response.message || 'Family member updated successfully', 'center', 'top', ['success-snackbar']);
+        },
+        error: (err: any) => {
+            console.error('Update error:', err);
+            this.alertService.displayAlert('error', 'An error occurred updating the family member','center', 'top', ['error-snackbar']);
+        }
     });
   }
 

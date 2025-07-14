@@ -16,9 +16,11 @@ import { PreferenceListPageComponent } from './pages/preferenceList/preference-l
 import { SportTeamComponent } from './pages/sport-team/sport-team.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
+import { ListingComponent } from './pages/listing/listing.component';
 import { GarbageScannerPageComponent } from './pages/garbage-scanner/garbage-scanner.component';
 import { CollectionCentersComponent } from './components/collection-centers/collection-centers.component';
 import { GoogleCallbackComponent } from './pages/auth/google-callback/google-callback.component';
+
 
 
 export const routes: Routes = [
@@ -189,6 +191,19 @@ export const routes: Routes = [
           iconPath: 'assets/icons/sidebar/compass-regular.svg'
         }
       },
+      {
+        path: 'family',
+        component: ListingComponent,
+        data: { 
+          authorities: [
+            IRoleType.admin, 
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Family',
+          showInSidebar: true
+        }
+      }
     ],
   },
    { path: '**', redirectTo: '' }
