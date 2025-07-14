@@ -111,6 +111,7 @@ export interface IPlayer {
   name?: string;
 }
 
+
 export interface IFamily {
   id?: number;
   son?: IUser;
@@ -138,3 +139,26 @@ interface IChallenge {
   description?: string;
 }
 
+export interface IWaste {
+  id?: number;
+  userId?: number;
+  user?: IUser;
+  productType?: string;
+  answer?: string;
+  createdAt?: Date;
+}
+
+export interface IWasteCreateRequest {
+  userId: number;
+  productType?: string;
+  answer?: string;
+}
+
+export interface IWasteUpdateRequest {
+  productType?: string;
+  answer?: string;
+}
+
+export interface IWasteStats {
+  totalCount: number;
+}

@@ -1,0 +1,21 @@
+<div class="image-preview mt-4" *ngIf="imageSrc">
+  <div class="preview-card">
+    <div class="preview-header">
+      <h6 class="mb-0">{{ title }}</h6>
+      <button class="btn btn-sm btn-outline-secondary" (click)="clear()">
+        <i class="fas" [class]="clearIcon"></i>
+      </button>
+    </div>
+    <div class="preview-body">
+      <img [src]="imageSrc" class="preview-image" [alt]="title">
+      <div class="preview-actions mt-3">
+        <button class="btn btn-success btn-lg w-100" 
+                (click)="analyze()"
+                [disabled]="isLoading">
+          <i class="fas fa-search me-2"></i>
+          {{ analyzeButtonText }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

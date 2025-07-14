@@ -14,10 +14,20 @@ import { GamesComponent } from './pages/games/games.component';
 import { OrdersComponent } from './pages/orders/orders.component';
 import { PreferenceListPageComponent } from './pages/preferenceList/preference-list.component';
 import { SportTeamComponent } from './pages/sport-team/sport-team.component';
+import { LandingComponent } from './pages/landing/landing.component';
 import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
 import { ListingComponent } from './pages/listing/listing.component';
+import { GarbageScannerPageComponent } from './pages/garbage-scanner/garbage-scanner.component';
+import { CollectionCentersComponent } from './components/collection-centers/collection-centers.component';
+import { GoogleCallbackComponent } from './pages/auth/google-callback/google-callback.component';
+
+
 
 export const routes: Routes = [
+  {
+    path: '',
+    component: LandingComponent,
+  },
   {
     path: 'login',
     component: LoginComponent,
@@ -32,6 +42,10 @@ export const routes: Routes = [
     path: 'signup',
     component: SigUpComponent,
     canActivate: [GuestGuard],
+  },
+  {
+    path: 'auth/google/callback',
+    component: GoogleCallbackComponent,
   },
   {
     path: 'access-denied',
@@ -61,7 +75,8 @@ export const routes: Routes = [
             IRoleType.admin
           ],
           name: 'Users',
-          showInSidebar: true
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
       {
@@ -74,7 +89,8 @@ export const routes: Routes = [
             IRoleType.son
           ],
           name: 'Dashboard',
-          showInSidebar: true
+          showInSidebar: false,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
       {
@@ -87,7 +103,8 @@ export const routes: Routes = [
             IRoleType.son
           ],
           name: 'profile',
-          showInSidebar: false
+          showInSidebar: false,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
       {
@@ -100,7 +117,8 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'games',
-          showInSidebar: true
+          showInSidebar: false,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
       {
@@ -113,7 +131,8 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'orders',
-          showInSidebar: true
+          showInSidebar: false,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
       {
@@ -126,7 +145,8 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'preference list',
-          showInSidebar: true
+          showInSidebar: false,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
       {
@@ -139,7 +159,36 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'Sport Team',
-          showInSidebar: true
+          showInSidebar: false,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
+        }
+      },
+      {
+        path: 'garbage-scanner',
+        component: GarbageScannerPageComponent,
+        data: { 
+          authorities: [
+            IRoleType.admin, 
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Escáner de Basura',
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/magnifying-glass-solid (1).svg'
+        }
+      },
+      {
+        path: 'collection-centers',
+        component: CollectionCentersComponent,
+        data: { 
+          authorities: [
+            IRoleType.admin, 
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Centros de Acopio',
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/compass-regular.svg'
         }
       },
       {
@@ -157,4 +206,5 @@ export const routes: Routes = [
       }
     ],
   },
+   { path: '**', redirectTo: '' }
 ];

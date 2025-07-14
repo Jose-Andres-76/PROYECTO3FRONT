@@ -1,0 +1,19 @@
+<h2>Centros de Acopio</h2>
+
+<app-map-collection-centers [centers]="allCenters"></app-map-collection-centers>
+
+
+<div class="centers-filter">
+  <label for="province">Filtrar por provincia:</label>
+  <select id="province" [(ngModel)]="selectedProvince">
+    <option *ngFor="let p of provinces" [value]="p">{{ p }}</option>
+  </select>
+
+ <ul class="centers-list">
+  <li *ngFor="let center of filteredCenters">
+    <a href="#" (click)="goToMap(center, $event)">
+      {{ center.name }}: {{ center.address }}
+    </a>
+  </li>
+</ul>
+</div>

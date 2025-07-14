@@ -1,0 +1,91 @@
+<!-- Modal Backdrop -->
+<div class="modal-backdrop" 
+     *ngIf="isVisible" 
+     (click)="closeModal()"
+     [class.show]="isVisible">
+  
+  <!-- Modal Dialog -->
+  <div class="modal-dialog modal-dialog-centered modal-lg" 
+       (click)="stopPropagation($event)">
+    <div class="modal-content">
+      
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="d-flex align-items-center flex-grow-1">
+          <i [class]="getQuestionIcon()" 
+             [class]="getQuestionColor()" 
+             class="fs-4 me-3"></i>
+          <div class="flex-grow-1">
+            <h5 class="modal-title mb-1">{{ question }}</h5>
+            <small class="text-muted">Respuesta para: {{ materialName }}</small>
+          </div>
+        </div>
+        <button type="button" 
+                class="btn-close ms-3" 
+                (click)="closeModal()"
+                [disabled]="isLoading"
+                aria-label="Cerrar">
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="text-center py-4">
+          <div class="spinner-wrapper">
+            <i class="fas fa-robot fs-1 mb-3 breathing"></i>
+            <div class="spinner-border mb-3" role="status">
+              <span class="visually-hidden">Consultando...</span>
+            </div>
+            <p class="text-muted">Consultando con el asistente IA...</p>
+          </div>
+        </div>
+
+        <!-- Response Content -->
+        <div *ngIf="!isLoading && response" class="response-content">
+          <div class="response-card">
+            <div class="d-flex align-items-start mb-3">
+              <div class="avatar-ai me-3">
+                <i class="fas fa-robot"></i>
+              </div>
+              <div class="response-text flex-grow-1">
+                <div class="response-bubble">
+                  <p class="mb-0" [innerHTML]="formatResponse(response)"></p>
+                </div>
+                <small class="text-muted mt-2 d-block">
+                  <i class="fas fa-check-circle me-1"></i>
+                  Respuesta generada por IA
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error State -->
+        <div *ngIf="!isLoading && !response" class="text-center py-4">
+          <i class="fas fa-exclamation-triangle fs-1 text-success mb-3"></i>
+          <p class="text-muted">No se pudo obtener una respuesta. Por favor, intenta nuevamente.</p>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" 
+                class="btn btn-outline-light" 
+                (click)="closeModal()"
+                [disabled]="isLoading">
+          <i class="fas fa-times me-2"></i>
+          Cerrar
+        </button>
+        <button type="button" 
+                class="btn btn-success"
+                (click)="closeModal()"
+                [disabled]="isLoading"
+                *ngIf="!isLoading && response">
+          <i class="fas fa-check me-2"></i>
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

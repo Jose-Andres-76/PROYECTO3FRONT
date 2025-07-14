@@ -5,6 +5,7 @@ import { SidebarComponent } from './elements/sidebar/sidebar.component';
 import { CommonModule } from '@angular/common';
 import { LayoutService } from '../../services/layout.service';
 import { SvgIconComponent } from '../svg-icon/svg-icon.component';
+import { FooterComponent } from './elements/footer/footer.component';
 
 @Component({
   selector: 'app-layout',
@@ -14,7 +15,8 @@ import { SvgIconComponent } from '../svg-icon/svg-icon.component';
     RouterOutlet,
     TopbarComponent,
     SidebarComponent,
-    SvgIconComponent
+    SvgIconComponent,
+    FooterComponent
   ],
   templateUrl: './app-layout.component.html',
 })
