@@ -1,0 +1,120 @@
+.hero-section {
+  position: relative;
+  background-image: url('/assets/img/landingpage/Landing.png'); 
+  background-size: cover;
+  background-position: center;
+  min-height: 600px;
+  padding: 150px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(94, 90, 90, 0.4);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-content h1 {
+  font-size: 3.5em;
+  margin-bottom: 20px;
+  line-height: 1.2;
+  color: white;
+}
+
+.hero-content p {
+  font-size: 1.5em;
+  margin-bottom: 40px;
+  color: white;
+}
+
+.hero-section .btn-primary {
+  background-color: #1b8159;
+  color: white;
+  border: none;
+  padding: 15px 50px;
+  border-radius: 10px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.hero-section .btn-primary:hover {
+  background-color: #166d4b;
+}
+
+@media (max-width: 992px) {
+  .hero-section {
+    min-height: 500px;
+    padding: 120px 15px;
+  }
+
+  .hero-content h1 {
+    font-size: 2.8em;
+  }
+
+  .hero-content p {
+    font-size: 1.3em;
+  }
+
+  .hero-section .btn-primary {
+    padding: 12px 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 400px;
+    padding: 100px 10px;
+  }
+
+  .hero-content h1 {
+    font-size: 2.2em;
+  }
+
+  .hero-content p {
+    font-size: 1.1em;
+  }
+
+  .hero-section .btn-primary {
+    padding: 12px 30px;
+    font-size: 0.95em;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section {
+    min-height: 350px;
+    padding: 80px 10px;
+  }
+
+  .hero-content h1 {
+    font-size: 1.8em;
+  }
+
+  .hero-content p {
+    font-size: 1em;
+  }
+
+  .hero-section .btn-primary {
+    padding: 10px 20px;
+    font-size: 0.9em;
+  }
+}
+
+
