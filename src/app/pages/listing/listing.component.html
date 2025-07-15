@@ -59,38 +59,35 @@
         </button>
     </div>
     <div class="modal-body">
-        @if(!newSonUser) {
-            <app-sign-up-form-for-family
-                (userCreated)="onSonUserCreated($event)"
-                (signupCancelled)="closeAddFamilyModal()"
-            />
-        } @else {
-            <div class="text-center">
-                <h4>Family Member Created Successfully!</h4>
-                <p>{{newSonUser.name}} {{newSonUser.lastname}} has been added to your family.</p>
-                <button type="button" class="btn btn-success" (click)="closeAddFamilyModal()">
-                    <i class="fas fa-check"></i> Done
-                </button>
-            </div>
-        }
+        <app-family-member-form
+            [memberForm]="memberForm"
+            [isEditMode]="false"
+            (callSaveMethod)="saveFamilyMember($event)"
+            (callCancelMethod)="closeAddFamilyModal()"
+        />
     </div>
 </ng-template>
 
 <ng-template #editFamilyMemberModal let-modal>
     <div class="modal-header">
-        <h4 class="modal-title">Edit Family Member</h4>
+        <h4 class="modal-title">{{ isCreatingFamily ? 'Add Family Member' : 'Edit Family Member' }}</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
             <span aria-hidden="true"></span>
         </button>
     </div>
     <div class="modal-body">
-        <div class="alert alert-info mb-3">
-            <i class="fas fa-info-circle me-2"></i>
-            <strong>Note:</strong> Password is required for security. Enter the current password.
-        </div>
+        @if (!isCreatingFamily) {
+            <div class="alert alert-info mb-3">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Note:</strong> Password is required for security. Enter the current password.
+            </div>
+        }
         <app-family-member-form
             [memberForm]="memberForm"
+            [isEditMode]="!isCreatingFamily"
             (callUpdateMethod)="updateFamilyMember($event)"
+            (callSaveMethod)="saveFamilyMember($event)"
+            (callCancelMethod)="modalService.closeAll()"
         />
     </div>
 </ng-template>
