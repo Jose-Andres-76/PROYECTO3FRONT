@@ -54,11 +54,7 @@ export class AuthService {
   }
 
   public check(): boolean {
-    if (!this.accessToken){
-      return false;
-    } else {
-      return true;
-    }
+    return !!this.accessToken && !this.isTokenExpired();
   }
 
   public login(credentials: {
@@ -69,7 +65,7 @@ export class AuthService {
       tap((response: any) => {
         this.accessToken = response.token;
         this.user.email = credentials.email;
-        this.expiresIn = response.expiresIn;
+        this.expiresIn = Date.now() + response.expiresIn;        
         this.user = response.authUser;
         this.save();
       })
@@ -181,7 +177,7 @@ export class AuthService {
       this.verifyGoogleToken(tokenData).subscribe({
         next: (response: any) => {
           this.accessToken = response.token;
-          this.expiresIn = response.expiresIn;
+          this.expiresIn = Date.now() + response.expiresIn;
           this.user = response.authUser || {
             email: tokenData.email,
             name: tokenData.name,
@@ -224,8 +220,14 @@ export class AuthService {
 
   public handleGoogleCallback(token: string, expiresIn: number): void {
     this.accessToken = token;
-    this.expiresIn = expiresIn;
+    this.expiresIn = Date.now() + expiresIn;
     // The user data should be included in the callback or fetched separately
     this.save();
   }
+
+  public isTokenExpired(): boolean {
+  if (!this.expiresIn) return true;
+  const now = Date.now();
+  return now > this.expiresIn;
+}
 }
