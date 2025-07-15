@@ -198,7 +198,6 @@ export const routes: Routes = [
           authorities: [
             IRoleType.admin, 
             IRoleType.father,
-            IRoleType.son,
           ],
           name: 'Family',
           showInSidebar: true,
