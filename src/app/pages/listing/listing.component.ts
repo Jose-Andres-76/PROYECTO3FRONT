@@ -222,7 +222,7 @@ export class ListingComponent {
         console.log('=== LISTING COMPONENT SAVE REWARD ===');
         console.log('Received reward object:', reward);
         
-        if (!reward.family || !reward.family.id) {  // Change to check 'family' instead of 'familyId'
+        if (!reward.family || !reward.family.id) {  
             console.error('Reward must have a valid family with id');
             return;
         }

@@ -4,14 +4,14 @@
       <div class="card shadow-lg border-0">
         <div class="card-body p-4">
           <div class="text-center mb-4">
-            <h3 class="text-primary">Create Son Account</h3>
-            <p class="text-muted">Create an account for your son to add to the family</p>
+            <h3 class="text-primary">Crear cuenta de hijo</h3>
+            <p class="text-muted">Crea una cuenta para el hijo que agregarás a tú familia</p>
           </div>
 
           @if(validSignup) {
             <div class="alert alert-success text-center">
               <i class="fas fa-check-circle"></i>
-              Son account created successfully!
+              Cuenta creada exitosamente.
             </div>
           } @else {
             <form (ngSubmit)="handleSignup($event)" novalidate>
@@ -22,7 +22,7 @@
               }
 
               <div class="mb-3">
-                <label for="name" class="form-label">Name *</label>
+                <label for="name" class="form-label">Nombre *</label>
                 <input 
                   type="text" 
                   class="form-control" 
@@ -32,16 +32,16 @@
                   #name="ngModel"
                   required
                   [class.is-invalid]="name.touched && name.invalid"
-                  placeholder="Enter son's name">
+                  placeholder="Ingrese el nombre del hijo">
                 @if(name.touched && name.invalid) {
                   <div class="invalid-feedback">
-                    Name is required
+                    El nombre es requerido
                   </div>
                 }
               </div>
 
               <div class="mb-3">
-                <label for="lastname" class="form-label">Last Name *</label>
+                <label for="lastname" class="form-label">Apellido *</label>
                 <input 
                   type="text" 
                   class="form-control" 
@@ -51,16 +51,16 @@
                   #lastname="ngModel"
                   required
                   [class.is-invalid]="lastname.touched && lastname.invalid"
-                  placeholder="Enter son's last name">
+                  placeholder="Ingrese el apellido del hijo">
                 @if(lastname.touched && lastname.invalid) {
                   <div class="invalid-feedback">
-                    Last name is required
+                    El apellido es requerido
                   </div>
                 }
               </div>
 
               <div class="mb-3">
-                <label for="email" class="form-label">Email *</label>
+                <label for="email" class="form-label">Correo electrónico *</label>
                 <input 
                   type="email" 
                   class="form-control" 
@@ -71,21 +71,21 @@
                   required
                   [pattern]="emailPattern"
                   [class.is-invalid]="email.touched && email.invalid"
-                  placeholder="Enter son's email">
+                  placeholder="Ingrese el correo electrónico del hijo">
                 @if(email.touched && email.invalid) {
                   <div class="invalid-feedback">
                     @if(email.errors?.['required']) {
-                      Email is required
+                      Correo electrónico es requerido
                     }
                     @if(email.errors?.['pattern']) {
-                      Please enter a valid email address
+                      Por favor, ingrese un correo electrónico válido
                     }
                   </div>
                 }
               </div>
 
               <div class="mb-3">
-                <label for="age" class="form-label">Age *</label>
+                <label for="age" class="form-label">Edad *</label>
                 <input 
                   type="number" 
                   class="form-control" 
@@ -94,25 +94,25 @@
                   [(ngModel)]="user.age" 
                   #age="ngModel"
                   required
-                  min="1"
+                  min="10"
                   max="100"
                   [class.is-invalid]="age.touched && age.invalid"
-                  placeholder="Enter son's age">
+                  placeholder="Ingrese la edad del hijo">
                 @if(age.touched && age.invalid) {
                   <div class="invalid-feedback">
                     @if(age.errors?.['required']) {
-                      Age is required
+                      Edad requerida
                     }
                     @if(age.errors?.['min'] || age.errors?.['max']) {
-                      Age must be between 1 and 100
+                      Ingrese por una edad válida
                     }
                   </div>
                 }
               </div>
 
               <div class="mb-3">
-                <label for="password" class="form-label">Password *</label>
                 <div class="input-group">
+                  <label for="password" class="form-label">Contraseña *</label>
                   <input 
                     [type]="showPassword ? 'text' : 'password'" 
                     class="form-control" 
@@ -123,7 +123,7 @@
                     required
                     [pattern]="passwordPattern"
                     [class.is-invalid]="password.touched && password.invalid"
-                    placeholder="Enter son's password">
+                    placeholder="Ingrese una contraseña segura">
                   <button 
                     type="button" 
                     class="btn btn-outline-secondary" 
@@ -134,10 +134,10 @@
                 @if(password.touched && password.invalid) {
                   <div class="invalid-feedback d-block">
                     @if(password.errors?.['required']) {
-                      Password is required
+                      Contraseña es requerida
                     }
                     @if(password.errors?.['pattern']) {
-                      Password must contain at least 8 characters, including uppercase, lowercase, number and special character
+                      Contraseña debe tener al menos 8 caracteres, una letra mayúscula, una minúscula, un número y un carácter especial
                     }
                   </div>
                 }
