@@ -1,0 +1,52 @@
+<form [formGroup]="memberForm" class="row">
+  <div>
+    <h2 class="mb-0">Edit Family Member</h2>
+    <p class="text-muted">Update the family member's information</p>
+  </div>
+  
+  <div class="mb-2">
+    <label class="mb-1" for="name">Name*</label>
+    <input id="name" formControlName="name" type="text" class="form-control">
+    @if (memberForm.controls['name'].invalid && (memberForm.controls['name'].dirty || memberForm.controls['name'].touched)) {
+      <p class="text-danger my-1">Name is required</p>
+    }
+  </div>
+  
+  <div class="mb-2">
+    <label class="mb-1" for="lastname">Last Name*</label>
+    <input id="lastname" formControlName="lastname" type="text" class="form-control">
+    @if (memberForm.controls['lastname'].invalid && (memberForm.controls['lastname'].dirty || memberForm.controls['lastname'].touched)) {
+      <p class="text-danger my-1">Last name is required</p>
+    }
+  </div>
+  
+  <div class="mb-2">
+    <label class="mb-1" for="email">Email*</label>
+    <input id="email" formControlName="email" type="email" class="form-control" readonly>
+    <small class="text-muted">Email cannot be changed</small>
+  </div>
+  
+  <div class="mb-2">
+    <label class="mb-1" for="password">Password*</label>
+    <input id="password" formControlName="password" type="password" class="form-control">
+    @if (memberForm.controls['password'].invalid && (memberForm.controls['password'].dirty || memberForm.controls['password'].touched)) {
+      <p class="text-danger my-1">Password is required</p>
+    }
+    <small class="text-muted">Enter the current password or a new password</small>
+  </div>
+  
+  <div class="mb-2">
+    <label class="mb-1" for="points">Points</label>
+    <input id="points" formControlName="points" type="number" class="form-control" min="0">
+    @if (memberForm.controls['points'].invalid && (memberForm.controls['points'].dirty || memberForm.controls['points'].touched)) {
+      <p class="text-danger my-1">Points must be a valid number</p>
+    }
+  </div>
+  
+  <div class="d-flex justify-content-end gap-2">
+    <button type="button" class="btn btn-secondary" (click)="memberForm.reset()">Reset</button>
+    <button (click)="callUpdate()" [disabled]="memberForm.invalid" class="btn btn-primary" type="button">
+      Update Member
+    </button>
+  </div>
+</form>

@@ -1,0 +1,165 @@
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+  <div class="row w-100">
+    <div class="col-12 col-md-6 col-lg-4 mx-auto">
+      <div class="card shadow-lg border-0">
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <h3 class="text-primary">Create Son Account</h3>
+            <p class="text-muted">Create an account for your son to add to the family</p>
+          </div>
+
+          @if(validSignup) {
+            <div class="alert alert-success text-center">
+              <i class="fas fa-check-circle"></i>
+              Son account created successfully!
+            </div>
+          } @else {
+            <form (ngSubmit)="handleSignup($event)" novalidate>
+              @if(signUpError) {
+                <div class="alert alert-danger">
+                  {{ signUpError }}
+                </div>
+              }
+
+              <div class="mb-3">
+                <label for="name" class="form-label">Name *</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="name" 
+                  name="name"
+                  [(ngModel)]="user.name" 
+                  #name="ngModel"
+                  required
+                  [class.is-invalid]="name.touched && name.invalid"
+                  placeholder="Enter son's name">
+                @if(name.touched && name.invalid) {
+                  <div class="invalid-feedback">
+                    Name is required
+                  </div>
+                }
+              </div>
+
+              <div class="mb-3">
+                <label for="lastname" class="form-label">Last Name *</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="lastname" 
+                  name="lastname"
+                  [(ngModel)]="user.lastname" 
+                  #lastname="ngModel"
+                  required
+                  [class.is-invalid]="lastname.touched && lastname.invalid"
+                  placeholder="Enter son's last name">
+                @if(lastname.touched && lastname.invalid) {
+                  <div class="invalid-feedback">
+                    Last name is required
+                  </div>
+                }
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="form-label">Email *</label>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  id="email" 
+                  name="email"
+                  [(ngModel)]="user.email" 
+                  #email="ngModel"
+                  required
+                  [pattern]="emailPattern"
+                  [class.is-invalid]="email.touched && email.invalid"
+                  placeholder="Enter son's email">
+                @if(email.touched && email.invalid) {
+                  <div class="invalid-feedback">
+                    @if(email.errors?.['required']) {
+                      Email is required
+                    }
+                    @if(email.errors?.['pattern']) {
+                      Please enter a valid email address
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="mb-3">
+                <label for="age" class="form-label">Age *</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="age" 
+                  name="age"
+                  [(ngModel)]="user.age" 
+                  #age="ngModel"
+                  required
+                  min="1"
+                  max="100"
+                  [class.is-invalid]="age.touched && age.invalid"
+                  placeholder="Enter son's age">
+                @if(age.touched && age.invalid) {
+                  <div class="invalid-feedback">
+                    @if(age.errors?.['required']) {
+                      Age is required
+                    }
+                    @if(age.errors?.['min'] || age.errors?.['max']) {
+                      Age must be between 1 and 100
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-label">Password *</label>
+                <div class="input-group">
+                  <input 
+                    [type]="showPassword ? 'text' : 'password'" 
+                    class="form-control" 
+                    id="password" 
+                    name="password"
+                    [(ngModel)]="user.password" 
+                    #password="ngModel"
+                    required
+                    [pattern]="passwordPattern"
+                    [class.is-invalid]="password.touched && password.invalid"
+                    placeholder="Enter son's password">
+                  <button 
+                    type="button" 
+                    class="btn btn-outline-secondary" 
+                    (click)="togglePasswordVisibility()">
+                    <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+                  </button>
+                </div>
+                @if(password.touched && password.invalid) {
+                  <div class="invalid-feedback d-block">
+                    @if(password.errors?.['required']) {
+                      Password is required
+                    }
+                    @if(password.errors?.['pattern']) {
+                      Password must contain at least 8 characters, including uppercase, lowercase, number and special character
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="d-grid gap-2">
+                <button 
+                  type="submit" 
+                  class="btn btn-primary">
+                  Create Son Account
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-secondary"
+                  (click)="cancelSignup()">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

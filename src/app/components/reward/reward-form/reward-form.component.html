@@ -1,0 +1,68 @@
+<form [formGroup]="rewardForm" class="row">
+  <div class="col-12">
+    <h2 class="mb-3">{{title}}</h2>
+  </div>
+  
+  <div class="col-12 mb-3">
+    <label class="mb-1" for="description">Description*</label>
+    <input 
+      id="description" 
+      formControlName="description" 
+      type="text" 
+      class="form-control"
+      placeholder="Enter reward description">
+    @if (rewardForm.controls['description'].invalid && (rewardForm.controls['description'].dirty || rewardForm.controls['description'].touched)) {
+      <p class="text-danger my-1">Description is required</p>
+    }
+  </div>
+
+  <div class="col-6 mb-3">
+    <label class="mb-1" for="cost">Cost (Points)*</label>
+    <input 
+      id="cost" 
+      formControlName="cost" 
+      type="number" 
+      class="form-control"
+      placeholder="Enter point cost"
+      min="0">
+    @if (rewardForm.controls['cost'].invalid && (rewardForm.controls['cost'].dirty || rewardForm.controls['cost'].touched)) {
+      <p class="text-danger my-1">Cost is required and must be a positive number</p>
+    }
+  </div>
+
+  <div class="col-6 mb-3">
+    <label class="mb-1" for="familyId">Family Member*</label>
+    <select 
+      id="familyId" 
+      formControlName="familyId" 
+      class="form-control">
+      <option value="">Select a family member</option>
+      @for (family of familyService.families$(); track family.id) {
+        <option [ngValue]="family.id">{{getFamilyDisplayName(family)}}</option>
+      }
+    </select>
+    @if (rewardForm.controls['familyId'].invalid && (rewardForm.controls['familyId'].dirty || rewardForm.controls['familyId'].touched)) {
+      <p class="text-danger my-1">Please select a family member</p>
+    }
+  </div>
+
+  <div class="col-6 mb-3 d-flex align-items-center">
+    <input 
+      id="status" 
+      formControlName="status" 
+      type="checkbox" 
+      class="form-check-input me-2">
+    <label class="mb-0" for="status">Active Reward</label>
+  </div>
+
+  <div class="col-12 d-flex justify-content-end">
+    <button 
+      (click)="callSave()" 
+      [disabled]="rewardForm.invalid" 
+      class="btn btn-primary" 
+      type="button">
+      <i class="fas fa-save me-2"></i>
+      Save Reward
+    </button>
+  </div>
+</form>
