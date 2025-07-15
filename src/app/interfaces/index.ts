@@ -111,6 +111,34 @@ export interface IPlayer {
   name?: string;
 }
 
+
+export interface IFamily {
+  id?: number;
+  son?: IUser;
+  father?: IUser;
+  idSon?: IUser;
+  idFather?: IUser;
+}
+
+export interface IReward {
+  id?: number;
+  family: {  
+    id: number;
+  }; 
+  cost?: number;
+  description?: string;
+  status?: boolean;
+}
+
+interface IChallenge {
+  id?: number;
+  familyId?: IFamily;
+  gameId?: IGame;
+  points?: number;
+  challengeStatus?: boolean;
+  description?: string;
+}
+
 export interface IWaste {
   id?: number;
   userId?: number;

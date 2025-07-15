@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { IAuthority, ILoginResponse, IResponse, IRoleType, IUser } from '../interfaces';
 import { Observable, firstValueFrom, of, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 declare const google: any;
 
@@ -26,6 +27,13 @@ export class AuthService {
 
     if (this.expiresIn)
       localStorage.setItem('expiresIn',JSON.stringify(this.expiresIn));
+
+    //get the user id
+    if (this.user && this.user.id) {
+      localStorage.setItem('user_id', JSON.stringify(this.user.id));
+    } else {
+      localStorage.removeItem('user_id');
+    }
   }
 
   private load(): void {
@@ -46,11 +54,7 @@ export class AuthService {
   }
 
   public check(): boolean {
-    if (!this.accessToken){
-      return false;
-    } else {
-      return true;
-    }
+    return !!this.accessToken && !this.isTokenExpired();
   }
 
   public login(credentials: {
@@ -61,7 +65,7 @@ export class AuthService {
       tap((response: any) => {
         this.accessToken = response.token;
         this.user.email = credentials.email;
-        this.expiresIn = response.expiresIn;
+        this.expiresIn = Date.now() + response.expiresIn;        
         this.user = response.authUser;
         this.save();
       })
@@ -94,6 +98,11 @@ export class AuthService {
 
   public signup(user: IUser): Observable<ILoginResponse> {
     return this.http.post<ILoginResponse>('auth/signup', user);
+  }
+
+
+  public signupSon(user: IUser): Observable<ILoginResponse> {
+    return this.http.post<ILoginResponse>('auth/signup/son', user);
   }
 
   public logout() {
@@ -130,7 +139,7 @@ export class AuthService {
   public initializeGoogleSignIn(): void {
     if (typeof google !== 'undefined') {
       google.accounts.id.initialize({
-        client_id: '866761172100-vand4bvk8gn2ap732uijdikpmuano2e8.apps.googleusercontent.com', // Replace with your complete Google Client ID
+        client_id: environment.googleClientId, // Use the Google Client ID from environment right here
         callback: this.handleGoogleSignIn.bind(this),
         auto_select: false,
         cancel_on_tap_outside: true,
@@ -168,7 +177,7 @@ export class AuthService {
       this.verifyGoogleToken(tokenData).subscribe({
         next: (response: any) => {
           this.accessToken = response.token;
-          this.expiresIn = response.expiresIn;
+          this.expiresIn = Date.now() + response.expiresIn;
           this.user = response.authUser || {
             email: tokenData.email,
             name: tokenData.name,
@@ -211,8 +220,14 @@ export class AuthService {
 
   public handleGoogleCallback(token: string, expiresIn: number): void {
     this.accessToken = token;
-    this.expiresIn = expiresIn;
+    this.expiresIn = Date.now() + expiresIn;
     // The user data should be included in the callback or fetched separately
     this.save();
   }
+
+  public isTokenExpired(): boolean {
+  if (!this.expiresIn) return true;
+  const now = Date.now();
+  return now > this.expiresIn;
+}
 }

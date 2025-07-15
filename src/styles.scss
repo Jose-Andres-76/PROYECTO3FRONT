@@ -49,6 +49,8 @@ body[class="dark-only"] {
 //start template styles
 @import "./assets/layout/layout.scss";
 //end template styles
+@import "leaflet/dist/leaflet.css";
+
 
 html, body { 
   height: 100%; 
