@@ -47,7 +47,7 @@
             @if (memberForm.controls['age']?.errors?.['required']) {
               La edad es requerida
             }
-            @if (memberForm.controls['age']?.errors?.['min'] || memberForm.controls['age']?.errors?.['max']) {
+            @if (memberForm.controls['age']?.errors?.['min'] || memberForm.controls['age'].errors?.['max']) {
               Por favor, ingrese una edad válida entre 10 y 100 años
             }
           </p>
