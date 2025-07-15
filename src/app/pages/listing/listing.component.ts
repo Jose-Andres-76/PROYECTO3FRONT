@@ -302,52 +302,35 @@ export class ListingComponent {
         this.rewardService.delete(reward);
     }
 
-    saveFamilyMember(member: IUser) {
-    console.log('Saving new family member:', member);
+    // Add ViewChild reference to the family member form
+@ViewChild('familyMemberFormComponent') familyMemberFormComponent: any;
+
+saveFamilyMember(member: IUser) {
+    console.log('Family member created, now creating family relationship:', member);
     
-    this.authService.signupSon(member).subscribe({
-        next: (response: any) => {
-            console.log('Family member created successfully:', response);
-            
-            let userId = response?.id || response?.data?.id || response?.user?.id || response?.authUser?.id;
-            
-            if (userId && this.user?.id) {
-                const newFamily = {
-                    father: { id: this.user.id },
-                    son: { id: userId }
-                };
-                
-                console.log('Creating family relationship:', newFamily);
-                this.familyService.save(newFamily);
-                this.closeAddFamilyModal();
-                
-                setTimeout(() => {
-                    this.familyService.getAll();
-                }, 500);
-            } else {
-                console.error('No user ID found in response:', response);
-                this.showErrorMessage('User was created but no ID was returned. Please try again.');
-            }
-        },
-        error: (err: any) => {
-            console.error('Error creating family member:', err);
-            
-            // Handle specific errors
-            if (err.status === 500 && err.error?.detail?.includes('Duplicate entry')) {
-                if (err.error.detail.includes('UK_nkljxer1wsj6nrovrei620k5d')) {
-                    this.showErrorMessage('A user with this email already exists. Please use a different email address.');
-                } else {
-                    this.showErrorMessage('This user already exists in the system. Please use different information.');
-                }
-            } else if (err.error?.detail) {
-                this.showErrorMessage(`Error: ${err.error.detail}`);
-            } else if (err.error?.message) {
-                this.showErrorMessage(`Error: ${err.error.message}`);
-            } else {
-                this.showErrorMessage('An error occurred while creating the family member. Please try again.');
-            }
-        }
-    });
+    if (member.id && this.user?.id) {
+        const newFamily = {
+            father: { id: this.user.id },
+            son: { id: member.id }
+        };
+        
+        console.log('Creating family relationship:', newFamily);
+        this.familyService.save(newFamily);
+        this.closeAddFamilyModal();
+        
+        setTimeout(() => {
+            this.familyService.getAll();
+        }, 500);
+    } else {
+        console.error('No user ID found for family creation:', member);
+        this.showErrorMessage('User was created but family relationship could not be established. Please try again.');
+    }
+}
+
+// NEW: Handle user created event (from sign-up-form-for-family compatibility)
+onUserCreated(userData: IUser) {
+    console.log('User created successfully:', userData);
+    this.saveFamilyMember(userData);
 }
 
 private showErrorMessage(message: string) {

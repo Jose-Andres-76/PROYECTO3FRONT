@@ -1,42 +1,54 @@
 <form [formGroup]="memberForm" class="row">
   <div>
-    <h2 class="mb-0">{{ isEditMode ? 'Edit Family Member' : 'Add Family Member' }}</h2>
-    <p class="text-muted">{{ isEditMode ? 'Update the family member\'s information' : 'Enter the new family member\'s information' }}</p>
+    <h2 class="mb-0">{{ title }}</h2>
+    <p class="text-muted">{{ isEditMode ? 'Actualizar la información de hijo' : 'Ingrese la información del nuevo hijo' }}</p>
   </div>
+
+  <!-- Success/Error Messages -->
+  @if(validSignup) {
+    <div class="alert alert-success text-center mb-3">
+      <i class="fas fa-check-circle"></i>
+      {{ isEditMode ? 'Miembro actualizado correctamente' : 'Cuenta de miembro actualizada correctamente' }}
+    </div>
+  }
   
-  <!-- Personal Information Section -->
+  @if(signUpError) {
+    <div class="alert alert-danger mb-3">
+      {{ signUpError }}
+    </div>
+  }
+  
   <div class="mb-3">
-    <h5 class="text-primary mb-2">Personal Information</h5>
+    <h5 class="text-primary mb-2">información Personal</h5>
     
     <div class="mb-2">
-      <label class="mb-1" for="name">First Name*</label>
+      <label class="mb-1" for="name">Nombre*</label>
       <input id="name" formControlName="name" type="text" class="form-control" placeholder="Enter first name">
       @if (memberForm.controls['name'].invalid && (memberForm.controls['name'].dirty || memberForm.controls['name'].touched)) {
-        <p class="text-danger my-1">First name is required</p>
+        <p class="text-danger my-1">El nombre es requerido</p>
       }
     </div>
     
     <div class="mb-2">
-      <label class="mb-1" for="lastname">Last Name*</label>
+      <label class="mb-1" for="lastname">Apellido*</label>
       <input id="lastname" formControlName="lastname" type="text" class="form-control" placeholder="Enter last name">
       @if (memberForm.controls['lastname'].invalid && (memberForm.controls['lastname'].dirty || memberForm.controls['lastname'].touched)) {
-        <p class="text-danger my-1">Last name is required</p>
+        <p class="text-danger my-1">El apellido es requerido</p>
       }
     </div>
 
-    <!-- Age field - only show when creating new member -->
     @if (!isEditMode) {
       <div class="mb-2">
-        <label class="mb-1" for="age">Age*</label>
+        <label class="mb-1" for="age">Edad*</label>
         <input id="age" formControlName="age" type="number" class="form-control" 
                min="10" max="100" placeholder="Enter age">
         @if (memberForm.controls['age']?.invalid && (memberForm.controls['age']?.dirty || memberForm.controls['age']?.touched)) {
           <p class="text-danger my-1">
             @if (memberForm.controls['age']?.errors?.['required']) {
-              Age is required
+              La edad es requerida
             }
             @if (memberForm.controls['age']?.errors?.['min'] || memberForm.controls['age']?.errors?.['max']) {
-              Please enter a valid age (10-100)
+              Por favor, ingrese una edad válida entre 10 y 100 años
             }
           </p>
         }
@@ -44,25 +56,24 @@
     }
   </div>
 
-  <!-- Account Information Section -->
   <div class="mb-3">
-    <h5 class="text-primary mb-2">Account Information</h5>
+    <h5 class="text-primary mb-2">información de cuenta</h5>
     
     <div class="mb-2">
-      <label class="mb-1" for="email">Email Address*</label>
+      <label class="mb-1" for="email">Correo Electrónico*</label>
       <input id="email" formControlName="email" type="email" class="form-control" 
              [readonly]="isEditMode" 
              placeholder="Enter email address">
       @if (isEditMode) {
-        <small class="text-muted">Email cannot be changed</small>
+        <small class="text-muted">El correo electrónico no debe cambiarse</small>
       }
       @if (memberForm.controls['email'].invalid && (memberForm.controls['email'].dirty || memberForm.controls['email'].touched)) {
-        <p class="text-danger my-1">Please enter a valid email address</p>
+        <p class="text-danger my-1">Por favor ingrese un correo electrónico válido</p>
       }
     </div>
     
     <div class="mb-2">
-      <label class="mb-1" for="password">Password*</label>
+      <label class="mb-1" for="password">Contraseña*</label>
       <div class="input-group">
         <input id="password" formControlName="password" 
                [type]="showPassword ? 'text' : 'password'" 
@@ -75,52 +86,55 @@
       @if (memberForm.controls['password'].invalid && (memberForm.controls['password'].dirty || memberForm.controls['password'].touched)) {
         <p class="text-danger my-1">
           @if (memberForm.controls['password'].errors?.['required']) {
-            Password is required
+            La contraseña es requerida
           }
           @if (memberForm.controls['password'].errors?.['pattern']) {
-            Password must have at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character
+            La contraseña debe contener al menos un número, una letra mayúscula y un carácter especial
           }
           @if (memberForm.controls['password'].errors?.['minlength']) {
-            Password must be at least 6 characters long
+            La contraseña debe tener al menos 6 caracteres
           }
         </p>
       }
       <small class="text-muted">
-        {{ isEditMode ? 'Enter the current password or a new password' : 'Password must be at least 6 characters long' }}
+        {{ isEditMode ? 'Ingrese la actual contraseña o una nueva' : 'La contraseña debe ser de al menos 6 caracteres' }}
       </small>
     </div>
   </div>
 
-  <!-- Points Section -->
   <div class="mb-3">
-    <h5 class="text-primary mb-2">Rewards & Points</h5>
+    <h5 class="text-primary mb-2">Puntos y Recompensas</h5>
     
     <div class="mb-2">
-      <label class="mb-1" for="points">Points</label>
+      <label class="mb-1" for="points">Puntos</label>
       <input id="points" formControlName="points" type="number" class="form-control" 
              min="0" placeholder="0" [readonly]="!isEditMode && !canManagePoints">
       @if (memberForm.controls['points'].invalid && (memberForm.controls['points'].dirty || memberForm.controls['points'].touched)) {
-        <p class="text-danger my-1">Points must be a valid number</p>
+        <p class="text-danger my-1">Puntos debe ser un número valido. No menor que cero.</p>
       }
       @if (!isEditMode) {
-        <small class="text-muted">Points will be set to 0 for new members</small>
+        <small class="text-muted">Puntos serán igual a 0 .</small>
       }
     </div>
   </div>
   
   <!-- Action Buttons -->
   <div class="d-flex justify-content-between align-items-center">
-    <button type="button" class="btn btn-outline-secondary" (click)="resetForm()">
-      <i class="fas fa-undo me-1"></i>Reset
+    <button type="button" class="btn btn-outline-secondary" (click)="resetForm()" [disabled]="isSubmitting">
+      <i class="fas fa-undo me-1"></i>Reiniciar en blanco
     </button>
     
     <div class="d-flex gap-2">
-      <button type="button" class="btn btn-secondary" (click)="cancelAction()">
+      <button type="button" class="btn btn-secondary" (click)="cancelAction()" [disabled]="isSubmitting">
         Cancel
       </button>
-      <button (click)="submitForm()" [disabled]="memberForm.invalid" class="btn btn-primary" type="button">
-        <i class="fas {{ isEditMode ? 'fa-save' : 'fa-plus' }} me-1"></i>
-        {{ isEditMode ? 'Update Member' : 'Add Member' }}
+      <button (click)="submitForm()" [disabled]="memberForm.invalid || isSubmitting" class="btn btn-primary" type="button">
+        @if(isSubmitting) {
+          <i class="fas fa-spinner fa-spin me-1"></i>
+        } @else {
+          <i class="fas {{ isEditMode ? 'fa-save' : 'fa-plus' }} me-1"></i>
+        }
+        {{ isSubmitting ? 'Procesando...' : (isEditMode ? 'Actualizar miembro' : 'Agregar miembro') }}
       </button>
     </div>
   </div>

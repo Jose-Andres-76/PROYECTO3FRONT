@@ -25,4 +25,13 @@ export class FamilyListComponent {
     public user = this.authService.getUser();
     @Output() callModalAction: EventEmitter<IFamily> = new EventEmitter<IFamily>();
     @Output() callDeleteAction: EventEmitter<IFamily> = new EventEmitter<IFamily>();
+
+    confirmDelete(family: IFamily): void {
+        const memberName = family.son?.name || 'este miembro';
+        const confirmation = confirm(`¿Estás seguro de que deseas eliminar a ${memberName} de tu familia?`);
+        
+        if (confirmation) {
+            this.callDeleteAction.emit(family);
+        }
+    }
 }

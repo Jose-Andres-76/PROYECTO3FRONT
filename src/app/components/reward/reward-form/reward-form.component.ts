@@ -62,8 +62,8 @@ export class RewardFormComponent implements OnInit {
     let item: IReward = {
       description: this.rewardForm.controls['description'].value,
       cost: this.rewardForm.controls['cost'].value,
-      family: {  // Change from 'familyId' to 'family'
-        id: this.rewardForm.controls['familyId'].value  // Keep as object with id property
+      family: {  
+        id: this.rewardForm.controls['familyId'].value  
       },
       status: this.rewardForm.controls['status'].value
     };

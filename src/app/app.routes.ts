@@ -199,7 +199,7 @@ export const routes: Routes = [
             IRoleType.admin, 
             IRoleType.father,
           ],
-          name: 'Family',
+          name: 'Mi Familia',
           showInSidebar: true,
           iconPath: 'assets/icons/sidebar/people-roof-solid.svg'
         }

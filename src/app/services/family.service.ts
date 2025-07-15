@@ -46,9 +46,9 @@ export class FamilyService extends BaseService<IFamily> {
             size: 5
         };
         this.totalItems = [];
-        }
+    }
 
-        getMyFamilies() {
+    getMyFamilies() {
         console.log('Fetching my families...');
 
         this.monitorUserChanges();
@@ -64,27 +64,16 @@ export class FamilyService extends BaseService<IFamily> {
                 console.log('My families response:', response);
                 console.log('My families data:', response.data);
 
-               if (!response.data || response.data.length === 0) {
+                if (!response.data || response.data.length === 0) {
                     this.clearFamilies();
                     return;
                 }
 
-            this.search = {...this.search, ...response.meta};
-            this.totalItems = Array.from({length: this.search.totalPages ? this.search.totalPages: 0}, (_, i) => i+1);
-            this.familyListSignal.set(response.data);
-
-            this.familyListSignal.update(families => {
-                return families.map(family => {
-                    if (family.idSon) {
-                        family.son = response.data.find((user: IFamily) => user.id === family.idSon);
-                    }
-                    if (family.idFather) {
-                        family.idFather = response.data.find((user: IFamily) => user.id === family.idFather);
-                    }
-                    return family;
-                });
-            });
-        },
+                this.search = {...this.search, ...response.meta};
+                this.totalItems = Array.from({length: this.search.totalPages ? this.search.totalPages: 0}, (_, i) => i+1);
+                
+                this.familyListSignal.set(response.data);
+            },
             error: (err: any) => {
                 console.error('Error fetching my families:', err);
                 this.alertService.displayAlert('error', 'Error loading your families', 'center', 'top', ['error-snackbar']);
@@ -108,18 +97,6 @@ export class FamilyService extends BaseService<IFamily> {
                 this.search = {...this.search, ...response.meta};
                 this.totalItems = Array.from({length: this.search.totalPages ? this.search.totalPages: 0}, (_, i) => i+1);
                 this.familyListSignal.set(response.data);
-
-                this.familyListSignal.update(families => {
-                    return families.map(family => {
-                        if (family.idSon) {
-                            family.son = response.data.find((user: IFamily) => user.id === family.idSon);
-                        }
-                        if (family.idFather) {
-                            family.idFather = response.data.find((user: IFamily) => user.id === family.idFather);
-                        }
-                        return family;
-                    });
-                });
             },
             error: (err: any) => {
                 console.error('Error fetching families:', err);
@@ -155,13 +132,23 @@ export class FamilyService extends BaseService<IFamily> {
     }
 
     delete(family: IFamily) {
+        // Immediately remove from local signal for instant UI feedback
+        this.familyListSignal.update(families => 
+            families.filter(f => f.id !== family.id)
+        );
+
         this.delCustomSource(`${family.id}`).subscribe({
             next: (response: any) => {
                 console.log('Delete response:', response);
                 this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                // Refresh from server to ensure consistency
+                setTimeout(() => {
+                    this.getAll();
+                }, 500);
             },
             error: (err: any) => {
+                // If deletion failed, restore the item to the list
+                this.getAll();
                 this.alertService.displayAlert('error', 'An error occurred deleting the family','center', 'top', ['error-snackbar']);
                 console.error('error', err);
             }

@@ -2,12 +2,12 @@
     <div class="row p-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
-                <h2>{{user?.lastname}} Family</h2>
+                <h2>Familia {{user?.lastname}}</h2>
                 <button 
                     type="button" 
                     class="btn btn-primary"
                     (click)="openAddFamilyModal()">
-                    <i class="fas fa-plus"></i> Add Family Member
+                    <i class="fas fa-plus"></i> Agregar miembro de familia
                 </button>
             </div>
         </div>
@@ -24,15 +24,14 @@
             }
         </div>
         
-        <!-- Rewards Section -->
         <div class="col-12 mt-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2>Family Rewards</h2>
+                <h2>Recompensas de Familia</h2>
                 <button 
                     type="button" 
                     class="btn btn-success"
                     (click)="openAddRewardModal()">
-                    <i class="fas fa-plus"></i> Add Reward
+                    <i class="fas fa-plus"></i> Agregar recompensa
                 </button>
             </div>
             <app-reward-list
@@ -53,72 +52,82 @@
 
 <ng-template #addFamilyModal let-modal>
     <div class="modal-header">
-        <h4 class="modal-title">Add Family Member</h4>
+        <h4 class="modal-title">Agregar Miembro de Familia</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="closeAddFamilyModal()">
             <span aria-hidden="true"></span>
         </button>
     </div>
     <div class="modal-body">
-        <app-family-member-form
-            [memberForm]="memberForm"
-            [isEditMode]="false"
-            (callSaveMethod)="saveFamilyMember($event)"
-            (callCancelMethod)="closeAddFamilyModal()"
-        />
+        @if(!newSonUser) {
+            <app-family-member-form
+                #familyMemberFormComponent
+                title="Agregar Nuevo Miembro"
+                [memberForm]="memberForm"
+                [isEditMode]="false"
+                (callSaveMethod)="saveFamilyMember($event)"
+                (callCancelMethod)="closeAddFamilyModal()"
+                (signupCancelled)="closeAddFamilyModal()"
+            />
+        } @else {
+            <div class="text-center">
+                <h4>Miembro de familia agregado exitosamente</h4>
+                <p>{{newSonUser.name}} {{newSonUser.lastname}} ha sido agregado a tu familia.</p>
+                <button type="button" class="btn btn-success" (click)="closeAddFamilyModal()">
+                    Cerrar
+                </button>
+            </div>
+        }
     </div>
 </ng-template>
 
 <ng-template #editFamilyMemberModal let-modal>
     <div class="modal-header">
-        <h4 class="modal-title">{{ isCreatingFamily ? 'Add Family Member' : 'Edit Family Member' }}</h4>
+        <h4 class="modal-title">Editar Miembro de Familia</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
             <span aria-hidden="true"></span>
         </button>
     </div>
     <div class="modal-body">
-        @if (!isCreatingFamily) {
-            <div class="alert alert-info mb-3">
-                <i class="fas fa-info-circle me-2"></i>
-                <strong>Note:</strong> Password is required for security. Enter the current password.
-            </div>
-        }
+        <div class="alert alert-info mb-3">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Note:</strong> La contraseña es requerida para actualizar la información del miembro de la familia.
+        </div>
         <app-family-member-form
+            #familyMemberFormComponent
+            title="Editar Miembro de Familia"
             [memberForm]="memberForm"
-            [isEditMode]="!isCreatingFamily"
+            [isEditMode]="true"
             (callUpdateMethod)="updateFamilyMember($event)"
-            (callSaveMethod)="saveFamilyMember($event)"
             (callCancelMethod)="modalService.closeAll()"
         />
     </div>
 </ng-template>
 
-<!-- Add Reward Modal -->
 <ng-template #addRewardModal let-modal>
     <div class="modal-header">
-        <h4 class="modal-title">Add New Reward</h4>
+        <h4 class="modal-title">Agregar Nueva Recompensa</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
             <span aria-hidden="true"></span>
         </button>
     </div>
     <div class="modal-body">
         <app-reward-form
-            title="Add New Reward"
+            title="Agregar Nueva Recompensa"
             (callSaveMethod)="saveReward($event)"
         />
     </div>
 </ng-template>
 
-<!-- Edit Reward Modal -->
 <ng-template #editRewardModal let-modal>
     <div class="modal-header">
-        <h4 class="modal-title">Edit Reward</h4>
+        <h4 class="modal-title">Editar Recompensa</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
             <span aria-hidden="true"></span>
         </button>
     </div>
     <div class="modal-body">
         <app-reward-form
-            title="Edit Reward"
+            title="Editar Recompensa"
             [reward]="getSelectedReward()"
             (callUpdateMethod)="updateReward($event)"
         />

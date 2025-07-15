@@ -4,7 +4,7 @@
   </div>
   
   <div class="col-12 mb-3">
-    <label class="mb-1" for="description">Description*</label>
+    <label class="mb-1" for="description">Descripción*</label>
     <input 
       id="description" 
       formControlName="description" 
@@ -12,12 +12,12 @@
       class="form-control"
       placeholder="Enter reward description">
     @if (rewardForm.controls['description'].invalid && (rewardForm.controls['description'].dirty || rewardForm.controls['description'].touched)) {
-      <p class="text-danger my-1">Description is required</p>
+      <p class="text-danger my-1">Una descripción es requerida</p>
     }
   </div>
 
   <div class="col-6 mb-3">
-    <label class="mb-1" for="cost">Cost (Points)*</label>
+    <label class="mb-1" for="cost">Costo (Puntos requeridos)*</label>
     <input 
       id="cost" 
       formControlName="cost" 
@@ -26,12 +26,12 @@
       placeholder="Enter point cost"
       min="0">
     @if (rewardForm.controls['cost'].invalid && (rewardForm.controls['cost'].dirty || rewardForm.controls['cost'].touched)) {
-      <p class="text-danger my-1">Cost is required and must be a positive number</p>
+      <p class="text-danger my-1">Costo es requerido. Debe ser un número mayor que cero.</p>
     }
   </div>
 
   <div class="col-6 mb-3">
-    <label class="mb-1" for="familyId">Family Member*</label>
+    <label class="mb-1" for="familyId">Miembro de Familia*</label>
     <select 
       id="familyId" 
       formControlName="familyId" 
@@ -52,7 +52,7 @@
       formControlName="status" 
       type="checkbox" 
       class="form-check-input me-2">
-    <label class="mb-0" for="status">Active Reward</label>
+    <label class="mb-0" for="status">Activar recompensa</label>
   </div>
 
   <div class="col-12 d-flex justify-content-end">
@@ -62,7 +62,7 @@
       class="btn btn-primary" 
       type="button">
       <i class="fas fa-save me-2"></i>
-      Save Reward
+      Guardar Recompensa
     </button>
   </div>
 </form>

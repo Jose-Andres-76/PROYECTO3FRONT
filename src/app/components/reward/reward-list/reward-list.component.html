@@ -2,12 +2,12 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">Description</th>
-        <th scope="col">Cost</th>
-        <th scope="col">Son Name</th>
-        <th scope="col">Son Last Name</th>
-        <th scope="col">Status</th>
-        <th class="text-center" scope="col">Actions</th>
+        <th scope="col">Descripción</th>
+        <th scope="col">Costo</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Estado</th>
+        <th class="text-center" scope="col">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -28,7 +28,7 @@
             <button (click)="callModalAction.emit(item)" class="btn btn-warning me-2" type="button">
               <i class="fas fa-pen"></i>
             </button>
-            <button (click)="callDeleteAction.emit(item)" class="btn btn-danger" type="button">
+            <button (click)="confirmDelete(item)" class="btn btn-danger" type="button">
               <i class="fas fa-trash"></i>
             </button>
           </td>
@@ -37,7 +37,7 @@
         <tr>
           <td colspan="6">
             <div class="d-flex justify-content-center align-items-center w-100">
-              <p class="mb-0">There are no rewards</p>
+              <p class="mb-0">Aún no hay recompensas</p>
             </div>
           </td>
         </tr>

@@ -35,4 +35,13 @@ export class RewardListComponent {
     console.log('Son lastname:', sonLastname);
     return sonLastname;
   }
+
+  confirmDelete(reward: IReward): void {
+    const rewardDescription = reward.description || 'esta recompensa';
+    const confirmation = confirm(`¿Estás seguro de que deseas eliminar "${rewardDescription}"?`);
+    
+    if (confirmation) {
+        this.callDeleteAction.emit(reward);
+    }
+  }
 }
