@@ -23,4 +23,7 @@ export class EcoDashboardComponent {
   viewRewards() {
     console.log('Ver recompensas');
   }
+    viewChallenges() {
+    console.log('Ver retos');
+  }
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+
 @Component({
   selector: 'app-eco-rewards',
   templateUrl: './eco-rewards.component.html',
@@ -21,4 +22,5 @@ export class EcoRewardsComponent {
   viewChallenges() {
     console.log('Ver retos');
   }
+  
 }
