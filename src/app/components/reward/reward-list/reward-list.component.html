@@ -2,17 +2,18 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">Descripción</th>
-        <th scope="col">Costo</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">Apellido</th>
-        <th scope="col">Estado</th>
-        <th class="text-center" scope="col">Acciones</th>
+        <th scope="col" class="text-center text-success">Descripción</th>
+        <th scope="col" class="text-center text-success">Costo</th>
+        <th scope="col" class="text-center text-success">Nombre</th>
+        <th scope="col" class="text-center text-success">Apellido</th>
+        <th scope="col" class="text-center text-success">Estado</th>
+        <th scope="col" class="text-center text-success">Editar</th>
+        <th scope="col" class="text-center text-success">Eliminar</th>
       </tr>
     </thead>
     <tbody>
       @for (item of rewards; track item.id) {
-        <tr>
+        <tr class="text-center">
           <td>{{item.description}}</td>
           <td>{{item.cost}}</td>
           <td>{{ getSonName(item) }}</td>
@@ -25,11 +26,13 @@
               class="form-check-input">
           </td>
           <td class="text-center">
-            <button (click)="callModalAction.emit(item)" class="btn btn-warning me-2" type="button">
-              <i class="fas fa-pen"></i>
+            <button (click)="callModalAction.emit(item)" class="btn btn-success" type="button">
+              Editar
             </button>
+          </td>
+          <td class="text-center">
             <button (click)="confirmDelete(item)" class="btn btn-danger" type="button">
-              <i class="fas fa-trash"></i>
+              Eliminar
             </button>
           </td>
         </tr>

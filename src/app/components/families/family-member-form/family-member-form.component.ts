@@ -57,19 +57,17 @@ export class FamilyMemberFormComponent {
 
   private setupFormValidators() {
     if (!this.isEditMode) {
-      // Create mode - strict validation like sign-up-form-for-family
       this.memberForm.controls['password']?.setValidators([
         Validators.required,
         Validators.pattern(this.passwordPattern)
       ]);
       this.memberForm.controls['age']?.setValidators([
         Validators.required,
-        Validators.min(1), // Match sign-up-form-for-family (min="1")
+        Validators.min(1), 
         Validators.max(100)
       ]);
       this.memberForm.controls['id']?.clearValidators();
     } else {
-      // Edit mode - more lenient password validation
       this.memberForm.controls['password']?.setValidators([
         Validators.required,
         Validators.minLength(6)
@@ -78,13 +76,11 @@ export class FamilyMemberFormComponent {
       this.memberForm.controls['id']?.setValidators([Validators.required]);
     }
     
-    // Email validation for both modes
     this.memberForm.controls['email']?.setValidators([
       Validators.required,
       Validators.pattern(this.emailPattern)
     ]);
     
-    // Name validations
     this.memberForm.controls['name']?.setValidators([
       Validators.required,
       Validators.minLength(2)
@@ -95,21 +91,17 @@ export class FamilyMemberFormComponent {
       Validators.minLength(2)
     ]);
     
-    // Points validation
     this.memberForm.controls['points']?.setValidators([
       Validators.min(0),
       Validators.pattern(/^\d+$/)
     ]);
     
-    // Update validity for all controls
     Object.keys(this.memberForm.controls).forEach(key => {
       this.memberForm.controls[key]?.updateValueAndValidity();
     });
   }
 
-  // NEW: Sync user object with form values (from sign-up-form-for-family behavior)
   private syncUserObjectWithForm() {
-    // Subscribe to form changes to keep user object in sync
     this.memberForm.valueChanges.subscribe(values => {
       this.user = {
         name: values.name,
@@ -127,10 +119,8 @@ export class FamilyMemberFormComponent {
   }
 
   submitForm() {
-    // Clear previous errors
     this.signUpError = '';
     
-    // Mark all fields as touched to show validation errors (like sign-up-form-for-family)
     this.markFormGroupTouched();
     
     console.log('Form validation state:', {
@@ -147,7 +137,6 @@ export class FamilyMemberFormComponent {
     if (this.memberForm.valid) {
       this.isSubmitting = true;
       
-      // Clean and prepare user data
       let member: IUser = {
         name: this.memberForm.controls['name'].value?.trim(),
         lastname: this.memberForm.controls['lastname'].value?.trim(),
@@ -156,10 +145,9 @@ export class FamilyMemberFormComponent {
         points: parseInt(this.memberForm.controls['points'].value) || 0
       };
 
-      // Add age only when creating new member (not editing)
       if (!this.isEditMode && this.memberForm.controls['age']) {
         const ageValue = parseInt(this.memberForm.controls['age'].value);
-        if (ageValue >= 1 && ageValue <= 100) { // Match sign-up-form-for-family validation
+        if (ageValue >= 1 && ageValue <= 100) {
           member.age = ageValue;
         } else {
           this.signUpError = 'Age must be between 1 and 100 years.';
@@ -168,12 +156,10 @@ export class FamilyMemberFormComponent {
         }
       }
 
-      // Add ID only for edit mode
       if (this.isEditMode && this.memberForm.controls['id']) {
         member.id = parseInt(this.memberForm.controls['id'].value);
       }
 
-      // Additional client-side validation
       if (!this.validateMemberData(member)) {
         this.isSubmitting = false;
         return;
@@ -185,7 +171,6 @@ export class FamilyMemberFormComponent {
         this.callUpdateMethod.emit(member);
         this.isSubmitting = false;
       } else {
-        // NEW: For create mode, call the auth service directly (like sign-up-form-for-family)
         this.handleSignup(member);
       }
     } else {
@@ -194,7 +179,6 @@ export class FamilyMemberFormComponent {
     }
   }
 
-  // NEW: Handle signup logic (EXACT copy from sign-up-form-for-family)
   private handleSignup(member: IUser) {
     console.log('Attempting to signup user:', member);
     
@@ -206,7 +190,6 @@ export class FamilyMemberFormComponent {
         
         let userId = null;
         
-        // EXACT logic from sign-up-form-for-family
         if (response?.id) {
           userId = response.id;
         } else if (response?.data?.id) {
@@ -217,7 +200,6 @@ export class FamilyMemberFormComponent {
           userId = response.authUser.id;
         }
         
-        // EXACT user creation logic from sign-up-form-for-family
         const createdUser: IUser = {
           id: userId,
           name: member.name,
@@ -233,7 +215,6 @@ export class FamilyMemberFormComponent {
         console.log('Emitting created user:', createdUser);
         
         if (createdUser.id) {
-          // Emit both events for backward compatibility
           this.userCreated.emit(createdUser);
           this.callSaveMethod.emit(createdUser);
         } else {
@@ -246,14 +227,12 @@ export class FamilyMemberFormComponent {
         this.isSubmitting = false;
         this.validSignup = false;
         
-        // EXACT error handling from sign-up-form-for-family
         this.signUpError = err.description || err.message || 'An error occurred during signup';
       }
     });
   }
 
   private validateMemberData(member: IUser): boolean {
-    // Validate required fields
     if (!member.name || member.name.trim().length < 2) {
       this.signUpError = 'Name must be at least 2 characters long.';
       return false;
@@ -264,7 +243,6 @@ export class FamilyMemberFormComponent {
       return false;
     }
     
-    // FIXED: Proper email validation
     if (!member.email) {
       this.signUpError = 'Email is required.';
       return false;
@@ -281,7 +259,6 @@ export class FamilyMemberFormComponent {
       return false;
     }
     
-    // Password validation based on mode
     if (!this.isEditMode) {
       const passwordRegex = new RegExp(this.passwordPattern);
       if (!passwordRegex.test(member.password)) {
@@ -306,21 +283,18 @@ export class FamilyMemberFormComponent {
     return true;
   }
 
-  // Method to handle success from parent component
   public handleSuccess() {
     this.validSignup = true;
     this.isSubmitting = false;
     this.signUpError = '';
   }
 
-  // Method to handle error from parent component
   public handleError(error: string) {
     this.signUpError = error;
     this.isSubmitting = false;
     this.validSignup = false;
   }
 
-  // Legacy method for backward compatibility
   callUpdate() {
     if (this.isEditMode) {
       this.submitForm();
@@ -333,9 +307,7 @@ export class FamilyMemberFormComponent {
     this.validSignup = false;
     this.isSubmitting = false;
     
-    // Set appropriate default values based on mode
     if (!this.isEditMode) {
-        // Create mode defaults
         this.memberForm.patchValue({
             id: '',
             name: '',
@@ -345,26 +317,20 @@ export class FamilyMemberFormComponent {
             password: '',
             points: 0
         });
-        
-        // Reset user object
         this.user = {};
     } else {
-        // Edit mode - don't set age
         this.memberForm.patchValue({
-            password: '', // Clear password but keep other fields
+            password: '',
             points: this.memberForm.get('points')?.value || 0
         });
     }
     
-    // Re-setup validators after reset
     this.setupFormValidators();
     
-    // Mark as pristine to avoid validation errors
     this.memberForm.markAsPristine();
     this.memberForm.markAsUntouched();
   }
 
-  // NEW: Cancel signup method (from sign-up-form-for-family)
   public cancelSignup() {
     this.signupCancelled.emit();
     this.callCancelMethod.emit();

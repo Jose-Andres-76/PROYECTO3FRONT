@@ -36,11 +36,12 @@ export class UserService extends BaseService<IUser> {
   save(user: IUser) {
     this.add(user).subscribe({
       next: (response: any) => {
-        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        console.log('User saved successfully:', response);
+        this.alertService.displayAlert('success', 'Usuario guardado exitosamente', 'center', 'top', ['success-snackbar']);
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'An error occurred saving the user','center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'Ocurrió un error guardando el usuario','center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
     });
@@ -49,18 +50,18 @@ export class UserService extends BaseService<IUser> {
   update(user: IUser) {
     this.editCustomSource(`${user.id}`, user).subscribe({
       next: (response: any) => {
-        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        console.log('User updated successfully:', response);
+        this.alertService.displayAlert('success', 'Usuario actualizado exitosamente', 'center', 'top', ['success-snackbar']);
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'An error occurred updating the user','center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'Ocurrió un error actualizando el usuario','center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
     });
   }
 
   updateFamilyMember(user: IUser) {
-    // Create a user object with the provided role
     const userToUpdate = {
         id: user.id,
         name: user.name,
@@ -80,11 +81,11 @@ export class UserService extends BaseService<IUser> {
     this.editCustomSource(`${user.id}`, userToUpdate).subscribe({
         next: (response: any) => {
             console.log('Update response:', response);
-            this.alertService.displayAlert('success', response.message || 'Family member updated successfully', 'center', 'top', ['success-snackbar']);
+            this.alertService.displayAlert('success', 'Miembro de familia actualizado exitosamente', 'center', 'top', ['success-snackbar']);
         },
         error: (err: any) => {
             console.error('Update error:', err);
-            this.alertService.displayAlert('error', 'An error occurred updating the family member','center', 'top', ['error-snackbar']);
+            this.alertService.displayAlert('error', 'Ocurrió un error actualizando el miembro de familia','center', 'top', ['error-snackbar']);
         }
     });
   }
@@ -92,11 +93,12 @@ export class UserService extends BaseService<IUser> {
   delete(user: IUser) {
     this.delCustomSource(`${user.id}`).subscribe({
       next: (response: any) => {
-        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        console.log('User deleted successfully:', response);
+        this.alertService.displayAlert('success', 'Usuario eliminado exitosamente', 'center', 'top', ['success-snackbar']);
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'An error occurred deleting the user','center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'Ocurrió un error actualizando el usuario','center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
     });

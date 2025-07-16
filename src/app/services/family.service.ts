@@ -55,7 +55,7 @@ export class FamilyService extends BaseService<IFamily> {
         const userId = this.authService.getUser()?.id;
         if (!userId) {
             console.error('User ID not found');
-            this.alertService.displayAlert('error', 'User not found', 'center', 'top', ['error-snackbar']);
+            this.alertService.displayAlert('error', 'Usuario no encontrado...', 'center', 'top', ['error-snackbar']);
             return;
         }
 
@@ -76,7 +76,7 @@ export class FamilyService extends BaseService<IFamily> {
             },
             error: (err: any) => {
                 console.error('Error fetching my families:', err);
-                this.alertService.displayAlert('error', 'Error loading your families', 'center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'Error cargando tus miembros de familia.', 'center', 'top', ['error-snackbar']);
                 this.clearFamilies(); 
             }
         });
@@ -100,7 +100,7 @@ export class FamilyService extends BaseService<IFamily> {
             },
             error: (err: any) => {
                 console.error('Error fetching families:', err);
-                this.alertService.displayAlert('error', 'Error loading families', 'center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'Error cargando miembros', 'center', 'top', ['error-snackbar']);
             }
         });
     }
@@ -108,11 +108,11 @@ export class FamilyService extends BaseService<IFamily> {
     save(family: IFamily) {
         this.add(family).subscribe({
             next: (response: any) => {
-                this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+                this.alertService.displayAlert('success', 'Miembro agregado exitosamente', 'center', 'top', ['success-snackbar']);
                 this.getAll();
             },
             error: (err: any) => {
-                this.alertService.displayAlert('error', 'An error occurred adding the family','center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'Ocurrió un error agregando el miembro','center', 'top', ['error-snackbar']);
                 console.error('error', err);
             }
         });
@@ -121,18 +121,17 @@ export class FamilyService extends BaseService<IFamily> {
     update(family: IFamily) {
         this.editCustomSource(`${family.id}`, family).subscribe({
             next: (response: any) => {
-                this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+                this.alertService.displayAlert('success', 'Miembro actualizado exitosamente', 'center', 'top', ['success-snackbar']);
                 this.getAll();
             },
             error: (err: any) => {
-                this.alertService.displayAlert('error', 'An error occurred updating the family','center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'Ocurrió un error actualizando el miembro','center', 'top', ['error-snackbar']);
                 console.error('error', err);
             }
         });
     }
 
     delete(family: IFamily) {
-        // Immediately remove from local signal for instant UI feedback
         this.familyListSignal.update(families => 
             families.filter(f => f.id !== family.id)
         );
@@ -140,16 +139,14 @@ export class FamilyService extends BaseService<IFamily> {
         this.delCustomSource(`${family.id}`).subscribe({
             next: (response: any) => {
                 console.log('Delete response:', response);
-                this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
-                // Refresh from server to ensure consistency
+                this.alertService.displayAlert('success', 'Miembro eliminado exitosamente', 'center', 'top', ['success-snackbar']);
                 setTimeout(() => {
                     this.getAll();
                 }, 500);
             },
             error: (err: any) => {
-                // If deletion failed, restore the item to the list
                 this.getAll();
-                this.alertService.displayAlert('error', 'An error occurred deleting the family','center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'Un error ocurrió eliminando el miembro. Asegúrese que no hay recompensas asignadas al miembro.','center', 'top', ['error-snackbar']);
                 console.error('error', err);
             }
         });

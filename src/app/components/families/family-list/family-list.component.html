@@ -2,23 +2,26 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">Nombre</th>
-        <th scope="col">Apellido</th>
-        <th scope="col">Correo Electrónico</th>
-        <th scope="col">Puntos</th>
-        <th class="text-center" scope="col">Acciones</th>
+        <th scope="col" class="text-center text-success">Nombre</th>
+        <th scope="col" class="text-center text-success">Apellido</th>
+        <th scope="col" class="text-center text-success">Correo Electrónico</th>
+        <th scope="col" class="text-center text-success">Puntos</th>
+        <th scope="col" class="text-center text-success">Editar</th>
+        <th scope="col" class="text-center text-success">Eliminar</th>
       </tr>
     </thead>
     <tbody>
       @for (item of families; track item.id) {
-        <tr>
+        <tr scope="col" class="text-center">
             <td>{{item.son?.name}}</td>
             <td>{{item.son?.lastname}}</td>
             <td>{{item.son?.email}}</td>
             <td>{{item.son?.points}}</td>
           <td class="text-center">
-            <button (click)="callModalAction.emit(item)" class="btn btn-warning me-2" type="button"><i class="fas fa-pen"></i></button>
-            <button (click)="confirmDelete(item)" class="btn btn-danger" type="button"><i class="fas fa-trash"></i></button>
+            <button (click)="callModalAction.emit(item)" class="btn btn-success" type="button">Editar</button>
+          </td>
+          <td class="text-center">
+            <button (click)="confirmDelete(item)" class="btn btn-danger" type="button">Eliminar</button>
           </td>
         </tr>
       } @empty {

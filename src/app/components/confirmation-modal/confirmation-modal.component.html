@@ -1,0 +1,18 @@
+<app-modal
+  [title]="title"
+  [confirmAction]="confirmText"
+  [cancelAction]="cancelText"
+  [loadingConfirmationMethod]="isLoading"
+  [customValidation]="false"
+  [confirmButtonClass]="'btn-success'"
+  [cancelButtonClass]="'btn-danger'"
+  (callConfirmationMethod)="onConfirm()"
+  (callCancelMethod)="onCancel()">
+  
+  <div class="text-center">
+    <div class="mb-3">
+      <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+    </div>
+    <p class="mb-0">{{ message }}</p>
+  </div>
+</app-modal>

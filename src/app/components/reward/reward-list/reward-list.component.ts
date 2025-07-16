@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { IReward } from '../../../interfaces';
 import { RewardService } from '../../../services/reward.service';
 import { AuthService } from '../../../services/auth.service';
+import { ConfirmationModalService } from '../../../services/confirmation-modal.service';
 
 @Component({
   selector: 'app-reward-list',
@@ -17,6 +18,7 @@ export class RewardListComponent {
   @Input() rewards: IReward[] = [];
   public rewardService: RewardService = inject(RewardService);
   public authService: AuthService = inject(AuthService);
+  private confirmationModalService = inject(ConfirmationModalService);
   public user = this.authService.getUser();
   @Output() callModalAction: EventEmitter<IReward> = new EventEmitter<IReward>();
   @Output() callDeleteAction: EventEmitter<IReward> = new EventEmitter<IReward>();
@@ -36,11 +38,12 @@ export class RewardListComponent {
     return sonLastname;
   }
 
-  confirmDelete(reward: IReward): void {
+  async confirmDelete(reward: IReward): Promise<void> {
     const rewardDescription = reward.description || 'esta recompensa';
-    const confirmation = confirm(`¿Estás seguro de que deseas eliminar "${rewardDescription}"?`);
     
-    if (confirmation) {
+    const confirmed = await this.confirmationModalService.confirmDelete(rewardDescription);
+    
+    if (confirmed) {
         this.callDeleteAction.emit(reward);
     }
   }
