@@ -1,0 +1,91 @@
+<form [formGroup]="challengeForm" class="row">
+  <div class="col-12">
+    <h2 class="mb-3">{{title}}</h2>
+  </div>
+  
+  <div class="col-12 mb-3">
+    <label class="mb-1" for="description">Descripción*</label>
+    <input 
+      id="description" 
+      formControlName="description" 
+      type="text" 
+      class="form-control"
+      placeholder="Ingrese la descripción del desafío">
+    @if (challengeForm.controls['description'].invalid && (challengeForm.controls['description'].dirty || challengeForm.controls['description'].touched)) {
+      <p class="text-danger my-1">Una descripción es requerida (mínimo 3 caracteres)</p>
+    }
+  </div>
+
+  <div class="col-6 mb-3">
+    <label class="mb-1" for="points">Puntos*</label>
+    <input 
+      id="points" 
+      formControlName="points" 
+      type="number" 
+      class="form-control"
+      placeholder="Puntos del desafío"
+      min="1">
+    @if (challengeForm.controls['points'].invalid && (challengeForm.controls['points'].dirty || challengeForm.controls['points'].touched)) {
+      <p class="text-danger my-1">Los puntos son requeridos. Debe ser un número mayor que cero.</p>
+    }
+  </div>
+
+  <div class="col-6 mb-3">
+    <label class="mb-1" for="gameId">Juego*</label>
+    <select 
+      id="gameId" 
+      formControlName="gameId" 
+      class="form-control">
+      <option value="">Seleccione un juego</option>
+      @for (game of gameService.items$(); track game.id) {
+        <option [ngValue]="game.id">{{getGameDisplayName(game)}}</option>
+      }
+    </select>
+    @if (challengeForm.controls['gameId'].invalid && (challengeForm.controls['gameId'].dirty || challengeForm.controls['gameId'].touched)) {
+      <p class="text-danger my-1">Por favor seleccione un juego</p>
+    }
+  </div>
+
+  <div class="col-6 mb-3">
+    <label class="mb-1" for="familyId">Miembro de Familia*</label>
+    <select 
+      id="familyId" 
+      formControlName="familyId" 
+      class="form-control">
+      <option value="">Seleccione un miembro de familia</option>
+      @for (family of familyService.families$(); track family.id) {
+        <option [ngValue]="family.id">{{getFamilyDisplayName(family)}}</option>
+      }
+    </select>
+    @if (challengeForm.controls['familyId'].invalid && (challengeForm.controls['familyId'].dirty || challengeForm.controls['familyId'].touched)) {
+      <p class="text-danger my-1">Por favor seleccione un miembro de familia</p>
+    }
+  </div>
+
+  <div class="col-6 mb-3 d-flex align-items-center">
+    <input 
+      id="challengeStatus" 
+      formControlName="challengeStatus" 
+      type="checkbox" 
+      class="form-check-input me-2">
+    <label class="mb-0" for="challengeStatus">Estado de Reto</label>
+  </div>
+
+  <div class="col-12 d-flex justify-content-between">
+    <button 
+      type="button" 
+      class="btn btn-danger" 
+      (click)="cancelAction()">
+      <i class="fas fa-times me-2"></i>
+      Cancelar
+    </button>
+    <button 
+      (click)="callSave()" 
+      [disabled]="challengeForm.invalid" 
+      class="btn btn-success" 
+      type="button">
+      <i class="fas fa-save me-2"></i>
+      Guardar Reto
+    </button>
+  </div>
+</form>

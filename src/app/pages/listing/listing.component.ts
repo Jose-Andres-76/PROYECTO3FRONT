@@ -3,15 +3,18 @@ import { UserListComponent } from "../../components/user/user-list/user-list.com
 import { FamilyListComponent } from "../../components/families/family-list/family-list.component";
 import { RewardListComponent } from "../../components/reward/reward-list/reward-list.component";
 import { RewardFormComponent } from "../../components/reward/reward-form/reward-form.component";
+import { ChallengeListComponent } from "../../components/challenges/challenge-list/challenge-list.component";
+import { ChallengeFormComponent } from "../../components/challenges/challenge-form/challenge-form.component";
 import { ModalComponent } from "../../components/modal/modal.component";
 import { LoaderComponent } from "../../components/loader/loader.component";
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { FamilyService } from "../../services/family.service";
 import { RewardService } from "../../services/reward.service";
+import { ChallengeService } from "../../services/challenge.service";
 import { inject } from "@angular/core";
 import { ModalService } from "../../services/modal.service";
 import { FormBuilder, Validators } from "@angular/forms";
-import { IFamily, IUser, IReward } from "../../interfaces";
+import { IFamily, IUser, IReward, IChallenge } from "../../interfaces";
 import { AuthService } from "../../services/auth.service";
 import { FamilyMemberFormComponent } from "../../components/families/family-member-form/family-member-form.component";
 import { UserService } from "../../services/user.service";
@@ -23,6 +26,8 @@ import { UserService } from "../../services/user.service";
         FamilyListComponent,
         RewardListComponent,
         RewardFormComponent,
+        ChallengeListComponent,
+        ChallengeFormComponent,
         PaginationComponent,
         ModalComponent,
         LoaderComponent,
@@ -34,6 +39,7 @@ import { UserService } from "../../services/user.service";
 export class ListingComponent {
   public familyService = inject(FamilyService);
   public rewardService = inject(RewardService);
+  public challengeService = inject(ChallengeService);
   public authService = inject(AuthService);
   public modalService = inject(ModalService);
   public userService = inject(UserService);
@@ -42,12 +48,15 @@ export class ListingComponent {
   @ViewChild('editFamilyMemberModal') public editFamilyMemberModal: any;
   @ViewChild('addRewardModal') public addRewardModal: any;
   @ViewChild('editRewardModal') public editRewardModal: any;
+  @ViewChild('addChallengeModal') public addChallengeModal: any;
+  @ViewChild('editChallengeModal') public editChallengeModal: any;
   public fb: FormBuilder = inject(FormBuilder); 
 
   public user = this.authService.getUser();
   public isCreatingFamily = false;
   public newSonUser: IUser | null = null;
   public selectedReward: IReward | null = null;
+  public selectedChallenge: IChallenge | null = null;
 
   familyForm = this.fb.group({
     id: [''],
@@ -56,13 +65,13 @@ export class ListingComponent {
   });
 
   memberForm = this.fb.group({
-  id: ['', Validators.required],
-  name: ['', [Validators.required, Validators.minLength(2)]],
-  lastname: ['', [Validators.required, Validators.minLength(2)]],
-  email: ['', [Validators.required, Validators.email]],
-  age: ['', [Validators.required, Validators.min(10), Validators.max(100)]], // Add age field
-  password: ['', [Validators.required, Validators.minLength(6)]],
-  points: [0, [Validators.min(0), Validators.pattern(/^\d+$/)]]
+    id: ['', Validators.required],
+    name: ['', [Validators.required, Validators.minLength(2)]],
+    lastname: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    age: ['', [Validators.required, Validators.min(10), Validators.max(100)]], // Add age field
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    points: [0, [Validators.min(0), Validators.pattern(/^\d+$/)]]
 });
 
   rewardForm = this.fb.group({
@@ -73,6 +82,15 @@ export class ListingComponent {
     status: [true]
   });
 
+  challengeForm = this.fb.group({
+    id: [''],
+    description: ['', [Validators.required, Validators.minLength(3)]],
+    points: ['', [Validators.required, Validators.min(1)]],
+    familyId: ['', Validators.required],
+    gameId: ['', Validators.required],
+    challengeStatus: [true]
+  });
+
   private currentMemberRole: any = null;
 
     constructor() {
@@ -81,23 +99,22 @@ export class ListingComponent {
         
         this.rewardService.search.page = 1;
         this.rewardService.getMyRewards();
+
+        this.challengeService.search.page = 1;
+        this.challengeService.getAll();
     }
 
     openAddFamilyModal() {
-    this.isCreatingFamily = false; // Set to false since we're using the unified form now
+    this.isCreatingFamily = false;
     
-    // Reset the form completely
     this.memberForm.reset();
     
-    // Setup form for create mode - add age validators
     this.memberForm.controls['age']?.setValidators([Validators.required, Validators.min(10), Validators.max(100)]);
     this.memberForm.controls['age']?.updateValueAndValidity();
     
-    // Remove validators that are not needed for create mode (like ID)
     this.memberForm.controls['id']?.clearValidators();
     this.memberForm.controls['id']?.updateValueAndValidity();
     
-    // Set default values for new member
     this.memberForm.patchValue({
         id: '',
         name: '',
@@ -108,7 +125,6 @@ export class ListingComponent {
         points: 0
     });
     
-    // Mark form as pristine to avoid showing validation errors initially
     this.memberForm.markAsPristine();
     this.memberForm.markAsUntouched();
     
@@ -193,7 +209,7 @@ export class ListingComponent {
     callEdition(family: IFamily) {
         console.log('Editing family member:', family); 
         if (family.son) {
-            this.isCreatingFamily = false; // Set to false for edit mode
+            this.isCreatingFamily = false;
             
             this.currentMemberRole = family.son.role || {
                 id: 2,
@@ -201,28 +217,24 @@ export class ListingComponent {
                 description: 'Son Role'
             };
 
-            // Reset form first
             this.memberForm.reset();
             
-            // Setup form for edit mode - remove age validators and add ID validators
             this.memberForm.controls['age']?.clearValidators();
             this.memberForm.controls['age']?.updateValueAndValidity();
             
             this.memberForm.controls['id']?.setValidators([Validators.required]);
             this.memberForm.controls['id']?.updateValueAndValidity();
 
-            // Set form values
             this.memberForm.patchValue({
                 id: family.son.id !== undefined && family.son.id !== null ? String(family.son.id) : '',
                 name: family.son.name || '',
                 lastname: family.son.lastname || '',
                 email: family.son.email || '',
-                age: '', // Don't set age for edit mode
+                age: '',
                 password: '',
                 points: family.son.points || 0
             });
             
-            // Mark form as pristine to avoid showing validation errors initially
             this.memberForm.markAsPristine();
             this.memberForm.markAsUntouched();
             
@@ -234,14 +246,11 @@ export class ListingComponent {
         }
     }
 
-    // Add method to prepare form for creating new member
     openAddFamilyMemberModal() {
-        // Reset form and add age validators for create mode
         this.memberForm.reset();
         this.memberForm.controls['age']?.setValidators([Validators.required, Validators.min(10), Validators.max(100)]);
         this.memberForm.controls['age']?.updateValueAndValidity();
         
-        // Set default values
         this.memberForm.patchValue({
             points: 0
         });
@@ -302,7 +311,45 @@ export class ListingComponent {
         this.rewardService.delete(reward);
     }
 
-    // Add ViewChild reference to the family member form
+    openAddChallengeModal() {
+        this.selectedChallenge = null;
+        this.modalService.displayModal('md', this.addChallengeModal);
+    }
+
+    callChallengeEdition(challenge: IChallenge) {
+        console.log('Editing challenge:', challenge);
+        this.selectedChallenge = challenge;
+        this.modalService.displayModal('md', this.editChallengeModal);
+    }
+
+    getSelectedChallenge(): IChallenge | undefined {
+        return this.selectedChallenge || undefined;
+    }
+
+    saveChallenge(challenge: IChallenge) {
+        console.log('=== LISTING COMPONENT SAVE CHALLENGE ===');
+        console.log('Received challenge object:', challenge);
+        
+        if (!challenge.family || !challenge.family.id) {  
+            console.error('Challenge must have a valid family with id');
+            return;
+        }
+        
+        this.challengeService.save(challenge);
+        this.modalService.closeAll();
+    }
+
+    updateChallenge(challenge: IChallenge) {
+        console.log('Updating challenge:', challenge);
+        this.challengeService.update(challenge);
+        this.modalService.closeAll();
+    }
+
+    deleteChallenge(challenge: IChallenge) {
+        console.log('Deleting challenge:', challenge);
+        this.challengeService.delete(challenge);
+    }
+
 @ViewChild('familyMemberFormComponent') familyMemberFormComponent: any;
 
 saveFamilyMember(member: IUser) {
@@ -327,7 +374,6 @@ saveFamilyMember(member: IUser) {
     }
 }
 
-// NEW: Handle user created event (from sign-up-form-for-family compatibility)
 onUserCreated(userData: IUser) {
     console.log('User created successfully:', userData);
     this.saveFamilyMember(userData);
@@ -337,42 +383,5 @@ private showErrorMessage(message: string) {
     alert(message);
     
     console.error(message);
-}
-private setupFormForMode(isEditMode: boolean, memberData?: IUser) {
-    this.memberForm.reset();
-    
-    if (isEditMode && memberData) {
-        this.memberForm.controls['age']?.clearValidators();
-        this.memberForm.controls['id']?.setValidators([Validators.required]);
-        
-        this.memberForm.patchValue({
-            id: memberData.id?.toString() || '',
-            name: memberData.name || '',
-            lastname: memberData.lastname || '',
-            email: memberData.email || '',
-            password: '',
-            points: memberData.points || 0
-        });
-    } else {
-        // Create mode setup
-        this.memberForm.controls['age']?.setValidators([Validators.required, Validators.min(10), Validators.max(100)]);
-        this.memberForm.controls['id']?.clearValidators();
-        
-        this.memberForm.patchValue({
-            id: '',
-            name: '',
-            lastname: '',
-            email: '',
-            age: '',
-            password: '',
-            points: 0
-        });
-    }
-    
-    // Update validation and mark as pristine
-    this.memberForm.controls['age']?.updateValueAndValidity();
-    this.memberForm.controls['id']?.updateValueAndValidity();
-    this.memberForm.markAsPristine();
-    this.memberForm.markAsUntouched();
 }
 }

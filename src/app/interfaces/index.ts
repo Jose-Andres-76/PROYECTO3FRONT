@@ -56,15 +56,10 @@ export interface IRole {
   name : string;
   updatedAt: string;
 }
-
 export interface IGame {
   id?: number;
-  name?: string;
-  imgURL?: string;
-  status?: string;
+  typesOfGames?: string;
   description?: string;
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 export interface IOrder {
@@ -122,7 +117,7 @@ export interface IFamily {
 
 export interface IReward {
   id?: number;
-  family: {  
+  family?: {  
     id: number;
   }; 
   cost?: number;
@@ -130,10 +125,14 @@ export interface IReward {
   status?: boolean;
 }
 
-interface IChallenge {
+export interface IChallenge {
   id?: number;
-  familyId?: IFamily;
-  gameId?: IGame;
+  family?: {
+    id: number;
+  };
+  game?: {
+    id: number;
+  };
   points?: number;
   challengeStatus?: boolean;
   description?: string;

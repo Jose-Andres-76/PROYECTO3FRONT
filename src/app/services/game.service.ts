@@ -1,7 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IGame } from '../interfaces';
+import { IGame, ISearch } from '../interfaces';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,75 +10,39 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 export class GameService extends BaseService<IGame>{
   protected override source: string = 'games';
   private itemListSignal = signal<IGame[]>([]);
-  private snackBar = inject(MatSnackBar);
   
   get items$() {
     return this.itemListSignal
   }
 
-  public getAll() {
-    this.findAll().subscribe({
+  public search: ISearch = {
+    page: 1,
+    size: 5
+  };
+
+  public totalItems: any = [];
+  private alertService: AlertService = inject(AlertService);
+
+  constructor() {
+    super();
+    console.log('GameService initialized');
+  }
+
+  getAll() {
+    console.log('Fetching all games...');
+    
+    this.findAllWithParams({ page: this.search.page, size: this.search.size }).subscribe({
       next: (response: any) => {
-        response.reverse();
-        this.itemListSignal.set(response);
+        console.log('Games fetched successfully:', response);
+        console.log('Games data:', response.data);
+        this.search = {...this.search, ...response.meta };
+        this.totalItems = Array.from({length: this.search.totalPages ? this.search.totalPages : 0}, (_, i) => i + 1);
+        this.itemListSignal.set(response.data);
       },
-      error: (error : any) => {
-        console.log('error', error);
-      }
-    });
-  }
-
-  public save(item: IGame) {
-    item.status = 'active';
-    this.add(item).subscribe({
-      next: (response: any) => {
-        this.itemListSignal.update((games: IGame[]) => [response, ...games]);
-      },
-      error: (error : any) => {
-        this.snackBar.open(error.error.description, 'Close', {
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar']
-        });
-        console.error('error', error);
-        console.error('error', error);
-      }
-    })
-  } 
-
-  public update(item: IGame) {
-    this.edit(item.id, item).subscribe({
-      next: () => {
-        const updatedItems = this.itemListSignal().map(game => game.id === item.id ? item : game);
-        this.itemListSignal.set(updatedItems);
-      },
-      error: (error : any) => {
-        this.snackBar.open(error.error.description, 'Close', {
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar']
-        });
-        console.error('error', error);
-        console.error('error', error);
+      error: (error: any) => {
+        console.error('Error fetching games:', error);
+        this.alertService.displayAlert('error', 'Error al cargar los juegos', 'center', 'top', ['error-snackbar']);
       }
     })
   }
-
-  public delete(game: IGame) {
-    this.del(game.id).subscribe({
-      next: () => {
-        const updatedItems = this.itemListSignal().filter((g: IGame) => g.id != game.id);
-        this.itemListSignal.set(updatedItems);
-      },
-      error: (error : any) => {
-        this.snackBar.open(error.error.description, 'Close', {
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar']
-        });
-        console.error('error', error);
-      }
-    })
-  }
-
 }
