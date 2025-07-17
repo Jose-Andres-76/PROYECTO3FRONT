@@ -2,18 +2,18 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">Apellido</th>
-        <th scope="col">Email</th>
-        <th scope="col">Creado</th>
-        <th scope="col">Actualizado</th>
-        <th class="text-center" scope="col">Acciones</th>
+        <th scope="col" class="text-center text-success">ID</th>
+       <th scope="col" class="text-center text-success">Nombre</th>
+        <th scope="col" class="text-center text-success">Apellido</th>
+        <th scope="col" class="text-center text-success">Email</th>
+        <th scope="col" class="text-center text-success">Creado</th>
+        <th scope="col" class="text-center text-success">Actualizado</th>
+        <th scope="col" class="text-center text-success">Acciones</th>
       </tr>
     </thead>
     <tbody>
       @for (item of users; track item.id) {
-        <tr>
+         <tr class="text-center">
           <th scope="row">{{item.id}}</th>
           <td>{{item.name}}</td>
           <td>{{item.lastname}}</td>
@@ -21,8 +21,8 @@
           <td>{{item.createdAt | date: 'dd/MM/yyyy HH:mm'}}</td>
           <td>{{item.updatedAt | date: 'dd/MM/yyyy HH:mm'}}</td>
           <td>
-            <button (click)="callModalAction.emit(item);" class="btn btn-warning me-2" type="button"><i class="fas fa-pen"></i></button>
-            <button (click)="callDeleteAction.emit(item)" class="btn btn-danger" type="button"><i class="fas fa-trash"></i></button>
+            <button (click)="callModalAction.emit(item);" class="btn btn-success" type="button">Editar</button>
+            <button (click)="callDeleteAction.emit(item)" class="btn btn-danger" type="button">Eliminar</button>
           </td>
         </tr>
       } @empty {
