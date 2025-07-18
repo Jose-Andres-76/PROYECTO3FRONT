@@ -53,18 +53,21 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.tokenCheckInterval = setInterval(() => {
-      const currentUrl = this.router.url;
-      if (currentUrl.startsWith('/app')) {
         const expiresIn = this.authService['expiresIn'];
         const timeLeft = expiresIn ? expiresIn - Date.now() : 0;
+        console.log('Time left for token expiration:', timeLeft);
+        this.tokenCheckInterval = setInterval(() => {
+
+        const currentUrl = this.router.url;
+        if (currentUrl.startsWith('/app')) {
+
         if (!this.authService.check()) {
           this.authService.logout();
           this.router.navigate(['/login'], { queryParams: { expired: 'true' } });
           clearInterval(this.tokenCheckInterval);
         }
       }
-    }, 30000); 
+    }, timeLeft); 
   }
 
 
