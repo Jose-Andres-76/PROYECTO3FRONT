@@ -3,17 +3,17 @@
     <h4>Registro</h4>
   </div>
 
-  <!-- Google sign-up button -->
+  <!-- Google sign-up button
   <div class="form-group mb-3">
     <div #googleButtonContainer class="w-100"></div>
-  </div>
+  </div> -->
 
   <!-- Separator -->
-  <div class="d-flex align-items-center mb-3">
+  <!-- <div class="d-flex align-items-center mb-3">
     <hr class="flex-grow-1" />
     <span class="mx-2">o</span>
     <hr class="flex-grow-1" />
-  </div>
+  </div> -->
 
   <div class="d-flex align-items-center mb-3">
     <div class="form-group px-1">
@@ -68,12 +68,13 @@
         Edad
       </label>
       <input #age="ngModel" type="number" class="form-control" id="age" name="age"
-        placeholder="-" [(ngModel)]="user.age" [ngClass]="{
-          'is-invalid': age.invalid && age.touched,
-          'is-valid': age.valid && age.touched
-        }" required />
+      min="18" max="120"
+      placeholder="-" [(ngModel)]="user.age" [ngClass]="{
+        'is-invalid': age.invalid && age.touched,
+        'is-valid': age.valid && age.touched
+      }" required />
       <div *ngIf="age.invalid && age.touched" class="invalid-feedback">
-        Por favor ingrese una edad valida
+        Por favor ingrese una edad valida entre 18 y 120 años
       </div>
     </div>
   </div>

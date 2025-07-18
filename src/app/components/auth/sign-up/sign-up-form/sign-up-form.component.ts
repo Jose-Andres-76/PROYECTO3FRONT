@@ -17,6 +17,7 @@ export class SignUpFormComponent implements OnInit, AfterViewInit {
   public validSignup!: boolean;
   public passwordPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=\\[\\]{}|\\\\:;"\'<>,.?/~`]).{8,}$';
   public emailPattern = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$';
+  public agePattern = '^(1[89]|[2-9][0-9]|1[01][0-9]|120)$'; // 18 to 120 years old
   public showPassword: boolean = false;
   
   @ViewChild('name') nameModel!: NgModel;
