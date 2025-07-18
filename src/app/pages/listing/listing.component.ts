@@ -240,7 +240,7 @@ export class ListingComponent {
             
             console.log('Form values set:', this.memberForm.value); 
             console.log('Son role:', family.son.role); 
-            this.modalService.displayModal('md', this.editFamilyMemberModal);
+            this.modalService.displayModal('lg', this.editFamilyMemberModal);
         } else {
             console.error('No son data found in family:', family);
         }
@@ -255,7 +255,7 @@ export class ListingComponent {
             points: 0
         });
         
-        this.modalService.displayModal('md', this.editFamilyMemberModal);
+        this.modalService.displayModal('lg', this.editFamilyMemberModal);
     }
 
     updateFamilyMember(member: IUser) {
@@ -274,13 +274,13 @@ export class ListingComponent {
 
     openAddRewardModal() {
         this.selectedReward = null;
-        this.modalService.displayModal('md', this.addRewardModal);
+        this.modalService.displayModal('lg', this.addRewardModal);
     }
 
     callRewardEdition(reward: IReward) {
         console.log('Editing reward:', reward);
         this.selectedReward = reward;
-        this.modalService.displayModal('md', this.editRewardModal);
+        this.modalService.displayModal('lg', this.editRewardModal);
     }
 
     getSelectedReward(): IReward | undefined {
@@ -313,13 +313,13 @@ export class ListingComponent {
 
     openAddChallengeModal() {
         this.selectedChallenge = null;
-        this.modalService.displayModal('md', this.addChallengeModal);
+        this.modalService.displayModal('lg', this.addChallengeModal);
     }
 
     callChallengeEdition(challenge: IChallenge) {
         console.log('Editing challenge:', challenge);
         this.selectedChallenge = challenge;
-        this.modalService.displayModal('md', this.editChallengeModal);
+        this.modalService.displayModal('lg', this.editChallengeModal);
     }
 
     getSelectedChallenge(): IChallenge | undefined {

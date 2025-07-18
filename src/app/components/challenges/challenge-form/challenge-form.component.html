@@ -31,19 +31,16 @@
   </div>
 
   <div class="col-6 mb-3">
-    <label class="mb-1" for="gameId">Juego*</label>
+    <label class="mb-1" for="gameId">Juego</label>
     <select 
       id="gameId" 
       formControlName="gameId" 
       class="form-control">
-      <option value="">Seleccione un juego</option>
+      <option value="">Seleccione un juego (opcional)</option>
       @for (game of gameService.items$(); track game.id) {
         <option [ngValue]="game.id">{{getGameDisplayName(game)}}</option>
       }
     </select>
-    @if (challengeForm.controls['gameId'].invalid && (challengeForm.controls['gameId'].dirty || challengeForm.controls['gameId'].touched)) {
-      <p class="text-danger my-1">Por favor seleccione un juego</p>
-    }
   </div>
 
   <div class="col-6 mb-3">

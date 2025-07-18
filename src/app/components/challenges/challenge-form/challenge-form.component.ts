@@ -58,8 +58,7 @@ export class ChallengeFormComponent implements OnInit {
         [Validators.required]
       ],
       gameId: [
-        this.challenge?.game?.id || '', 
-        [Validators.required]
+        this.challenge?.game?.id || ''
       ],
       challengeStatus: [
         this.challenge?.challengeStatus !== undefined ? this.challenge.challengeStatus : true
@@ -74,11 +73,18 @@ export class ChallengeFormComponent implements OnInit {
       family: {  
         id: this.challengeForm.controls['familyId'].value  
       },
-      game: {
-        id: this.challengeForm.controls['gameId'].value
-      },
+      // game: {
+      //   id: this.challengeForm.controls['gameId'].value
+      // },
       challengeStatus: this.challengeForm.controls['challengeStatus'].value
     };
+
+    const gameId = this.challengeForm.controls['gameId'].value;
+    if (gameId) {
+      item.game = {
+        id: gameId
+      };
+    }
     
     if (this.challengeForm.controls['id'].value) {
       item.id = this.challengeForm.controls['id'].value;
