@@ -78,7 +78,7 @@ export const routes: Routes = [
           authorities: [
             IRoleType.admin
           ],
-          name: 'Users',
+          name: 'Usuarios',
           showInSidebar: true,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
