@@ -56,12 +56,15 @@
         Edad
       </label>
       <input #age="ngModel" type="number" class="form-control" id="age" name="age"
-        placeholder="-" [(ngModel)]="user.age" [ngClass]="{
-          'is-invalid': age.invalid && age.touched,
-          'is-valid': age.valid && age.touched
-        }" required />
+      min="18" max="120"
+      placeholder="-" [(ngModel)]="user.age" [ngClass]="{
+        'is-invalid': age.invalid && age.touched,
+        'is-valid': age.valid && age.touched
+      }" required />
       <div *ngIf="age.invalid && age.touched" class="invalid-feedback">
-        Por favor ingrese una edad válida
+
+        Por favor ingrese una edad valida entre 18 y 120 años
+
       </div>
     </div>
   </div>

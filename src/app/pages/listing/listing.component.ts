@@ -13,7 +13,6 @@ import { ModalService } from "../../services/modal.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { IFamily, IUser, IReward } from "../../interfaces";
 import { AuthService } from "../../services/auth.service";
-import { SignUpFormForFamilyComponent } from "../../components/auth/sign-up/sign-up-form-for-family/sign-up-form-for-family.component";
 import { FamilyMemberFormComponent } from "../../components/families/family-member-form/family-member-form.component";
 import { UserService } from "../../services/user.service";
 
@@ -27,7 +26,6 @@ import { UserService } from "../../services/user.service";
         PaginationComponent,
         ModalComponent,
         LoaderComponent,
-        SignUpFormForFamilyComponent,
         FamilyMemberFormComponent
     ],
     templateUrl: './listing.component.html',
@@ -58,13 +56,14 @@ export class ListingComponent {
   });
 
   memberForm = this.fb.group({
-    id: ['', Validators.required],
-    name: ['', [Validators.required, Validators.minLength(2)]],
-    lastname: ['', [Validators.required, Validators.minLength(2)]],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    points: [0, [Validators.min(0), Validators.pattern(/^\d+$/)]]
-  });
+  id: ['', Validators.required],
+  name: ['', [Validators.required, Validators.minLength(2)]],
+  lastname: ['', [Validators.required, Validators.minLength(2)]],
+  email: ['', [Validators.required, Validators.email]],
+  age: ['', [Validators.required, Validators.min(10), Validators.max(100)]], // Add age field
+  password: ['', [Validators.required, Validators.minLength(6)]],
+  points: [0, [Validators.min(0), Validators.pattern(/^\d+$/)]]
+});
 
   rewardForm = this.fb.group({
     id: [''],
@@ -85,10 +84,36 @@ export class ListingComponent {
     }
 
     openAddFamilyModal() {
-        this.isCreatingFamily = true;
-        this.newSonUser = null;
-        this.modalService.displayModal('lg', this.addFamilyModal);
-    }
+    this.isCreatingFamily = false; // Set to false since we're using the unified form now
+    
+    // Reset the form completely
+    this.memberForm.reset();
+    
+    // Setup form for create mode - add age validators
+    this.memberForm.controls['age']?.setValidators([Validators.required, Validators.min(10), Validators.max(100)]);
+    this.memberForm.controls['age']?.updateValueAndValidity();
+    
+    // Remove validators that are not needed for create mode (like ID)
+    this.memberForm.controls['id']?.clearValidators();
+    this.memberForm.controls['id']?.updateValueAndValidity();
+    
+    // Set default values for new member
+    this.memberForm.patchValue({
+        id: '',
+        name: '',
+        lastname: '',
+        email: '',
+        age: '',
+        password: '',
+        points: 0
+    });
+    
+    // Mark form as pristine to avoid showing validation errors initially
+    this.memberForm.markAsPristine();
+    this.memberForm.markAsUntouched();
+    
+    this.modalService.displayModal('lg', this.addFamilyModal);
+}
 
     onSonUserCreated(userData: IUser) {
         console.log('User created successfully:', userData);
@@ -168,18 +193,38 @@ export class ListingComponent {
     callEdition(family: IFamily) {
         console.log('Editing family member:', family); 
         if (family.son) {
+            this.isCreatingFamily = false; // Set to false for edit mode
+            
             this.currentMemberRole = family.son.role || {
                 id: 2,
                 name: 'ROLE_SON',
                 description: 'Son Role'
             };
 
-            this.memberForm.controls['id'].setValue(family.son.id !== undefined && family.son.id !== null ? String(family.son.id) : '');
-            this.memberForm.controls['name'].setValue(family.son.name || '');
-            this.memberForm.controls['lastname'].setValue(family.son.lastname || '');
-            this.memberForm.controls['email'].setValue(family.son.email || '');
-            this.memberForm.controls['password'].setValue('');
-            this.memberForm.controls['points'].setValue(family.son.points || 0);
+            // Reset form first
+            this.memberForm.reset();
+            
+            // Setup form for edit mode - remove age validators and add ID validators
+            this.memberForm.controls['age']?.clearValidators();
+            this.memberForm.controls['age']?.updateValueAndValidity();
+            
+            this.memberForm.controls['id']?.setValidators([Validators.required]);
+            this.memberForm.controls['id']?.updateValueAndValidity();
+
+            // Set form values
+            this.memberForm.patchValue({
+                id: family.son.id !== undefined && family.son.id !== null ? String(family.son.id) : '',
+                name: family.son.name || '',
+                lastname: family.son.lastname || '',
+                email: family.son.email || '',
+                age: '', // Don't set age for edit mode
+                password: '',
+                points: family.son.points || 0
+            });
+            
+            // Mark form as pristine to avoid showing validation errors initially
+            this.memberForm.markAsPristine();
+            this.memberForm.markAsUntouched();
             
             console.log('Form values set:', this.memberForm.value); 
             console.log('Son role:', family.son.role); 
@@ -187,6 +232,21 @@ export class ListingComponent {
         } else {
             console.error('No son data found in family:', family);
         }
+    }
+
+    // Add method to prepare form for creating new member
+    openAddFamilyMemberModal() {
+        // Reset form and add age validators for create mode
+        this.memberForm.reset();
+        this.memberForm.controls['age']?.setValidators([Validators.required, Validators.min(10), Validators.max(100)]);
+        this.memberForm.controls['age']?.updateValueAndValidity();
+        
+        // Set default values
+        this.memberForm.patchValue({
+            points: 0
+        });
+        
+        this.modalService.displayModal('md', this.editFamilyMemberModal);
     }
 
     updateFamilyMember(member: IUser) {
@@ -222,7 +282,7 @@ export class ListingComponent {
         console.log('=== LISTING COMPONENT SAVE REWARD ===');
         console.log('Received reward object:', reward);
         
-        if (!reward.family || !reward.family.id) {  // Change to check 'family' instead of 'familyId'
+        if (!reward.family || !reward.family.id) {  
             console.error('Reward must have a valid family with id');
             return;
         }
@@ -241,4 +301,78 @@ export class ListingComponent {
         console.log('Deleting reward:', reward);
         this.rewardService.delete(reward);
     }
+
+    // Add ViewChild reference to the family member form
+@ViewChild('familyMemberFormComponent') familyMemberFormComponent: any;
+
+saveFamilyMember(member: IUser) {
+    console.log('Family member created, now creating family relationship:', member);
+    
+    if (member.id && this.user?.id) {
+        const newFamily = {
+            father: { id: this.user.id },
+            son: { id: member.id }
+        };
+        
+        console.log('Creating family relationship:', newFamily);
+        this.familyService.save(newFamily);
+        this.closeAddFamilyModal();
+        
+        setTimeout(() => {
+            this.familyService.getAll();
+        }, 500);
+    } else {
+        console.error('No user ID found for family creation:', member);
+        this.showErrorMessage('User was created but family relationship could not be established. Please try again.');
+    }
+}
+
+// NEW: Handle user created event (from sign-up-form-for-family compatibility)
+onUserCreated(userData: IUser) {
+    console.log('User created successfully:', userData);
+    this.saveFamilyMember(userData);
+}
+
+private showErrorMessage(message: string) {
+    alert(message);
+    
+    console.error(message);
+}
+private setupFormForMode(isEditMode: boolean, memberData?: IUser) {
+    this.memberForm.reset();
+    
+    if (isEditMode && memberData) {
+        this.memberForm.controls['age']?.clearValidators();
+        this.memberForm.controls['id']?.setValidators([Validators.required]);
+        
+        this.memberForm.patchValue({
+            id: memberData.id?.toString() || '',
+            name: memberData.name || '',
+            lastname: memberData.lastname || '',
+            email: memberData.email || '',
+            password: '',
+            points: memberData.points || 0
+        });
+    } else {
+        // Create mode setup
+        this.memberForm.controls['age']?.setValidators([Validators.required, Validators.min(10), Validators.max(100)]);
+        this.memberForm.controls['id']?.clearValidators();
+        
+        this.memberForm.patchValue({
+            id: '',
+            name: '',
+            lastname: '',
+            email: '',
+            age: '',
+            password: '',
+            points: 0
+        });
+    }
+    
+    // Update validation and mark as pristine
+    this.memberForm.controls['age']?.updateValueAndValidity();
+    this.memberForm.controls['id']?.updateValueAndValidity();
+    this.memberForm.markAsPristine();
+    this.memberForm.markAsUntouched();
+}
 }
