@@ -10,7 +10,7 @@
       formControlName="description" 
       type="text" 
       class="form-control"
-      placeholder="Enter reward description">
+      placeholder="Ingrese una descripción de la recompensa">
     @if (rewardForm.controls['description'].invalid && (rewardForm.controls['description'].dirty || rewardForm.controls['description'].touched)) {
       <p class="text-danger my-1">Una descripción es requerida</p>
     }
@@ -23,7 +23,7 @@
       formControlName="cost" 
       type="number" 
       class="form-control"
-      placeholder="Enter point cost"
+      placeholder="Ingrese el costo de la recompensa"
       min="0">
     @if (rewardForm.controls['cost'].invalid && (rewardForm.controls['cost'].dirty || rewardForm.controls['cost'].touched)) {
       <p class="text-danger my-1">Costo es requerido. Debe ser un número mayor que cero.</p>
@@ -36,13 +36,13 @@
       id="familyId" 
       formControlName="familyId" 
       class="form-control">
-      <option value="">Select a family member</option>
+      <option value="">Seleccione el miembro de familia</option>
       @for (family of familyService.families$(); track family.id) {
         <option [ngValue]="family.id">{{getFamilyDisplayName(family)}}</option>
       }
     </select>
     @if (rewardForm.controls['familyId'].invalid && (rewardForm.controls['familyId'].dirty || rewardForm.controls['familyId'].touched)) {
-      <p class="text-danger my-1">Please select a family member</p>
+      <p class="text-danger my-1">Por favor elija un miembro de familia</p>
     }
   </div>
 

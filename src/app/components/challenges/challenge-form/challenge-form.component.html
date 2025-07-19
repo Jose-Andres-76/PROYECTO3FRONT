@@ -10,7 +10,7 @@
       formControlName="description" 
       type="text" 
       class="form-control"
-      placeholder="Ingrese la descripción del desafío">
+      placeholder="Ingrese la descripción del reto">
     @if (challengeForm.controls['description'].invalid && (challengeForm.controls['description'].dirty || challengeForm.controls['description'].touched)) {
       <p class="text-danger my-1">Una descripción es requerida (mínimo 3 caracteres)</p>
     }
@@ -23,7 +23,7 @@
       formControlName="points" 
       type="number" 
       class="form-control"
-      placeholder="Puntos del desafío"
+      placeholder="Puntos del reto"
       min="1">
     @if (challengeForm.controls['points'].invalid && (challengeForm.controls['points'].dirty || challengeForm.controls['points'].touched)) {
       <p class="text-danger my-1">Los puntos son requeridos. Debe ser un número mayor que cero.</p>

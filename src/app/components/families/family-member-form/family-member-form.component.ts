@@ -150,7 +150,7 @@ export class FamilyMemberFormComponent {
         if (ageValue >= 1 && ageValue <= 100) {
           member.age = ageValue;
         } else {
-          this.signUpError = 'Age must be between 1 and 100 years.';
+          this.signUpError = 'Edad debe ser entre 1 y 100 años.';
           this.isSubmitting = false;
           return;
         }
@@ -219,7 +219,7 @@ export class FamilyMemberFormComponent {
           this.callSaveMethod.emit(createdUser);
         } else {
           console.error('No user ID found in response:', response);
-          this.signUpError = 'User was created but no ID was returned. Please try again.';
+          this.signUpError = 'Usuario creado pero no se pudo obtener el ID.';
         }
       },
       error: (err: any) => {
@@ -227,55 +227,54 @@ export class FamilyMemberFormComponent {
         this.isSubmitting = false;
         this.validSignup = false;
         
-        this.signUpError = err.description || err.message || 'An error occurred during signup';
+        this.signUpError = err.description || err.message || 'Un error ocurrió al crear el usuario.';
       }
     });
   }
 
   private validateMemberData(member: IUser): boolean {
     if (!member.name || member.name.trim().length < 2) {
-      this.signUpError = 'Name must be at least 2 characters long.';
+      this.signUpError = 'Nombre debe tener al menos 2 caracteres.';
       return false;
     }
     
     if (!member.lastname || member.lastname.trim().length < 2) {
-      this.signUpError = 'Last name must be at least 2 characters long.';
+      this.signUpError = 'Apellido debe tener al menos 2 caracteres.';
       return false;
     }
     
     if (!member.email) {
-      this.signUpError = 'Email is required.';
+      this.signUpError = 'Email es requerido';
       return false;
     }
     
     const emailRegex = new RegExp(this.emailPattern);
     if (!emailRegex.test(member.email)) {
-      this.signUpError = 'Please enter a valid email address.';
+      this.signUpError = 'Por favor ingrese un email válido.';
       return false;
     }
     
     if (!member.password) {
-      this.signUpError = 'Password is required.';
+      this.signUpError = 'Contraseña es requerida';
       return false;
     }
     
     if (!this.isEditMode) {
       const passwordRegex = new RegExp(this.passwordPattern);
       if (!passwordRegex.test(member.password)) {
-        this.signUpError = 'Password must contain at least 8 characters including uppercase, lowercase, number and special character.';
+        this.signUpError = 'Contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.';
         return false;
       }
     } else {
       if (member.password.length < 6) {
-        this.signUpError = 'Password must be at least 6 characters long.';
+        this.signUpError = 'Contraseña debe tener al menos 6 caracteres.';
         return false;
       }
     }
     
-    // Age validation for create mode
     if (!this.isEditMode) {
-      if (!member.age || member.age < 1 || member.age > 100) { // Match sign-up-form-for-family
-        this.signUpError = 'Age must be between 1 and 100 years.';
+      if (!member.age || member.age < 10 || member.age > 100) { 
+        this.signUpError = 'Edad debe ser entre 10 y 100 años.';
         return false;
       }
     }
