@@ -149,11 +149,13 @@ export class PasswordRecoveryComponent implements OnInit {
     });
   }
 
-  public isValidResetForm(): boolean {
-    return this.passwordResetForm.code.length === 6 &&
-           this.passwordResetForm.newPassword.length >= 6 &&
-           this.passwordResetForm.newPassword === this.passwordResetForm.confirmPassword;
-  }
+  public passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{}|\\:;"'<>,.?/~`]).{8,}$/;
+  
+    public isValidResetForm(): boolean {
+      return this.passwordResetForm.code.length === 6 &&
+        this.passwordPattern.test(this.passwordResetForm.newPassword) &&
+        this.passwordResetForm.newPassword === this.passwordResetForm.confirmPassword;
+    }
 
   public closeModal() {
     this.modalService.closeAll();
