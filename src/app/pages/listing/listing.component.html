@@ -18,7 +18,7 @@
                     type="button" 
                     class="btn btn-success"
                     (click)="openAddFamilyModal()">
-                    <i class="fas fa-plus"></i> Agregar miembro de familia
+                    <i class="fas fa-plus"></i> Agregar Miembro de Familia
                 </button>
             </div>
         </div>
@@ -40,11 +40,33 @@
                         type="button" 
                         class="btn btn-success"
                         (click)="openAddRewardModal()">
-                        <i class="fas fa-plus"></i> Agregar recompensa
+                        <i class="fas fa-plus"></i> Agregar Recompensa
                     </button>
                 </div>
             </div>
-            
+        </div>
+
+        <div class="col-12 mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Retos</h2>
+            </div>
+            <div id="challenge-list-bg">
+                <div id="challenge-list" class="mb-3">
+                    <app-challenge-list
+                    (callDeleteAction)="deleteChallenge($event)"
+                    (callModalAction)="callChallengeEdition($event)"
+                    [challenges]="challengeService.challenges$()"
+                    />
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    <button 
+                        type="button" 
+                        class="btn btn-success"
+                        (click)="openAddChallengeModal()">
+                        <i class="fas fa-plus"></i> Agregar Reto
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 } @loading (minimum 1.5s){
@@ -115,6 +137,7 @@
         <app-reward-form
             title="Agregar Nueva Recompensa"
             (callSaveMethod)="saveReward($event)"
+            (callCancelMethod)="modalService.closeAll()"
         />
     </div>
 </ng-template>
@@ -131,6 +154,40 @@
             title="Editar Recompensa"
             [reward]="getSelectedReward()"
             (callUpdateMethod)="updateReward($event)"
+            (callCancelMethod)="modalService.closeAll()"
+        />
+    </div>
+</ng-template>
+
+<ng-template #addChallengeModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Agregar Nuevo Reto</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-challenge-form
+            title="Agregar Nuevo Reto"
+            (callSaveMethod)="saveChallenge($event)"
+            (callCancelMethod)="modalService.closeAll()"
+        />
+    </div>
+</ng-template>
+
+<ng-template #editChallengeModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Editar Reto</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-challenge-form
+            title="Editar Reto"
+            [challenge]="getSelectedChallenge()"
+            (callUpdateMethod)="updateChallenge($event)"
+            (callCancelMethod)="modalService.closeAll()"
         />
     </div>
 </ng-template>
