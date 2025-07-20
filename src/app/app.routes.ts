@@ -12,9 +12,6 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { GuestGuard } from './guards/guest.guard';
 import { IRoleType } from './interfaces';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { OrdersComponent } from './pages/orders/orders.component';
-import { PreferenceListPageComponent } from './pages/preferenceList/preference-list.component';
-import { SportTeamComponent } from './pages/sport-team/sport-team.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
 import { ListingComponent } from './pages/listing/listing.component';
@@ -107,48 +104,6 @@ export const routes: Routes = [
             IRoleType.son
           ],
           name: 'profile',
-          showInSidebar: false,
-          iconPath: 'assets/icons/sidebar/users-solid.svg'
-        }
-      },
-      {
-        path: 'orders',
-        component: OrdersComponent,
-        data: { 
-          authorities: [
-            IRoleType.admin, 
-            IRoleType.father,
-            IRoleType.son,
-          ],
-          name: 'orders',
-          showInSidebar: false,
-          iconPath: 'assets/icons/sidebar/users-solid.svg'
-        }
-      },
-      {
-        path: 'preference-list',
-        component: PreferenceListPageComponent,
-        data: { 
-          authorities: [
-            IRoleType.admin, 
-            IRoleType.father,
-            IRoleType.son,
-          ],
-          name: 'preference list',
-          showInSidebar: false,
-          iconPath: 'assets/icons/sidebar/users-solid.svg'
-        }
-      },
-      {
-        path: 'sport-team',
-        component: SportTeamComponent,
-        data: { 
-          authorities: [
-            IRoleType.admin, 
-            IRoleType.father,
-            IRoleType.son,
-          ],
-          name: 'Sport Team',
           showInSidebar: false,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
