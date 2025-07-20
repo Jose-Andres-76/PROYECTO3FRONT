@@ -92,6 +92,7 @@ export const routes: Routes = [
           showInSidebar: true,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
+        
       },
       {
         path: 'profile',
@@ -200,7 +201,7 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'Recompensas Eco', 
-          showInSidebar: true 
+          showInSidebar: false 
           
         }
       },
@@ -214,7 +215,7 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'Retos Eco', 
-          showInSidebar: true 
+          showInSidebar: false 
         }
       },
     ],
