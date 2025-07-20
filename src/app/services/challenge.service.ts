@@ -146,8 +146,4 @@ export class ChallengeService extends BaseService<IChallenge> {
             }
         });
     }
-
-    getChallengeById(id: number): Observable<any> {
-        return this.find(id);
-    }
 }
