@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GeneralInfoService } from '../../../../services/general-info.service';
 import { FormsModule } from '@angular/forms';
+import { AlertService } from '../../../../services/alert.service';
+
 
 @Component({
   selector: 'app-footer',
@@ -13,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 export class FooterComponent {
   email: string = '';
   isSubmitting: boolean = false;
+  private alertService: AlertService = inject(AlertService);
 
   constructor(private generalInfoService: GeneralInfoService) {}
 
@@ -24,12 +28,12 @@ export class FooterComponent {
       this.generalInfoService.sendEmailGeneralInfo(this.email).subscribe({
         next: (response) => {
           console.log('Email sent successfully:', response);
-          alert('Correo enviado correctamente');
+           this.alertService.displayAlert('success', 'Correo enviado exitosamente', 'center', 'top', ['success-snackbar']);
           this.email = ''; // Clean the form for next submission
           this.isSubmitting = false;
         },
         error: (error) => {
-          console.error('Error sending email:', error);
+          this.alertService.displayAlert('error', 'No se ha enviar el correo electrónico', 'center', 'top', ['error-snackbar']);
           let errorMessage = 'Error al enviar el correo';
           //Set of messages for different error statuses
           if (error.status === 404) {
@@ -48,10 +52,12 @@ export class FooterComponent {
           this.isSubmitting = false;
         },
         complete: () => {
-          console.log('Email request completed');
+          this.alertService.displayAlert('success', 'Correo enviado exitosamente', 'center', 'top', ['success-snackbar']);
           this.isSubmitting = false;
         }
       });
     }
   }
 }
+
+

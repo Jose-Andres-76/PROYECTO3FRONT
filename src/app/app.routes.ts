@@ -6,14 +6,12 @@ import { UsersComponent } from './pages/users/users.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
 import { AdminRoleGuard } from './guards/admin-role.guard';
+import { FatherRoleGuard } from './guards/father-role.guard';
+import { SonRoleGuard } from './guards/son-role-guard.guard';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { GuestGuard } from './guards/guest.guard';
 import { IRoleType } from './interfaces';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { GamesComponent } from './pages/games/games.component';
-import { OrdersComponent } from './pages/orders/orders.component';
-import { PreferenceListPageComponent } from './pages/preferenceList/preference-list.component';
-import { SportTeamComponent } from './pages/sport-team/sport-team.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
 import { ListingComponent } from './pages/listing/listing.component';
@@ -27,6 +25,7 @@ export const routes: Routes = [
   {
     path: '',
     component: LandingComponent,
+     canActivate: [GuestGuard],
   },
   {
     path: 'login',
@@ -36,7 +35,7 @@ export const routes: Routes = [
   {
     path: 'password-recovery',
     component: PasswordRecoveryComponent,
-
+    canActivate: [GuestGuard],
   },
   {
     path: 'signup',
@@ -46,6 +45,7 @@ export const routes: Routes = [
   {
     path: 'auth/google/callback',
     component: GoogleCallbackComponent,
+    canActivate: [GuestGuard],
   },
   {
     path: 'access-denied',
@@ -67,6 +67,20 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
       {
+        path: 'family',
+        component: ListingComponent,
+        canActivate:[FatherRoleGuard],
+        data: { 
+          authorities: [
+            IRoleType.admin, 
+            IRoleType.father,
+          ],
+          name: 'Mi Familia',
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/people-roof-solid.svg'
+        }
+      },
+      {
         path: 'users',
         component: UsersComponent,
         canActivate:[AdminRoleGuard],
@@ -74,7 +88,7 @@ export const routes: Routes = [
           authorities: [
             IRoleType.admin
           ],
-          name: 'Users',
+          name: 'Usuarios',
           showInSidebar: true,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
@@ -82,6 +96,7 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent,
+        canActivate: [AuthGuard],
         data: { 
           authorities: [
             IRoleType.admin, 
@@ -107,79 +122,11 @@ export const routes: Routes = [
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
-      {
-        path: 'games',
-        component: GamesComponent,
-        data: { 
-          authorities: [
-            IRoleType.admin, 
-            IRoleType.father,
-            IRoleType.son,
-          ],
-          name: 'games',
-          showInSidebar: false,
-          iconPath: 'assets/icons/sidebar/users-solid.svg'
-        }
-      },
-      {
-        path: 'orders',
-        component: OrdersComponent,
-        data: { 
-          authorities: [
-            IRoleType.admin, 
-            IRoleType.father,
-            IRoleType.son,
-          ],
-          name: 'orders',
-          showInSidebar: false,
-          iconPath: 'assets/icons/sidebar/users-solid.svg'
-        }
-      },
-      {
-        path: 'preference-list',
-        component: PreferenceListPageComponent,
-        data: { 
-          authorities: [
-            IRoleType.admin, 
-            IRoleType.father,
-            IRoleType.son,
-          ],
-          name: 'preference list',
-          showInSidebar: false,
-          iconPath: 'assets/icons/sidebar/users-solid.svg'
-        }
-      },
-      {
-        path: 'sport-team',
-        component: SportTeamComponent,
-        data: { 
-          authorities: [
-            IRoleType.admin, 
-            IRoleType.father,
-            IRoleType.son,
-          ],
-          name: 'Sport Team',
-          showInSidebar: false,
-          iconPath: 'assets/icons/sidebar/users-solid.svg'
-        }
-      },
-      {
-        path: 'garbage-scanner',
-        component: GarbageScannerPageComponent,
-        data: { 
-          authorities: [
-            IRoleType.admin, 
-            IRoleType.father,
-            IRoleType.son,
-          ],
-          name: 'Escáner de Basura',
-          showInSidebar: true,
-          iconPath: 'assets/icons/sidebar/magnifying-glass-solid (1).svg'
-        }
-      },
+    
       {
         path: 'collection-centers',
         component: CollectionCentersComponent,
+        canActivate: [AuthGuard],
         data: { 
           authorities: [
             IRoleType.admin, 
@@ -191,19 +138,22 @@ export const routes: Routes = [
           iconPath: 'assets/icons/sidebar/compass-regular.svg'
         }
       },
-      {
-        path: 'family',
-        component: ListingComponent,
+        {
+        path: 'garbage-scanner',
+        component: GarbageScannerPageComponent,
+        canActivate: [AuthGuard],
         data: { 
           authorities: [
             IRoleType.admin, 
             IRoleType.father,
+            IRoleType.son,
           ],
-          name: 'Family',
+          name: 'Escáner de Basura',
           showInSidebar: true,
-          iconPath: 'assets/icons/sidebar/people-roof-solid.svg'
+          iconPath: 'assets/icons/sidebar/magnifying-glass-solid (1).svg'
         }
       }
+      
     ],
   },
    { path: '**', redirectTo: '' }

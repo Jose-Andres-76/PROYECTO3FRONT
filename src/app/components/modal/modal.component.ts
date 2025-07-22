@@ -28,6 +28,8 @@ export class ModalComponent{
   @Input() modalBodyClass: string = "modal-body";
   @Input() modalFooterClass: string = "modal-footer";
   @Input() modalContentClass: string = "modal-content";
+  @Input() confirmButtonClass: string = "btn-danger";
+  @Input() cancelButtonClass: string = "btn-primary";
   @Output() callCancelMethod = new EventEmitter();
   @Output() callConfirmationMethod = new EventEmitter();
 

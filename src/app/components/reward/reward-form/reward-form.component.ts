@@ -21,9 +21,10 @@ export class RewardFormComponent implements OnInit {
   public rewardService: RewardService = inject(RewardService);
   
   @Input() reward?: IReward;
-  @Input() title: string = 'Add Reward';
+  @Input() title: string = 'Agregar Recompensa';
   @Output() callSaveMethod: EventEmitter<IReward> = new EventEmitter<IReward>();
   @Output() callUpdateMethod: EventEmitter<IReward> = new EventEmitter<IReward>();
+  @Output() callCancelMethod: EventEmitter<void> = new EventEmitter<void>();
 
   public rewardForm!: FormGroup;
 
@@ -62,8 +63,8 @@ export class RewardFormComponent implements OnInit {
     let item: IReward = {
       description: this.rewardForm.controls['description'].value,
       cost: this.rewardForm.controls['cost'].value,
-      family: {  // Change from 'familyId' to 'family'
-        id: this.rewardForm.controls['familyId'].value  // Keep as object with id property
+      family: {  
+        id: this.rewardForm.controls['familyId'].value  
       },
       status: this.rewardForm.controls['status'].value
     };
@@ -75,6 +76,10 @@ export class RewardFormComponent implements OnInit {
     } else {
       this.callSaveMethod.emit(item);
     }
+  }
+
+  public cancelAction(): void {
+    this.callCancelMethod.emit();
   }
 
   public getFamilyDisplayName(family: IFamily): string {

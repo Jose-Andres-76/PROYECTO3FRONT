@@ -56,15 +56,10 @@ export interface IRole {
   name : string;
   updatedAt: string;
 }
-
 export interface IGame {
   id?: number;
-  name?: string;
-  imgURL?: string;
-  status?: string;
+  typesOfGames?: string;
   description?: string;
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 export interface IOrder {
@@ -82,35 +77,6 @@ export interface ISearch {
   totalPages?:number;
 }
 
-export interface IMovie {
-  id?: number;
-  title?: string;
-  director?: string;
-  description?: string;
-}
-
-export interface IPreferenceList {
-  id?: number;
-  name?: string;
-  movies?: IMovie[];
-}
-
-export interface ISportTeam {
-  id?: number;
-  name?: string;
-  players?: IPlayer[];
-  stadium?: string;
-  founded?: number;
-  coach?: string;
-  isInClubsWorldCup?: boolean;
-  teamLogo?: string;
-}
-
-export interface IPlayer {
-  id?: number;
-  name?: string;
-}
-
 
 export interface IFamily {
   id?: number;
@@ -122,7 +88,7 @@ export interface IFamily {
 
 export interface IReward {
   id?: number;
-  family: {  
+  family?: {  
     id: number;
   }; 
   cost?: number;
@@ -130,10 +96,14 @@ export interface IReward {
   status?: boolean;
 }
 
-interface IChallenge {
+export interface IChallenge {
   id?: number;
-  familyId?: IFamily;
-  gameId?: IGame;
+  family?: {
+    id: number;
+  };
+  game?: {
+    id: number;
+  };
   points?: number;
   challengeStatus?: boolean;
   description?: string;
