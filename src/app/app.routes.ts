@@ -67,6 +67,20 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
       {
+        path: 'family',
+        component: ListingComponent,
+        canActivate:[FatherRoleGuard],
+        data: { 
+          authorities: [
+            IRoleType.admin, 
+            IRoleType.father,
+          ],
+          name: 'Mi Familia',
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/people-roof-solid.svg'
+        }
+      },
+      {
         path: 'users',
         component: UsersComponent,
         canActivate:[AdminRoleGuard],
@@ -108,21 +122,7 @@ export const routes: Routes = [
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
-      {
-        path: 'garbage-scanner',
-        component: GarbageScannerPageComponent,
-        canActivate: [AuthGuard],
-        data: { 
-          authorities: [
-            IRoleType.admin, 
-            IRoleType.father,
-            IRoleType.son,
-          ],
-          name: 'Escáner de Basura',
-          showInSidebar: true,
-          iconPath: 'assets/icons/sidebar/magnifying-glass-solid (1).svg'
-        }
-      },
+    
       {
         path: 'collection-centers',
         component: CollectionCentersComponent,
@@ -138,20 +138,22 @@ export const routes: Routes = [
           iconPath: 'assets/icons/sidebar/compass-regular.svg'
         }
       },
-      {
-        path: 'family',
-        component: ListingComponent,
-        canActivate:[FatherRoleGuard],
+        {
+        path: 'garbage-scanner',
+        component: GarbageScannerPageComponent,
+        canActivate: [AuthGuard],
         data: { 
           authorities: [
             IRoleType.admin, 
             IRoleType.father,
+            IRoleType.son,
           ],
-          name: 'Mi Familia',
+          name: 'Escáner de Basura',
           showInSidebar: true,
-          iconPath: 'assets/icons/sidebar/people-roof-solid.svg'
+          iconPath: 'assets/icons/sidebar/magnifying-glass-solid (1).svg'
         }
       }
+      
     ],
   },
    { path: '**', redirectTo: '' }
