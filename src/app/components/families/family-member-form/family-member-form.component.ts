@@ -33,23 +33,19 @@ export class FamilyMemberFormComponent {
   @Output() callSaveMethod: EventEmitter<IUser> = new EventEmitter<IUser>();
   @Output() callCancelMethod: EventEmitter<void> = new EventEmitter<void>();
   
-  // NEW: Outputs matching sign-up-form-for-family
   @Output() userCreated = new EventEmitter<IUser>();
   @Output() signupCancelled = new EventEmitter<void>();
 
-  // UI state properties (matching sign-up-form-for-family)
   public showPassword: boolean = false;
   public signUpError: string = '';
   public validSignup: boolean = false;
   public isSubmitting: boolean = false;
 
-  // NEW: User object like in sign-up-form-for-family
   public user: IUser = {};
 
   ngOnInit() {
     this.setupFormValidators();
     
-    // Initialize user object from form if in create mode
     if (!this.isEditMode) {
       this.syncUserObjectWithForm();
     }
