@@ -55,7 +55,7 @@ export class RewardService extends BaseService<IReward> {
         this.monitorUserChanges();
         const userId = this.authService.getUser()?.id;
         if (!userId) {
-            this.alertService.displayAlert('error', 'User not found', 'center', 'top', ['error-snackbar']);
+            this.alertService.displayAlert('error', 'Usuario no encontrado...', 'center', 'top', ['error-snackbar']);
             console.error('User ID not found');
             return;
         }
@@ -76,7 +76,7 @@ export class RewardService extends BaseService<IReward> {
             },
             error: (error: any) => {
                 console.error('Error fetching my rewards:', error);
-                this.alertService.displayAlert('error', 'Failed to fetch rewards', 'center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'No se ha podido traer recompensas..', 'center', 'top', ['error-snackbar']);
             }
         });
     }
@@ -99,7 +99,7 @@ export class RewardService extends BaseService<IReward> {
             },
             error: (error: any) => {
                 console.error('Error fetching all rewards:', error);
-                this.alertService.displayAlert('error', 'Failed to fetch rewards', 'center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'No se ha podido traer recompensas..', 'center', 'top', ['error-snackbar']);
             }
         });     
     }
@@ -108,12 +108,12 @@ export class RewardService extends BaseService<IReward> {
         this.add(reward).subscribe({
             next: (response: any) => {
                 console.log('Reward saved successfully:', response);
-                this.alertService.displayAlert('success', 'Reward saved successfully', 'center', 'top', ['success-snackbar']);
+                this.alertService.displayAlert('success', 'Recompensa guardada exitosamente', 'center', 'top', ['success-snackbar']);
                 this.getAll();
             },
             error: (error: any) => {
                 console.error('Error saving reward:', error);
-                this.alertService.displayAlert('error', 'Failed to save reward', 'center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'No se ha podido agregar tu recompensa', 'center', 'top', ['error-snackbar']);
             }
         });
     }
@@ -122,12 +122,12 @@ export class RewardService extends BaseService<IReward> {
         this.edit(reward.id, reward).subscribe({
             next: (response: any) => {
                 console.log('Reward updated successfully:', response);
-                this.alertService.displayAlert('success', 'Reward updated successfully', 'center', 'top', ['success-snackbar']);
+                this.alertService.displayAlert('success', 'Recompensa actualizada exitosamente', 'center', 'top', ['success-snackbar']);
                 this.getAll();
             },
             error: (error: any) => {
                 console.error('Error updating reward:', error);
-                this.alertService.displayAlert('error', 'Failed to update reward', 'center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'No se ha podido actualizar la recompensa', 'center', 'top', ['error-snackbar']);
             }
         });
     }
@@ -136,12 +136,12 @@ export class RewardService extends BaseService<IReward> {
         this.delCustomSource(`${reward.id}`).subscribe({
             next: (response: any) => {
                 console.log('Reward deleted successfully:', response);
-                this.alertService.displayAlert('success', 'Reward deleted successfully', 'center', 'top', ['success-snackbar']);
+                this.alertService.displayAlert('success', 'Recompensa eliminada exitosamente', 'center', 'top', ['success-snackbar']);
                 this.getAll();
             },
             error: (error: any) => {
                 console.error('Error deleting reward:', error);
-                this.alertService.displayAlert('error', 'Failed to delete reward', 'center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'No se ha podido eliminar recompensa', 'center', 'top', ['error-snackbar']);
             }
         });
     }

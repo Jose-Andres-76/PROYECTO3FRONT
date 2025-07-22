@@ -46,16 +46,16 @@ export class FamilyService extends BaseService<IFamily> {
             size: 5
         };
         this.totalItems = [];
-        }
+    }
 
-        getMyFamilies() {
+    getMyFamilies() {
         console.log('Fetching my families...');
 
         this.monitorUserChanges();
         const userId = this.authService.getUser()?.id;
         if (!userId) {
             console.error('User ID not found');
-            this.alertService.displayAlert('error', 'User not found', 'center', 'top', ['error-snackbar']);
+            this.alertService.displayAlert('error', 'Usuario no encontrado...', 'center', 'top', ['error-snackbar']);
             return;
         }
 
@@ -64,30 +64,19 @@ export class FamilyService extends BaseService<IFamily> {
                 console.log('My families response:', response);
                 console.log('My families data:', response.data);
 
-               if (!response.data || response.data.length === 0) {
+                if (!response.data || response.data.length === 0) {
                     this.clearFamilies();
                     return;
                 }
 
-            this.search = {...this.search, ...response.meta};
-            this.totalItems = Array.from({length: this.search.totalPages ? this.search.totalPages: 0}, (_, i) => i+1);
-            this.familyListSignal.set(response.data);
-
-            this.familyListSignal.update(families => {
-                return families.map(family => {
-                    if (family.idSon) {
-                        family.son = response.data.find((user: IFamily) => user.id === family.idSon);
-                    }
-                    if (family.idFather) {
-                        family.idFather = response.data.find((user: IFamily) => user.id === family.idFather);
-                    }
-                    return family;
-                });
-            });
-        },
+                this.search = {...this.search, ...response.meta};
+                this.totalItems = Array.from({length: this.search.totalPages ? this.search.totalPages: 0}, (_, i) => i+1);
+                
+                this.familyListSignal.set(response.data);
+            },
             error: (err: any) => {
                 console.error('Error fetching my families:', err);
-                this.alertService.displayAlert('error', 'Error loading your families', 'center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'Error cargando tus miembros de familia.', 'center', 'top', ['error-snackbar']);
                 this.clearFamilies(); 
             }
         });
@@ -108,22 +97,10 @@ export class FamilyService extends BaseService<IFamily> {
                 this.search = {...this.search, ...response.meta};
                 this.totalItems = Array.from({length: this.search.totalPages ? this.search.totalPages: 0}, (_, i) => i+1);
                 this.familyListSignal.set(response.data);
-
-                this.familyListSignal.update(families => {
-                    return families.map(family => {
-                        if (family.idSon) {
-                            family.son = response.data.find((user: IFamily) => user.id === family.idSon);
-                        }
-                        if (family.idFather) {
-                            family.idFather = response.data.find((user: IFamily) => user.id === family.idFather);
-                        }
-                        return family;
-                    });
-                });
             },
             error: (err: any) => {
                 console.error('Error fetching families:', err);
-                this.alertService.displayAlert('error', 'Error loading families', 'center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'Error cargando miembros', 'center', 'top', ['error-snackbar']);
             }
         });
     }
@@ -131,11 +108,11 @@ export class FamilyService extends BaseService<IFamily> {
     save(family: IFamily) {
         this.add(family).subscribe({
             next: (response: any) => {
-                this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+                this.alertService.displayAlert('success', 'Miembro agregado exitosamente', 'center', 'top', ['success-snackbar']);
                 this.getAll();
             },
             error: (err: any) => {
-                this.alertService.displayAlert('error', 'An error occurred adding the family','center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'Ocurrió un error agregando el miembro','center', 'top', ['error-snackbar']);
                 console.error('error', err);
             }
         });
@@ -144,25 +121,32 @@ export class FamilyService extends BaseService<IFamily> {
     update(family: IFamily) {
         this.editCustomSource(`${family.id}`, family).subscribe({
             next: (response: any) => {
-                this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+                this.alertService.displayAlert('success', 'Miembro actualizado exitosamente', 'center', 'top', ['success-snackbar']);
                 this.getAll();
             },
             error: (err: any) => {
-                this.alertService.displayAlert('error', 'An error occurred updating the family','center', 'top', ['error-snackbar']);
+                this.alertService.displayAlert('error', 'Ocurrió un error actualizando el miembro','center', 'top', ['error-snackbar']);
                 console.error('error', err);
             }
         });
     }
 
     delete(family: IFamily) {
+        this.familyListSignal.update(families => 
+            families.filter(f => f.id !== family.id)
+        );
+
         this.delCustomSource(`${family.id}`).subscribe({
             next: (response: any) => {
                 console.log('Delete response:', response);
-                this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.alertService.displayAlert('success', 'Miembro eliminado exitosamente', 'center', 'top', ['success-snackbar']);
+                setTimeout(() => {
+                    this.getAll();
+                }, 500);
             },
             error: (err: any) => {
-                this.alertService.displayAlert('error', 'An error occurred deleting the family','center', 'top', ['error-snackbar']);
+                this.getAll();
+                this.alertService.displayAlert('error', 'Un error ocurrió eliminando el miembro. Asegúrese que no hay recompensas asignadas al miembro.','center', 'top', ['error-snackbar']);
                 console.error('error', err);
             }
         });

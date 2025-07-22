@@ -20,7 +20,7 @@
                 Email
               </label>
               <input #email="ngModel" type="text" class="form-control" id="email" name="email"
-                placeholder="ejemplo.email@gmail.com" [(ngModel)]="loginForm.email" [ngClass]="{
+                placeholder="ejemplo@gmail.com" [(ngModel)]="loginForm.email" [ngClass]="{
                   'is-invalid': email.invalid && email.touched,
                   'is-valid': email.valid && email.touched
                 }" required />

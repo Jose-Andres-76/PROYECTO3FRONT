@@ -2,8 +2,9 @@
   <table class="table table-striped">
     <thead>
       <tr>
+        <th scope="col" class="text-center text-success">Juego</th>
         <th scope="col" class="text-center text-success">Descripción</th>
-        <th scope="col" class="text-center text-success">Costo</th>
+        <th scope="col" class="text-center text-success">Puntos a otorgar</th>
         <th scope="col" class="text-center text-success">Nombre</th>
         <th scope="col" class="text-center text-success">Apellido</th>
         <th scope="col" class="text-center text-success">Estado</th>
@@ -12,16 +13,17 @@
       </tr>
     </thead>
     <tbody>
-      @for (item of rewards; track item.id) {
+      @for (item of challenges; track item.id) {
         <tr class="text-center">
-          <td>{{item.description}}</td>
-          <td>{{item.cost}}</td>
+          <td>{{ getGameType(item) }}</td>
+          <td>{{ item.description }}</td>
+          <td>{{ item.points }}</td>
           <td>{{ getSonName(item) }}</td>
           <td>{{ getSonLastname(item) }}</td>
           <td>
             <input 
               type="checkbox" 
-              [checked]="item.status" 
+              [checked]="item.challengeStatus" 
               disabled
               class="form-check-input">
           </td>
@@ -38,9 +40,9 @@
         </tr>
       } @empty {
         <tr>
-          <td colspan="6">
+          <td colspan="7">
             <div class="d-flex justify-content-center align-items-center w-100">
-              <p class="mb-0">Aún no hay recompensas</p>
+              <p class="mb-0">Aún no hay desafíos</p>
             </div>
           </td>
         </tr>
