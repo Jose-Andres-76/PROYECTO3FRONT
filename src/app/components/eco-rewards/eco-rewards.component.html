@@ -1,0 +1,21 @@
+<div class="eco-rewards">
+  <h1>Recompensas</h1>
+  <p>Elije tus recompensas!</p>
+
+  <div class="cards">
+    <div class="card" *ngFor="let reward of rewards">
+      <h2>{{ reward.name }}</h2>
+      <span class="coins">💰 {{ reward.cost }}</span>
+      <button (click)="claimReward(reward)">Jugar ahora</button>
+    </div>
+    <div class="card placeholder"></div>
+  </div>
+
+  <div class="actions">
+    <span class="coins">💰 {{ coins }}</span>
+     <button class="button" [routerLink]="['/app/Eco']">Modulo infantil</button>
+    <button  class="button" [routerLink]="['/app/challenges']">Ver retos</button>
+   
+  </div>
+</div>
+
