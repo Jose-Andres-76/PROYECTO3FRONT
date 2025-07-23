@@ -1,0 +1,50 @@
+<div class="table-container table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col" class="text-center text-success">Descripción</th>
+        <th scope="col" class="text-center text-success">Costo</th>
+        <th scope="col" class="text-center text-success">Nombre</th>
+        <th scope="col" class="text-center text-success">Apellido</th>
+        <th scope="col" class="text-center text-success">Estado</th>
+        <th scope="col" class="text-center text-success">Editar</th>
+        <th scope="col" class="text-center text-danger">Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of rewards; track item.id) {
+        <tr class="text-center">
+          <td>{{item.description}}</td>
+          <td>{{item.cost}}</td>
+          <td>{{ getSonName(item) }}</td>
+          <td>{{ getSonLastname(item) }}</td>
+          <td>
+            <input 
+              type="checkbox" 
+              [checked]="item.status" 
+              disabled
+              class="form-check-input">
+          </td>
+          <td class="text-center">
+            <button (click)="callModalAction.emit(item)" class="btn btn-success" type="button">
+              Editar
+            </button>
+          </td>
+          <td class="text-center">
+            <button (click)="confirmDelete(item)" class="btn btn-danger" type="button">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6">
+            <div class="d-flex justify-content-center align-items-center w-100">
+              <p class="mb-0">Aún no hay recompensas</p>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

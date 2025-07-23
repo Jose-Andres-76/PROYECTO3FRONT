@@ -56,15 +56,10 @@ export interface IRole {
   name : string;
   updatedAt: string;
 }
-
 export interface IGame {
   id?: number;
-  name?: string;
-  imgURL?: string;
-  status?: string;
+  typesOfGames?: string;
   description?: string;
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 export interface IOrder {
@@ -82,33 +77,36 @@ export interface ISearch {
   totalPages?:number;
 }
 
-export interface IMovie {
+
+export interface IFamily {
   id?: number;
-  title?: string;
-  director?: string;
+  son?: IUser;
+  father?: IUser;
+  idSon?: IUser;
+  idFather?: IUser;
+}
+
+export interface IReward {
+  id?: number;
+  family?: {  
+    id: number;
+  }; 
+  cost?: number;
   description?: string;
+  status?: boolean;
 }
 
-export interface IPreferenceList {
+export interface IChallenge {
   id?: number;
-  name?: string;
-  movies?: IMovie[];
-}
-
-export interface ISportTeam {
-  id?: number;
-  name?: string;
-  players?: IPlayer[];
-  stadium?: string;
-  founded?: number;
-  coach?: string;
-  isInClubsWorldCup?: boolean;
-  teamLogo?: string;
-}
-
-export interface IPlayer {
-  id?: number;
-  name?: string;
+  family?: {
+    id: number;
+  };
+  game?: {
+    id: number;
+  };
+  points?: number;
+  challengeStatus?: boolean;
+  description?: string;
 }
 
 export interface IWaste {

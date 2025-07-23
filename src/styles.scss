@@ -49,6 +49,8 @@ body[class="dark-only"] {
 //start template styles
 @import "./assets/layout/layout.scss";
 //end template styles
+@import "leaflet/dist/leaflet.css";
+
 
 html, body { 
   height: 100%; 
@@ -56,11 +58,11 @@ html, body {
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .error-snackbar .mdc-snackbar__surface{
-  background-color: rgb(197, 49, 49) !important;
+  background-color: rgb(220,53,69) !important;
 }
 
 .success-snackbar .mdc-snackbar__surface{
-  background-color: rgb(54, 197, 49) !important;
+  background-color: rgb(25,135,84) !important;
 }
 
 

@@ -1,0 +1,193 @@
+@defer {
+    <div class="row p-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Familia {{user?.lastname}}</h2>
+            </div>
+        </div>
+        <div id="family-list-bg" class="col-12">
+            <div id="family-list" class="mb-3">
+            <app-family-list
+                (callDeleteAction)="deleteFamily($event)"
+                (callModalAction)="callEdition($event)"
+                [families]="familyService.families$()"
+            />
+            </div>
+            <div class="d-flex justify-content-center mt-3">
+                <button 
+                    type="button" 
+                    class="btn btn-success"
+                    (click)="openAddFamilyModal()">
+                    <i class="fas fa-plus"></i> Agregar Miembro de Familia
+                </button>
+            </div>
+        </div>
+        
+        <div class="col-12 mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Recompensas de Familia</h2>
+            </div>
+            <div id="reward-list-bg">
+                <div id="reward-list" class="mb-3">
+                    <app-reward-list
+                    (callDeleteAction)="rewardService.delete($event)"
+                    (callModalAction)="callRewardEdition($event)"
+                    [rewards]="rewardService.rewards$()"
+                    />
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    <button 
+                        type="button" 
+                        class="btn btn-success"
+                        (click)="openAddRewardModal()">
+                        <i class="fas fa-plus"></i> Agregar Recompensa
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Retos</h2>
+            </div>
+            <div id="challenge-list-bg">
+                <div id="challenge-list" class="mb-3">
+                    <app-challenge-list
+                    (callDeleteAction)="deleteChallenge($event)"
+                    (callModalAction)="callChallengeEdition($event)"
+                    [challenges]="challengeService.challenges$()"
+                    />
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    <button 
+                        type="button" 
+                        class="btn btn-success"
+                        (click)="openAddChallengeModal()">
+                        <i class="fas fa-plus"></i> Agregar Reto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+} @loading (minimum 1.5s){
+    <app-loader></app-loader>
+} 
+
+<ng-template #addFamilyModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Agregar Miembro de Familia</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeAddFamilyModal()">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        @if(!newSonUser) {
+            <app-family-member-form
+                #familyMemberFormComponent
+                title="Agregar Nuevo Miembro"
+                [memberForm]="memberForm"
+                [isEditMode]="false"
+                (callSaveMethod)="saveFamilyMember($event)"
+                (callCancelMethod)="closeAddFamilyModal()"
+                (signupCancelled)="closeAddFamilyModal()"
+            />
+        } @else {
+            <div class="text-center">
+                <h4>Miembro de familia agregado exitosamente</h4>
+                <p>{{newSonUser.name}} {{newSonUser.lastname}} ha sido agregado a tu familia.</p>
+                <button type="button" class="btn btn-success" (click)="closeAddFamilyModal()">
+                    Cerrar
+                </button>
+            </div>
+        }
+    </div>
+</ng-template>
+
+<ng-template #editFamilyMemberModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Editar Miembro de Familia</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="alert alert-success mb-3">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Nota:</strong> La contraseña es alterable, si desea puede crear una nueva contraseña para el hijo.
+        </div>
+        <app-family-member-form
+            #familyMemberFormComponent
+            title="Editar Miembro de Familia"
+            [memberForm]="memberForm"
+            [isEditMode]="true"
+            (callUpdateMethod)="updateFamilyMember($event)"
+            (callCancelMethod)="modalService.closeAll()"
+        />
+    </div>
+</ng-template>
+
+<ng-template #addRewardModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Agregar Nueva Recompensa</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-reward-form
+            title="Agregar Nueva Recompensa"
+            (callSaveMethod)="saveReward($event)"
+            (callCancelMethod)="modalService.closeAll()"
+        />
+    </div>
+</ng-template>
+
+<ng-template #editRewardModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Editar Recompensa</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-reward-form
+            title="Editar Recompensa"
+            [reward]="getSelectedReward()"
+            (callUpdateMethod)="updateReward($event)"
+            (callCancelMethod)="modalService.closeAll()"
+        />
+    </div>
+</ng-template>
+
+<ng-template #addChallengeModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Agregar Nuevo Reto</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-challenge-form
+            title="Agregar Nuevo Reto"
+            (callSaveMethod)="saveChallenge($event)"
+            (callCancelMethod)="modalService.closeAll()"
+        />
+    </div>
+</ng-template>
+
+<ng-template #editChallengeModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Editar Reto</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modalService.closeAll()">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-challenge-form
+            title="Editar Reto"
+            [challenge]="getSelectedChallenge()"
+            (callUpdateMethod)="updateChallenge($event)"
+            (callCancelMethod)="modalService.closeAll()"
+        />
+    </div>
+</ng-template>

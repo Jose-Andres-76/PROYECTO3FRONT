@@ -1,0 +1,140 @@
+<form [formGroup]="memberForm" class="row">
+  <div>
+    <h2 class="mb-0">{{ title }}</h2>
+    <p class="text-muted">{{ isEditMode ? 'Actualizar la información de hijo' : 'Ingrese la información del nuevo hijo' }}</p>
+  </div>
+
+  @if(validSignup) {
+    <div class="alert alert-success text-center mb-3">
+      <i class="fas fa-check-circle"></i>
+      {{ isEditMode ? 'Miembro actualizado correctamente' : 'Cuenta de miembro actualizada correctamente' }}
+    </div>
+  }
+  
+  @if(signUpError) {
+    <div class="alert alert-danger mb-3">
+      {{ signUpError }}
+    </div>
+  }
+  
+  <div class="mb-3">
+    <h5 class="text-success mb-2">información Personal</h5>
+    
+    <div class="mb-2">
+      <label class="mb-1" for="name">Nombre*</label>
+      <input id="name" formControlName="name" type="text" class="form-control" placeholder="Ingrese el nombre">
+      @if (memberForm.controls['name'].invalid && (memberForm.controls['name'].dirty || memberForm.controls['name'].touched)) {
+        <p class="text-danger my-1">El nombre es requerido</p>
+      }
+    </div>
+    
+    <div class="mb-2">
+      <label class="mb-1" for="lastname">Apellido*</label>
+      <input id="lastname" formControlName="lastname" type="text" class="form-control" placeholder="Ingrese el apellido">
+      @if (memberForm.controls['lastname'].invalid && (memberForm.controls['lastname'].dirty || memberForm.controls['lastname'].touched)) {
+        <p class="text-danger my-1">El apellido es requerido</p>
+      }
+    </div>
+
+    @if (!isEditMode) {
+      <div class="mb-2">
+        <label class="mb-1" for="age">Edad*</label>
+        <input id="age" formControlName="age" type="number" class="form-control" 
+               min="10" max="100" placeholder="Ingrese la edad del hijo">
+        @if (memberForm.controls['age'].invalid && (memberForm.controls['age'].dirty || memberForm.controls['age'].touched)) {
+          <p class="text-danger my-1">
+            @if (memberForm.controls['age'].errors?.['required']) {
+              La edad es requerida
+            }
+            @if (memberForm.controls['age'].errors?.['min'] || memberForm.controls['age'].errors?.['max']) {
+              Por favor, ingrese una edad válida entre 10 y 100 años
+            }
+          </p>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="mb-3">
+    <h5 class="text-success mb-2">información de cuenta</h5>
+    
+    <div class="mb-2">
+      <label class="mb-1" for="email">Correo Electrónico*</label>
+      <input id="email" formControlName="email" type="email" class="form-control" 
+             [readonly]="isEditMode" 
+             placeholder="Ingrese correo electrónico">
+      @if (isEditMode) {
+        <small class="text-muted">El correo electrónico no debe cambiarse</small>
+      }
+      @if (memberForm.controls['email'].invalid && (memberForm.controls['email'].dirty || memberForm.controls['email'].touched)) {
+        <p class="text-danger my-1">Por favor ingrese un correo electrónico válido</p>
+      }
+    </div>
+    
+    <div class="mb-2">
+      <label class="mb-1" for="password">Contraseña*</label>
+      <div class="input-group">
+        <input id="password" formControlName="password" 
+               [type]="showPassword ? 'text' : 'password'" 
+               class="form-control" 
+               placeholder="{{ isEditMode ? 'Ingrese su contraseña actual' : 'Ingrese su contraseña' }}">
+        <button type="button" class="btn btn-outline-secondary" (click)="togglePasswordVisibility()">
+          <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+        </button>
+      </div>
+      @if (memberForm.controls['password'].invalid && (memberForm.controls['password'].dirty || memberForm.controls['password'].touched)) {
+        <p class="text-danger my-1">
+          @if (memberForm.controls['password'].errors?.['required']) {
+            La contraseña es requerida
+          }
+          @if (memberForm.controls['password'].errors?.['pattern']) {
+            La contraseña debe contener al menos un número, una letra mayúscula y un carácter especial
+          }
+          @if (memberForm.controls['password'].errors?.['minlength']) {
+            La contraseña debe tener al menos 6 caracteres
+          }
+        </p>
+      }
+      <small class="text-muted">
+        {{ isEditMode ? 'Ingrese la contraseña del miembro' : 'La contraseña debe ser de al menos 6 caracteres' }}
+      </small>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <h5 class="text-success mb-2">Puntos y Recompensas</h5>
+    
+    <div class="mb-2">
+      <label class="mb-1" for="points">Puntos</label>
+      <input id="points" formControlName="points" type="number" class="form-control" 
+             min="0" placeholder="0" [readonly]="!isEditMode && !canManagePoints">
+      @if (memberForm.controls['points'].invalid && (memberForm.controls['points'].dirty || memberForm.controls['points'].touched)) {
+        <p class="text-danger my-1">Puntos debe ser un número valido. No menor que cero.</p>
+      }
+      @if (!isEditMode) {
+        <small class="text-muted">Puntos serán igual a 0 .</small>
+      }
+    </div>
+  </div>
+  
+  <!-- Action Buttons -->
+  <div class="d-flex justify-content-between align-items-center">
+    <button type="button" class="btn btn-outline-secondary" (click)="resetForm()" [disabled]="isSubmitting">
+      <i class="fas fa-undo me-1"></i>Reiniciar en blanco
+    </button>
+    
+    <div class="d-flex gap-2">
+      <button type="button" class="btn btn-danger" (click)="cancelAction()" [disabled]="isSubmitting">
+        Cancelar
+      </button>
+      <button (click)="submitForm()" [disabled]="memberForm.invalid || isSubmitting" class="btn btn-success" type="button">
+        @if(isSubmitting) {
+          <i class="fas fa-spinner fa-spin me-1"></i>
+        } @else {
+          <i class="fas {{ isEditMode ? 'fa-save' : 'fa-plus' }} me-1"></i>
+        }
+        {{ isSubmitting ? 'Procesando...' : (isEditMode ? 'Actualizar miembro' : 'Agregar miembro') }}
+      </button>
+    </div>
+  </div>
+</form>

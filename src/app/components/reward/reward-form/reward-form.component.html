@@ -1,0 +1,75 @@
+<form [formGroup]="rewardForm" class="row">
+  <div class="col-12">
+    <h2 class="mb-3">{{title}}</h2>
+  </div>
+  
+  <div class="col-12 mb-3">
+    <label class="mb-1" for="description">Descripción*</label>
+    <input 
+      id="description" 
+      formControlName="description" 
+      type="text" 
+      class="form-control"
+      placeholder="Ingrese una descripción de la recompensa">
+    @if (rewardForm.controls['description'].invalid && (rewardForm.controls['description'].dirty || rewardForm.controls['description'].touched)) {
+      <p class="text-danger my-1">Una descripción es requerida</p>
+    }
+  </div>
+
+  <div class="col-6 mb-3">
+    <label class="mb-1" for="cost">Costo (Puntos requeridos)*</label>
+    <input 
+      id="cost" 
+      formControlName="cost" 
+      type="number" 
+      class="form-control"
+      placeholder="Ingrese el costo de la recompensa"
+      min="0">
+    @if (rewardForm.controls['cost'].invalid && (rewardForm.controls['cost'].dirty || rewardForm.controls['cost'].touched)) {
+      <p class="text-danger my-1">Costo es requerido. Debe ser un número mayor que cero.</p>
+    }
+  </div>
+
+  <div class="col-6 mb-3">
+    <label class="mb-1" for="familyId">Miembro de Familia*</label>
+    <select 
+      id="familyId" 
+      formControlName="familyId" 
+      class="form-control">
+      <option value="">Seleccione el miembro de familia</option>
+      @for (family of familyService.families$(); track family.id) {
+        <option [ngValue]="family.id">{{getFamilyDisplayName(family)}}</option>
+      }
+    </select>
+    @if (rewardForm.controls['familyId'].invalid && (rewardForm.controls['familyId'].dirty || rewardForm.controls['familyId'].touched)) {
+      <p class="text-danger my-1">Por favor elija un miembro de familia</p>
+    }
+  </div>
+
+  <div class="col-6 mb-3 d-flex align-items-center">
+    <input 
+      id="status" 
+      formControlName="status" 
+      type="checkbox" 
+      class="form-check-input me-2">
+    <label class="mb-0" for="status">Activar recompensa</label>
+  </div>
+
+  <div class="col-12 d-flex justify-content-between">
+    <button 
+      type="button" 
+      class="btn btn-danger" 
+      (click)="cancelAction()">
+      <i class="fas fa-times me-2"></i>
+      Cancelar
+    </button>
+    <button 
+      (click)="callSave()" 
+      [disabled]="rewardForm.invalid" 
+      class="btn btn-success" 
+      type="button">
+      <i class="fas fa-save me-2"></i>
+      Guardar Recompensa
+    </button>
+  </div>
+</form>

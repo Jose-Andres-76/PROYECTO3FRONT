@@ -1,0 +1,38 @@
+<div class="table-container table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col" class="text-center text-success">Nombre</th>
+        <th scope="col" class="text-center text-success">Apellido</th>
+        <th scope="col" class="text-center text-success">Correo Electrónico</th>
+        <th scope="col" class="text-center text-success">Puntos</th>
+        <th scope="col" class="text-center text-success">Editar</th>
+        <th scope="col" class="text-center text-danger">Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of families; track item.id) {
+        <tr scope="col" class="text-center">
+            <td>{{item.son?.name}}</td>
+            <td>{{item.son?.lastname}}</td>
+            <td>{{item.son?.email}}</td>
+            <td>{{item.son?.points}}</td>
+          <td class="text-center">
+            <button (click)="callModalAction.emit(item)" class="btn btn-success" type="button">Editar</button>
+          </td>
+          <td class="text-center">
+            <button (click)="confirmDelete(item)" class="btn btn-danger" type="button">Eliminar</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5">
+            <div class="d-flex justify-content-center align-items-center w-100">
+              <p class="mb-0">No hay miembros en tú familia aún.</p>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
