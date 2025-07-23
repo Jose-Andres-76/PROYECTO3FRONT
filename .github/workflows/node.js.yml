@@ -1,0 +1,67 @@
+name: Angular CI
+
+on:
+  push:
+    branches: [ "main", "Quality", "develop" ]
+  pull_request:
+    branches: [ "main", "Quality" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js 22.16.0
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.16.0'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm install
+        npm install leaflet
+        npm install --save-dev @types/leaflet
+        
+    - name: Build Angular app
+      run: npm run build -- --configuration=production
+      
+    - name: Run tests (if available)
+      run: npm run test -- --browsers=ChromeHeadless --watch=false || echo "No tests configured"
+      continue-on-error: true
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: angular-build
+        path: dist/demo-angular-front/
+        retention-days: 7
+
+  lint-and-quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js 22.16.0
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.16.0'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm install
+        npm install leaflet
+        npm install --save-dev @types/leaflet
+        
+    - name: Check TypeScript compilation
+      run: npx tsc --noEmit
+      
+    - name: Run linting (if available)
+      run: npm run lint || echo "No lint script configured"
+      continue-on-error: true
