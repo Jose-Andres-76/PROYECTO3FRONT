@@ -199,7 +199,7 @@ export const routes: Routes = [
           showInSidebar: false 
         }
       },
-      }
+      
     ],
   },
    { path: '**', redirectTo: '' }
