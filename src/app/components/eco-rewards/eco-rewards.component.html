@@ -1,21 +1,33 @@
 <div class="eco-rewards">
   <h1><i class="fa-solid fa-trophy"></i> Recompensas</h1>
-  <p>Elije tus recompensas!</p>
+  <p>Estas son las recompensas que puedes canjear</p>
 
   <div class="cards">
-    <div class="card" *ngFor="let reward of rewards">
-      <h2>{{ reward.name }}</h2>
-      <span class="coins">💰 {{ reward.cost }}</span>
-      <button (click)="claimReward(reward)">Jugar ahora</button>
+    <div class="card" *ngFor="let reward of rewards()">
+      <h2>{{ reward.description }}</h2>
+      <span class="fa-solid fa-coins"> {{ reward.cost }}</span>
+      <div class="status">
+        <input
+          type="checkbox"
+          [checked]="reward.status"
+          disabled
+        /> Disponible
+      </div>
+      <button (click)="claimReward(reward)">
+        <i class="fa-regular fa-face-smile-beam fa-beat"></i>Canjear
+      </button>
     </div>
     <div class="card placeholder"></div>
   </div>
 
   <div class="actions">
-    <span class="coins">💰 {{ coins }}</span>
-     <button class="button" [routerLink]="['/app/Eco']"><i class="fa-solid fa-face-smile"></i>Modulo infantil</button>
-    <button  class="button" [routerLink]="['/app/challenges']"><i class="fa-solid fa-award"></i>Ver retos</button>
-   
+    <span class="fa-sharp-duotone fa-solid fa-coins fa-beat">💰 {{ coins() }}</span>
+    <button class="button" [routerLink]="['/app/Eco']">
+      <i class="fa-solid fa-face-smile"></i> Módulo infantil
+    </button>
+    <button class="button" [routerLink]="['/app/challenges']">
+      <i class="fa-solid fa-award"></i> Ver retos
+    </button>
   </div>
 </div>
 
