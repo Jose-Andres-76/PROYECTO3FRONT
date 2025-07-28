@@ -95,13 +95,13 @@ export class ListingComponent {
 
     constructor() {
         this.familyService.search.page = 1;
-        this.familyService.getAll();
+        this.familyService.getMyFamilies();
         
         this.rewardService.search.page = 1;
         this.rewardService.getMyRewards();
 
         this.challengeService.search.page = 1;
-        this.challengeService.getAll();
+        this.challengeService.getMyChallenges();
     }
 
     openAddFamilyModal() {
@@ -268,7 +268,7 @@ export class ListingComponent {
         this.userService.updateFamilyMember(memberWithRole);
         this.modalService.closeAll();
         setTimeout(() => {
-            this.familyService.getAll();
+            this.familyService.getMyFamilies();
         }, 500);
     }
 
@@ -366,11 +366,11 @@ saveFamilyMember(member: IUser) {
         this.closeAddFamilyModal();
         
         setTimeout(() => {
-            this.familyService.getAll();
+            this.familyService.getMyFamilies();
         }, 500);
     } else {
         console.error('No user ID found for family creation:', member);
-        this.showErrorMessage('User was created but family relationship could not be established. Please try again.');
+        this.showErrorMessage('Usuerio fue creado, pero no se pudo crear la familia. Por favor, inténtalo de nuevo más tarde.');
     }
 }
 

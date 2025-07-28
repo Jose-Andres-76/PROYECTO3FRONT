@@ -32,7 +32,7 @@ export class ChallengeFormComponent implements OnInit {
 
   ngOnInit() {
     console.log('ChallengeFormComponent initialized');
-    this.familyService.getAll();
+    this.familyService.getMyFamilies();
     this.gameService.getAll();
     this.initializeForm();
     

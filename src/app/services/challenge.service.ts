@@ -82,35 +82,35 @@ export class ChallengeService extends BaseService<IChallenge> {
         });
     }
 
-    getAll() {
-        console.log('Fetching all challenges...');
+    // getAll() {
+    //     console.log('Fetching all challenges...');
 
-        if (!this.authService.isAdmin()) {
-            this.getMyChallenges();
-            return;
-        }
+    //     if (!this.authService.isAdmin()) {
+    //         this.getMyChallenges();
+    //         return;
+    //     }
 
-        this.findAllWithParams({ page: this.search.page, size: this.search.size }).subscribe({
-            next: (response: any) => {
-                console.log('All challenges response:', response);
-                console.log('All challenges data:', response.data);
-                this.search = { ...this.search, ...response.meta };
-                this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
-                this.challengeListSignal.set(response.data);
-            },
-            error: (error: any) => {
-                console.error('Error fetching all challenges:', error);
-                this.alertService.displayAlert('error', 'No se han podido traer los desafíos...', 'center', 'top', ['error-snackbar']);
-            }
-        });     
-    }
+    //     this.findAllWithParams({ page: this.search.page, size: this.search.size }).subscribe({
+    //         next: (response: any) => {
+    //             console.log('All challenges response:', response);
+    //             console.log('All challenges data:', response.data);
+    //             this.search = { ...this.search, ...response.meta };
+    //             this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
+    //             this.challengeListSignal.set(response.data);
+    //         },
+    //         error: (error: any) => {
+    //             console.error('Error fetching all challenges:', error);
+    //             this.alertService.displayAlert('error', 'No se han podido traer los desafíos...', 'center', 'top', ['error-snackbar']);
+    //         }
+    //     });     
+    // }
 
     save(challenge: IChallenge) {
         this.add(challenge).subscribe({
             next: (response: any) => {
                 console.log('Challenge saved successfully:', response);
                 this.alertService.displayAlert('success', 'Desafío guardado exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyChallenges();
             },
             error: (error: any) => {
                 console.error('Error saving challenge:', error);
@@ -124,7 +124,7 @@ export class ChallengeService extends BaseService<IChallenge> {
             next: (response: any) => {
                 console.log('Challenge updated successfully:', response);
                 this.alertService.displayAlert('success', 'Desafío actualizado exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyChallenges();
             },
             error: (error: any) => {
                 console.error('Error updating challenge:', error);
@@ -138,7 +138,7 @@ export class ChallengeService extends BaseService<IChallenge> {
             next: (response: any) => {
                 console.log('Challenge deleted successfully:', response);
                 this.alertService.displayAlert('success', 'Desafío eliminado exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyChallenges();
             },
             error: (error: any) => {
                 console.error('Error deleting challenge:', error);
