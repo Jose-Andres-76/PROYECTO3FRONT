@@ -1,0 +1,44 @@
+.drag-drop-game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  min-height: 100vh;
+  background: #f4f7fa;
+  padding: 32px 0;
+}
+
+.draggable-images-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.drop-zones-row {
+  display: flex;
+  gap: 48px;
+  justify-content: center;
+  width: 100%;
+}
+
+.zone-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 200px;
+}
+
+.zone-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #222;
+}
+
+.reciclable-zone .drop-zone {
+  background: #43a047 !important;
+}
+
+.no-reciclable-zone .drop-zone {
+  background: #e53935
+}

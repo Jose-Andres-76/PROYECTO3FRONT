@@ -1,0 +1,11 @@
+<div
+  class="drop-zone"
+  [ngStyle]="{ 'background-color': color }"
+  [class.over]="isOver"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+>
+  <span class="drop-zone-label">{{ label }}</span>
+  <ng-content></ng-content>
+</div>

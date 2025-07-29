@@ -1,0 +1,65 @@
+<div class="drag-drop-game-container">
+  <h2 style="margin-bottom: 24px; color: #222; font-weight: bold;">
+    Juego Drag and Drop - Clasifica los objetos
+  </h2>
+  <div *ngIf="errorMessage" style="color: #e53935; font-weight: bold; margin-bottom: 16px;">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="victoryMessage" style="color: #43a047; font-weight: bold; margin-bottom: 16px;">
+    {{ victoryMessage }}
+  </div>
+  <div class="draggable-images-row" *ngIf="!gameOver && !victoryMessage">
+    <app-draggable-image
+      *ngFor="let img of draggableImages"
+      [imageUrl]="img.imageUrl"
+      [alt]="img.alt"
+      [data]="img"
+    ></app-draggable-image>
+  </div>
+
+  <div class="drop-zones-row">
+    <div class="zone-list reciclable-zone">
+      <div class="zone-title">Reciclable</div>
+      <app-drop-zone
+        label="Reciclable"
+        color="#43a047"
+        acceptType="reciclable"
+        (itemDropped)="onDropReciclable($event)"
+      >
+        <ng-container *ngFor="let item of reciclableDropped">
+          <app-draggable-image
+            [imageUrl]="item.imageUrl"
+            [alt]="item.alt"
+            [data]="item"
+            [draggable]="false"
+          ></app-draggable-image>
+        </ng-container>
+      </app-drop-zone>
+    </div>
+
+    <div class="zone-list no-reciclable-zone">
+      <div class="zone-title">No Reciclable</div>
+      <app-drop-zone
+        label="No Reciclable"
+        color="#e53935"
+        acceptType="no-reciclable"
+        (itemDropped)="onDropNoReciclable($event)"
+      >
+        <ng-container *ngFor="let item of noReciclableDropped">
+          <app-draggable-image
+            [imageUrl]="item.imageUrl"
+            [alt]="item.alt"
+            [data]="item"
+            [draggable]="false"
+          ></app-draggable-image>
+        </ng-container>
+      </app-drop-zone>
+    </div>
+  </div>
+  <div *ngIf="gameOver" style="margin-top: 32px;">
+    <button (click)="shuffleImages()">Reiniciar Juego</button>
+  </div>
+  <div *ngIf="victoryMessage" style="margin-top: 32px;">
+    <button (click)="shuffleImages()">Jugar de nuevo</button>
+  </div>
+</div>
