@@ -1,34 +1,32 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
+import { Component, computed, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms'; 
 
+import { RewardService } from '../../services/reward.service';
+import { IReward } from '../../interfaces';
 
 @Component({
   selector: 'app-eco-rewards',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './eco-rewards.component.html',
   styleUrls: ['./eco-rewards.component.scss'],
-  imports: [CommonModule, FormsModule, RouterModule],
-  standalone: true
 })
 export class EcoRewardsComponent {
-  coins = 1200;
+  private rewardService = inject(RewardService);
 
-  rewards = [
-    { name: 'Salida a McDonald\'s', cost: 50 },
-    { name: 'Videojuego', cost: 500 },
-    { name: 'Día sin tareas', cost: 100 },
-    { name: 'Día de descanso', cost: 200 },
-    { name: 'Día de parque', cost: 300 },   
+  rewards = this.rewardService.rewards$;
 
-  ];
+  coins = computed(() =>
+    this.rewards().reduce((total, r) => total + (r.cost || 0), 0)
+  );
 
-  claimReward(reward: any) {
-    console.log(`Recompensa seleccionada: ${reward.name}`);
+  constructor() {
+    this.rewardService.getMyRewards();
   }
+  claimReward(reward: IReward) {
+  console.log(`Recompensa seleccionada: ${reward.description}`);
+}
 
-  viewChallenges() {
-    console.log('Ver retos');
-  }
-  
 }

@@ -1,28 +1,37 @@
 <div class="eco-challenges">
-  <h1>Retos</h1>
+  <h1><i class="fa-solid fa-award"></i> Retos</h1>
   <p>Revisa que retos debes completar!</p>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Realizada</th>
-        <th>Descripción</th>
-        <th>Puntos</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let challenge of challenges">
-        <td><input type="checkbox" [(ngModel)]="challenge.done"></td>
-        <td>{{ challenge.description }}</td>
-        <td>{{ challenge.points }}</td>
-      </tr>
-    </tbody>
-  </table>
+<table>
+  <thead>
+    <tr>
+      <th>Realizada</th>
+      <th>Juego</th>
+      <th>Descripción</th>
+      <th>Puntos</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let challenge of challenges()">
+      <td>
+        <input 
+          type="checkbox"
+          [checked]="challenge.challengeStatus"
+          disabled
+        >
+      </td>
+      <td>{{ getGameType(challenge) }}</td>
+      <td>{{ challenge.description }}</td>
+      <td>{{ challenge.points }}</td>
+    </tr>
+  </tbody>
+</table>
+
 
   <div class="actions">
-    <span class="coins">💰 {{ coins }}</span>
-      <button  class="button" [routerLink]="['/app/Eco' ]">Modulo infantil</button>
-      <button  class="button" [routerLink]="['/app/rewards']">Ver recompensas</button>
+   <span  class="fa-sharp-duotone fa-solid fa-coins fa-beat" >{{ coins() }}</span>
+      <button  class="button" [routerLink]="['/app/Eco' ]"><i class="fa-solid fa-face-smile"></i>Modulo infantil</button>
+      <button  class="button" [routerLink]="['/app/rewards']"><i class="fa-solid fa-trophy"></i>Ver recompensas</button>
     
   </div>
 </div>

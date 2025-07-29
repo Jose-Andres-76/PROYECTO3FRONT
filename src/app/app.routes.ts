@@ -163,8 +163,8 @@ export const routes: Routes = [
         component: EcoDashboardComponent,
         data: { 
           authorities: [
-            IRoleType.admin, 
-            IRoleType.father,
+           // IRoleType.admin, 
+           // IRoleType.father,
             IRoleType.son,
           ],
           name: 'Modulo infantil',

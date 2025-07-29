@@ -1,26 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { ChallengeService } from '../../services/challenge.service';
+import { IChallenge } from '../../interfaces';
+
 @Component({
   selector: 'app-eco-challenges',
   standalone: true,
-  imports: [CommonModule, FormsModule,RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './eco-challenges.component.html',
   styleUrls: ['./eco-challenges.component.scss'],
 })
 export class EcoChallengesComponent {
-  challenges = [
-    { description: 'Recicla plástico', done: false, points: 10 },
-    { description: 'Usa transporte público', done: false, points: 20 },
-    { description: 'Reduce consumo de agua', done: false, points: 15 },
-  ];
+  private challengeService = inject(ChallengeService);
+  getGameType(challenge: IChallenge): string {
+  return (challenge as any).game?.typesOfGames || 'N/A';
+}
+  challenges = this.challengeService.challenges$;
 
-  coins = 0;
+  coins = computed(() =>
+    this.challenges()
+      .filter((c) => c.challengeStatus)
+      .reduce((total, c) => total + (c.points || 0), 0)
+  );
 
-  viewRewards() {
-    console.log('Ver recompensas');
+  constructor() {
+    this.challengeService.getMyChallenges();
   }
 }
 

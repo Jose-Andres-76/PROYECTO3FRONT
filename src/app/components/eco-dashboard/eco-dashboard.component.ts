@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms'; 
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { IUser } from '../../interfaces';
+import { MyAccountComponent } from '../../components/my-account/my-account.component';
 
 @Component({
   selector: 'app-eco-dashboard',
@@ -11,9 +14,6 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, FormsModule, RouterModule]
 })
 export class EcoDashboardComponent {
-  user = {
-    name: 'Invitado'
-  };
 
   coins = 1200;
 
@@ -27,4 +27,22 @@ export class EcoDashboardComponent {
     viewChallenges() {
     console.log('Ver retos');
   }
+  public user?: IUser;
+  public userName: string = '';
+
+  constructor(public authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.user = this.authService.getUser();
+    if (this.user && this.user.name) {
+      this.userName = this.user.name;
+    } else {
+      const user = localStorage.getItem('auth_user');
+      if (user) {
+        this.userName = JSON.parse(user)?.name || '';
+      }
+    }
+  }
+  
+
 }
