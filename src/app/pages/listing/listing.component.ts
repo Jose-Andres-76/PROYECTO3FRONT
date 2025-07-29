@@ -69,7 +69,7 @@ export class ListingComponent {
     name: ['', [Validators.required, Validators.minLength(2)]],
     lastname: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
-    age: ['', [Validators.required, Validators.min(10), Validators.max(100)]], // Add age field
+    age: ['', [Validators.required, Validators.min(10), Validators.max(120)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     points: [0, [Validators.min(0), Validators.pattern(/^\d+$/)]]
 });

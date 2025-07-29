@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { IUser } from '../../../interfaces';
 
@@ -17,10 +16,8 @@ import { IUser } from '../../../interfaces';
 })
 export class FamilyMemberFormComponent {
   public fb: FormBuilder = inject(FormBuilder);
-  private router = inject(Router);
   private authService = inject(AuthService);
   
-  // Validation patterns from sign-up-form-for-family (EXACT MATCH)
   public passwordPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=\\[\\]{}|\\\\:;"\'<>,.?/~`]).{8,}$';
   public emailPattern = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$';
   
@@ -33,23 +30,19 @@ export class FamilyMemberFormComponent {
   @Output() callSaveMethod: EventEmitter<IUser> = new EventEmitter<IUser>();
   @Output() callCancelMethod: EventEmitter<void> = new EventEmitter<void>();
   
-  // NEW: Outputs matching sign-up-form-for-family
   @Output() userCreated = new EventEmitter<IUser>();
   @Output() signupCancelled = new EventEmitter<void>();
 
-  // UI state properties (matching sign-up-form-for-family)
   public showPassword: boolean = false;
   public signUpError: string = '';
   public validSignup: boolean = false;
   public isSubmitting: boolean = false;
 
-  // NEW: User object like in sign-up-form-for-family
   public user: IUser = {};
 
   ngOnInit() {
     this.setupFormValidators();
     
-    // Initialize user object from form if in create mode
     if (!this.isEditMode) {
       this.syncUserObjectWithForm();
     }
@@ -63,8 +56,8 @@ export class FamilyMemberFormComponent {
       ]);
       this.memberForm.controls['age']?.setValidators([
         Validators.required,
-        Validators.min(1), 
-        Validators.max(100)
+        Validators.min(10), 
+        Validators.max(120)
       ]);
       this.memberForm.controls['id']?.clearValidators();
     } else {

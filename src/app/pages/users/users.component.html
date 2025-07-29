@@ -3,7 +3,6 @@
     <div class="col-12">
       <div class="d-flex justify-content-between align-items-center">
         <h2>Usuarios</h2>
-        <button (click)="modalService.displayModal('md', addUsersModal)" type="button" class="btn btn-primary"><i class="fas fa-plus"></i></button>
       </div>
     </div>
     <div class="col-12">
@@ -18,6 +17,9 @@
         />
       }
     </div>
+    <button (click)="openAddUserModal()" type="button" class="btn btn-primary">
+      <i class="fas fa-plus"></i> Agregar Usuario
+    </button>
   </div>
 } @loading (minimum 1.5s){
   <app-loader></app-loader>
@@ -26,12 +28,16 @@
 <ng-template #addUsersModal>
   <app-modal
     [hideFooter]="true"
+    (callCancelMethod)="onModalClose()"
   >
     <div>
       <app-user-form
         [userForm]="userForm"
+        [isEditMode]="isEditMode"
+        [title]="isEditMode ? 'Editar Usuario' : 'Agregar Usuario'"
         (callSaveMethod)="saveUser($event)"
         (callUpdateMethod)="updateUser($event)"
+        (callCancelMethod)="onModalClose()"
       />
     </div>
   </app-modal>
