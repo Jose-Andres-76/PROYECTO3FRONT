@@ -18,6 +18,7 @@ import { ListingComponent } from './pages/listing/listing.component';
 import { GarbageScannerPageComponent } from './pages/garbage-scanner/garbage-scanner.component';
 import { CollectionCentersComponent } from './components/collection-centers/collection-centers.component';
 import { GoogleCallbackComponent } from './pages/auth/google-callback/google-callback.component';
+import { ProfileEcoComponent } from './pages/profile-eco/profile-eco.component';
 
 
 
@@ -118,7 +119,21 @@ export const routes: Routes = [
             IRoleType.son
           ],
           name: 'profile',
-          showInSidebar: false,
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
+        }
+      },
+      {
+        path: 'profile-eco',
+        component: ProfileEcoComponent,
+        data: { 
+          authorities: [
+            IRoleType.admin, 
+            IRoleType.father,
+            IRoleType.son
+          ],
+          name: 'profile-eco',
+          showInSidebar: true,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
