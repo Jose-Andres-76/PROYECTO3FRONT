@@ -10,6 +10,7 @@ import { AlertService } from './alert.service';
 export class UserService extends BaseService<IUser> {
   protected override source: string = 'users';
   private userListSignal = signal<IUser[]>([]);
+  apiUrl: string = 'http://localhost:8080/users';
   get users$() {
     return this.userListSignal;
   }
@@ -102,5 +103,9 @@ export class UserService extends BaseService<IUser> {
         console.error('error', err);
       }
     });
+  }
+
+  updatePoints(userId: number, points: number) {
+  return this.editCustomSource2(`${userId}/points`, { points });
   }
 }

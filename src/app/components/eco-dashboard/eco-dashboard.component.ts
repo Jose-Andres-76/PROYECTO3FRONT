@@ -16,6 +16,7 @@ import { MyAccountComponent } from '../../components/my-account/my-account.compo
 export class EcoDashboardComponent {
 
   coins = 1200;
+item: any;
 
   playGame(game: string) {
     console.log(`Iniciando juego: ${game}`);
