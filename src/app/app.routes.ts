@@ -21,6 +21,7 @@ import { GoogleCallbackComponent } from './pages/auth/google-callback/google-cal
 import { EcoDashboardComponent } from './pages/eco/eco.component';
 import { EcoRewardsComponent } from './components/eco-rewards/eco-rewards.component';
 import { EcoChallengesComponent } from './components/eco-challenges/eco-challenges.component';
+import { EcoTriviaComponent } from './components/eco-trivia/eco-trivia.component';
 
 
 
@@ -199,6 +200,21 @@ export const routes: Routes = [
           showInSidebar: false 
         }
       },
+       { path: 'trivias',
+        component: EcoTriviaComponent, 
+        data: {
+          authorities: [
+            IRoleType.admin,
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Retos Eco', 
+          showInSidebar: false 
+        }
+      },
+
+
+
       
     ],
   },

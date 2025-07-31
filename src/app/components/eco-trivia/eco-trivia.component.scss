@@ -1,0 +1,178 @@
+.eco-trivia-container {
+  background-color: #eaffea;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.opciones button {
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  width: 100%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  background-color: #fff;
+  border: 2px solid #ccc;
+}
+
+.opciones button.seleccionada {
+  border-color: #4caf50;
+  background-color: #e6ffe6;
+}
+
+.feedback p.correcto {
+  color: green;
+}
+
+.feedback p.incorrecto {
+  color: red;
+}
+
+.resultado-final {
+  text-align: center;
+  background-color: #d9f9d9;
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+.eco-trivia-retos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.card {
+  width: 100%;
+  max-width: 500px;
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.reto-img {
+  width: 150px;
+  height: auto;
+  display: block;
+  margin: 0 auto 1rem;
+  border-radius: 10px;
+}
+
+.eco-trivia-retos p {
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+.opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.opcion button {
+  flex: 1;
+}
+
+.btn-audio {
+  background-color: #e0f7fa;
+  border: none;
+  border-radius: 50%;
+  padding: 0.6rem 0.8rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background-color 0.3s;
+}
+
+.btn-audio:hover {
+  background-color: #b2ebf2;
+}
+
+.pregunta-con-audio {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.texto-pregunta {
+  margin: 0;
+  font-size: 1.2rem;
+  flex: 1;
+}
+
+.btn-audio {
+  background-color: #e0f7fa;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background-color 0.3s;
+}
+
+.btn-audio:hover {
+  background-color: #b2ebf2;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #28a745;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  i {
+    font-size: 1.2rem;
+    min-width: 20px;
+  }
+}
+.actions {
+  display: flex;
+  justify-content: center; /* Centra los botones horizontalmente */
+  gap: 1rem; /* 👉 Espacio entre los botones */
+  margin-top: 1.5rem;
+}
+
+.actions .button {
+  background-color: white;
+  color: black;
+  padding: 0.75rem 1.25rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.actions .button:hover {
+  background-color: #388e3c;
+}
