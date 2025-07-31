@@ -23,8 +23,8 @@
         </div>
       </div>
 
-      <div class="opciones">
-        <div class="opcion" *ngFor="let option of questions[i][currentQuestionIndex[i]]?.options">
+
+        <div class="texto-opcion" *ngFor="let option of questions[i][currentQuestionIndex[i]]?.options">
             <button
               [class.seleccionada]="option === selectedOption[i]"
               (click)="selectOption(option, i)"
@@ -35,7 +35,7 @@
               <i class="fa-solid fa-volume-high"></i>
             </button>
           </div>
-      </div>
+
 
         <div class="boton-siguiente">
           <button (click)="submitAnswer(i, reto)" [disabled]="!selectedOption[i]">Responder</button>
@@ -62,7 +62,7 @@
 
 
  <div class="actions">
-      <button  class="button" [routerLink]="['/app/challenges']"><i class="fa-solid fa-award"></i>Ver retos</button>
+      <button  class="button" [routerLink]="['/app/trivias-intro']"><i class="fa-solid fa-award"></i>Volver</button>
       <button  class="button" [routerLink]="['/app/rewards' ]"><i class="fa-solid fa-trophy"></i>Ver recompensas</button>
   </div>
 
