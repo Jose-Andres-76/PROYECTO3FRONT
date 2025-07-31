@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { UserListComponent } from '../../components/user/user-list/user-list.component';
 import { UserFormComponent } from '../../components/user/user-from/user-form.component';
 import { LoaderComponent } from '../../components/loader/loader.component';
@@ -22,7 +22,7 @@ import { IUser } from '../../interfaces';
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
 })
-export class UsersComponent {
+export class UsersComponent implements OnInit {
   public userService: UserService = inject(UserService);
   
   public modalService: ModalService = inject(ModalService);
@@ -36,9 +36,12 @@ export class UsersComponent {
     password: ['', Validators.required]
   })
 
-  constructor() {
+  ngOnInit() {
     this.userService.search.page = 1;
-    this.userService.getAll();
+    this.userService.getAll();}
+
+  constructor() {
+    
   }
 
   saveUser(user: IUser) {
@@ -47,10 +50,11 @@ export class UsersComponent {
   }
 
   callEdition(user: IUser) {
+   
     this.userForm.controls['id'].setValue(user.id ? JSON.stringify(user.id) : '');
     this.userForm.controls['email'].setValue(user.email ? user.email : '');
-    this.userForm.controls['name'].setValue(user.name ? JSON.stringify(user.name) : '');
-    this.userForm.controls['lastname'].setValue(user.lastname ? JSON.stringify(user.lastname) : '');
+    this.userForm.controls['name'].setValue(user.name ? user.name : '');
+    this.userForm.controls['lastname'].setValue(user.lastname ? user.lastname : '');
     this.modalService.displayModal('md', this.addUsersModal);
   }
 

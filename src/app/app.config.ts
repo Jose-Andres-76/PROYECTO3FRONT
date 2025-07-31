@@ -16,8 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([
         baseUrlInterceptor,
-        accessTokenInterceptor,
-        //handleErrorsInterceptor
+        accessTokenInterceptor
       ])
     ), provideAnimationsAsync()
   ]
