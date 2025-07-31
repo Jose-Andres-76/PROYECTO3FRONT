@@ -3,6 +3,11 @@
     <div class="col-12">
       <div class="d-flex justify-content-between align-items-center">
         <h2>Usuarios</h2>
+        <div class="d-flex justify-content-center mt-3">
+          <button (click)="openAddUserModal()" type="button" class="btn btn-success">
+            <i class="fas fa-plus"></i> Agregar Usuario
+          </button>
+        </div>
       </div>
     </div>
     <div id="user-list-bg" class="col-12">
@@ -18,11 +23,6 @@
           [service]="userService"
         />
       }
-    </div>
-    <div class="d-flex justify-content-center mt-3">
-    <button (click)="openAddUserModal()" type="button" class="btn btn-success">
-      <i class="fas fa-plus"></i> Agregar Usuario
-    </button>
     </div>
   </div>
 } @loading (minimum 1.5s){
