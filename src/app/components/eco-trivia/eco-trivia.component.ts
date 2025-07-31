@@ -31,39 +31,42 @@ export class EcoTriviaComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private userService = inject(UserService);
+  private userId: number | null = null;
 
   challenges = this.challengeService.challenges$;
 
   private challenges$ = toObservable(this.challengeService.challenges$);
 
-
   ngOnInit(): void {
     const user = this.authService.getUser();
-    const userId = user?.id;
- 
-    if (!userId) {
+    this.userId = user?.id ?? null;
+
+    if (!this.userId) {
       console.error('❌ Usuario no autenticado.');
       return;
-
     }
 
-    this.userPoints = user.points ?? 0;
+    this.userService.getUserById(this.userId).subscribe({
+      next: (updatedUser) => {
+        this.userPoints = updatedUser.points ?? 0;
+      }
+    });
 
     this.challengeService.getMyChallenges();
 
     this.challenges$.subscribe((challenges: IChallenge[]) => {
       this.ecoTriviaChallenges = challenges.filter(
-  
+
         c => c.game?.id === 3 && c.challengeStatus == true
       );
 
-        this.ecoTriviaChallenges.forEach((reto, index) => {
+      this.ecoTriviaChallenges.forEach((reto, index) => {
         this.questions[index] = this.generateQuestions();
         this.currentQuestionIndex[index] = 0;
         this.selectedOption[index] = null;
         this.respuestaCorrecta[index] = null;
         this.scores[index] = 0;
-        this.mensajeFinal[index] = ''; 
+        this.mensajeFinal[index] = '';
       });
     });
   }
@@ -132,9 +135,9 @@ export class EcoTriviaComponent implements OnInit {
       }
     ];
 
-    const copiaPool = [...pool]; 
+    const copiaPool = [...pool];
     const mezcladas = this.shuffleArray(copiaPool);
-    return mezcladas.slice(0, 2); 
+    return mezcladas.slice(0, 2);
   }
 
 
@@ -162,7 +165,7 @@ export class EcoTriviaComponent implements OnInit {
       this.scores[index] += 10;
     }
 
-   
+
     setTimeout(() => {
       this.respuestaCorrecta[index] = null;
       this.selectedOption[index] = null;
@@ -185,34 +188,31 @@ export class EcoTriviaComponent implements OnInit {
     }, 1400);
   }
 
- savePoints(reto: IChallenge): void {
-  if (!reto.points) return;
+  savePoints(reto: IChallenge): void {
+    if (!reto.points || !this.userId) return;
 
-  const user = this.authService.getUser();
-  if (!user) return;
+    const user = this.authService.getUser();
+    const newPoints = (user?.points ?? 0) + reto.points;
 
-  const newPoints = (user.points || 0) + reto.points;
-
-  this.userService.updatePoints(user.id!, newPoints).subscribe({
-    next: () => {
-      console.log(`✅ Usuario actualizado con ${reto.points} puntos del reto ${reto.id}`);
-      this.userPoints = newPoints;
-    },
-    error: (err) => {
-      console.error('❌ Error actualizando puntos del usuario: ', err);
-    }
-  });
-
+    this.userService.updatePoints(this.userId, newPoints).subscribe({
+      next: () => {
+        this.userService.getUserById(this.userId!).subscribe({
+          next: (updatedUser) => {
+            this.userPoints = updatedUser.points ?? 0;
+          }
+        });
+      }
+    });
   }
-    speak(text: string): void {
-      const speech = new SpeechSynthesisUtterance();
-      speech.text = text;
-      speech.lang = 'es-CR';
-      window.speechSynthesis.speak(speech);
-    }
 
+  speak(text: string): void {
+    const speech = new SpeechSynthesisUtterance();
+    speech.text = text;
+    speech.lang = 'es-CR';
+    window.speechSynthesis.speak(speech);
+  }
 
-    back(): void {
-      this.router.navigate(['/eco-challenges']);
-    }
+  back(): void {
+    this.router.navigate(['/eco-challenges']);
+  }
 }
