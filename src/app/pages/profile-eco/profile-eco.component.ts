@@ -100,7 +100,8 @@ export class ProfileEcoComponent implements OnInit {
         name: formData.name,
         lastname: formData.lastname,
         age: formData.age,
-        points: user.points || 0
+        points: user.points || 0,
+        password: formData.password || ''
       };
 
       // Add password to profile data if provided
@@ -117,7 +118,7 @@ export class ProfileEcoComponent implements OnInit {
         this.editProfileService.saveProfilePicture(user.id, profileData);
       } else {
         const updatedUser: IUser = baseProfileData as IUser;
-        alert("user.id: " + user.id);
+       
         this.editProfileService.saveProfile(user.id, updatedUser);
       }
     } else {

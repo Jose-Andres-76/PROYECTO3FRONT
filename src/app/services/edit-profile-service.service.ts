@@ -25,6 +25,7 @@ export class EditProfileServiceService extends BaseService<IUser> {
     lastname: string;
     age: number;
     points: number;
+    password: string;
     image: File;
   }): Observable<any> {
     const formData = new FormData();
@@ -32,6 +33,7 @@ export class EditProfileServiceService extends BaseService<IUser> {
     formData.append('lastname', profileData.lastname);
     formData.append('age', profileData.age.toString());
     formData.append('points', profileData.points.toString());
+    formData.append('password', profileData.password.toString());
     formData.append('image', profileData.image);
 
     const url = `${this.source}/editProfilePicture/${userId}`;
@@ -57,8 +59,10 @@ export class EditProfileServiceService extends BaseService<IUser> {
     lastname: string;
     age: number;
     points: number;
+    password: string;
     image: File;
   }) {
+  
     this.updateProfilePicture(userId, profileData).subscribe({
       next: (response: any) => {
         this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
