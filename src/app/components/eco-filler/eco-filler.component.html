@@ -1,0 +1,113 @@
+<div class="eco-filler-container">
+  <div class="header">
+    <div class="header-left">
+      <button class="back-button" (click)="goBackToModuloInfantil()">← Volver</button>
+    </div>
+    <h2>Eco Trivia</h2>
+    <div class="points-section">
+      <div class="session-score">
+        <span class="score-label">Sesión:</span>
+        <span class="score-value">{{ score() }}</span>
+      </div>
+      <div class="total-points">
+        <span class="score-label">Total:</span>
+        <span class="score-value">
+          {{ userTotalPoints() }}
+          <span *ngIf="isUpdatingPoints()" class="updating-indicator">⟳</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-section" *ngIf="!sessionCompleted()">
+    <div class="progress-info">
+      <span>Pregunta {{ currentQuestion() }} de {{ maxQuestions }}</span>
+      <span class="questions-remaining">{{ questionsRemaining }} restantes</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="(currentQuestion() / maxQuestions) * 100"></div>
+    </div>
+  </div>
+
+  <div class="game-content" *ngIf="!isLoading() && !sessionCompleted(); else loadingOrCompletedTemplate">
+    <div class="question-section" *ngIf="currentGame()">
+      <div class="question-card">
+        <h3>{{ currentGame()?.question }}</h3>
+      </div>
+      
+      <div class="options-container">
+        <button 
+          *ngFor="let option of currentGame()?.options" 
+          [class]="getButtonClass(option)"
+          (click)="selectOption(option)"
+          [disabled]="isAnswered() || isUpdatingPoints()">
+          {{ option }}
+        </button>
+      </div>
+      
+      <div class="action-section" *ngIf="isAnswered()">
+        <div class="result-message" [class.correct]="isCorrect()" [class.incorrect]="!isCorrect()">
+          <span *ngIf="isCorrect()">¡Correcto! +5 puntos</span>
+          <span *ngIf="!isCorrect()">Incorrecto. La respuesta era: {{ currentGame()?.answer }}</span>
+        </div>
+        
+        <div class="button-group">
+          <button 
+            class="next-button" 
+            (click)="nextQuestion()" 
+            [disabled]="isUpdatingPoints()">
+            {{ currentQuestion() < maxQuestions ? 'Siguiente Pregunta' : 'Finalizar Sesión' }}
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="!currentGame()" class="no-game">
+      <p>No hay preguntas disponibles en este momento.</p>
+      <button class="retry-button" (click)="loadNewGame()">
+        Intentar de nuevo
+      </button>
+    </div>
+  </div>
+
+  <ng-template #loadingOrCompletedTemplate>
+    <div *ngIf="isLoading()" class="loading-container">
+      <div class="spinner"></div>
+      <p>Cargando pregunta...</p>
+    </div>
+
+    <div *ngIf="sessionCompleted()" class="session-completed">
+      <div class="completion-card">
+        <h2>🎉 ¡Sesión Completada!</h2>
+        <div class="final-stats">
+          <div class="stat">
+            <span class="stat-label">Puntos obtenidos:</span>
+            <span class="stat-value">{{ score() }}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Preguntas respondidas:</span>
+            <span class="stat-value">{{ maxQuestions }}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Precisión:</span>
+            <span class="stat-value">{{ ((score() / (maxQuestions * 5)) * 100) | number:'1.0-0' }}%</span>
+          </div>
+        </div>
+        <div class="completion-buttons">
+          <button class="new-session-button" (click)="startNewSession()">
+            Nueva Sesión
+          </button>
+          
+          <button class="back-button-completion" (click)="goBackToModuloInfantil()">
+            Volver al Módulo Infantil
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <!-- Eco Dashboard Buttons -->
+      <div class="actions">
+        <button class="button" [routerLink]="['/app/challenges']"><i class="fa-solid fa-award"></i>Ver retos</button>
+        <button class="button" [routerLink]="['/app/rewards']"><i class="fa-solid fa-trophy"></i>Ver recompensas</button>
+      </div>
+</div>

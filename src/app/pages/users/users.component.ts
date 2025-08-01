@@ -59,7 +59,7 @@ export class UsersComponent implements OnInit {
   openAddUserModal() {
     this.isEditMode = false;
     this.resetForm();
-    this.modalService.displayModal('md', this.addUsersModal);
+    this.modalService.displayModal('lg', this.addUsersModal);
   }
 
   saveUser(user: IUser) {
@@ -86,7 +86,7 @@ export class UsersComponent implements OnInit {
       age: user.age || 0,
       roleId: user.role?.id?.toString() || '' 
     });
-    this.modalService.displayModal('md', this.addUsersModal);
+    this.modalService.displayModal('lg', this.addUsersModal);
   }
 
   updateUser(user: IUser) {

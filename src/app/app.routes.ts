@@ -23,6 +23,7 @@ import { EcoDashboardComponent } from './pages/eco/eco.component';
 import { EcoRewardsComponent } from './components/eco-rewards/eco-rewards.component';
 import { EcoChallengesComponent } from './components/eco-challenges/eco-challenges.component';
 import { EcoTriviaComponent } from './components/eco-trivia/eco-trivia.component';
+import { EcoFillerComponent } from './components/eco-filler/eco-filler.component';
 
 
 
@@ -229,6 +230,19 @@ export const routes: Routes = [
           showInSidebar: false 
         }
       },
+      {
+        path: 'filler',
+        component: EcoFillerComponent,
+        data: {
+          authorities: [
+            IRoleType.admin,
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Rellenador Eco',
+          showInSidebar: false
+        }
+      }
 
 
 
