@@ -112,6 +112,7 @@ export const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent,
+        canActivate: [AuthGuard],
         data: { 
           authorities: [
             IRoleType.admin, 
@@ -119,13 +120,14 @@ export const routes: Routes = [
             IRoleType.son
           ],
           name: 'profile',
-          showInSidebar: true,
+          showInSidebar: false,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
       {
         path: 'profile-eco',
         component: ProfileEcoComponent,
+        canActivate: [AuthGuard],
         data: { 
           authorities: [
             IRoleType.admin, 
@@ -133,7 +135,7 @@ export const routes: Routes = [
             IRoleType.son
           ],
           name: 'profile-eco',
-          showInSidebar: true,
+          showInSidebar: false,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
