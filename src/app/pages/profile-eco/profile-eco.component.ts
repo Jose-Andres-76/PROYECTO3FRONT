@@ -134,7 +134,7 @@ export class ProfileEcoComponent implements OnInit {
   }
 
   getProfileImageUrl(): string {
-    return this.previewUrl || this.profileService.user$().urlImage || '/assets/icons/default-user.png';
+    return this.previewUrl || this.profileService.user$().urlImage || '/assets/icons/sidebar/child-reaching-solid.svg';
   }
 
   togglePasswordVisibility() {

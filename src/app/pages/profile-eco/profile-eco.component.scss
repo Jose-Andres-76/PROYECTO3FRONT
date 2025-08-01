@@ -33,6 +33,13 @@
           object-fit: cover;
           border: 4px solid #e9ecef;
           background-color: #f8f9fa;
+          
+          // Special styling for SVG default image
+          &[src*=".svg"] {
+            padding: 20px;
+            background-color: #e8f5e8;
+            border-color: #28a745;
+          }
         }
 
         .edit-picture-btn {
@@ -225,6 +232,11 @@
       .profile-picture-section .profile-picture-container .profile-picture {
         width: 100px;
         height: 100px;
+        
+        // Adjust SVG padding for mobile
+        &[src*=".svg"] {
+          padding: 15px;
+        }
       }
 
       .btn-success {
