@@ -66,6 +66,10 @@ export class EditProfileServiceService extends BaseService<IUser> {
     this.updateProfilePicture(userId, profileData).subscribe({
       next: (response: any) => {
         this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
+        // Refresh the page to update all components including topbar
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500); // Wait for alert to be visible before refreshing
       },
       error: (err: any) => {
         this.alertService.displayAlert('error', 'Ocurrió un error actualizando el perfil', 'center', 'top', ['error-snackbar']);
@@ -81,6 +85,10 @@ export class EditProfileServiceService extends BaseService<IUser> {
     this.updateProfile(userId, user).subscribe({
       next: (response: any) => {
         this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
+        // Refresh the page to update all components including topbar
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500); // Wait for alert to be visible before refreshing
       },
       error: (err: any) => {
         this.alertService.displayAlert('error', 'Ocurrió un error actualizando el perfil', 'center', 'top', ['error-snackbar']);
