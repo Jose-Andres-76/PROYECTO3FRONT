@@ -90,8 +90,6 @@ export class ProfileEcoComponent implements OnInit {
         };
         this.editProfileService.saveProfilePicture(user.id, profileData);
       } else {
-        // Update without profile picture
-        alert("Dentro de Sin PROFILE");
         const updatedUser: IUser = {
           name: formData.name,
           lastname: formData.lastname,
