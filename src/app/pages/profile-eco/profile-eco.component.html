@@ -116,16 +116,25 @@
         <!-- Password Field -->
         <div class="form-group mb-3">
           <label for="password" class="form-label">Nueva Contraseña</label>
-          <input 
-            id="password" 
-            formControlName="password" 
-            type="password" 
-            class="form-control"
-            [ngClass]="{
-              'is-invalid': profileForm.get('password')?.invalid && profileForm.get('password')?.touched,
-              'is-valid': profileForm.get('password')?.valid && profileForm.get('password')?.touched
-            }"
-            placeholder="Ingrese nueva contraseña (opcional)">
+          <div class="password-input-container">
+            <input 
+              id="password" 
+              formControlName="password" 
+              [type]="showPassword ? 'text' : 'password'" 
+              class="form-control password-input"
+              [ngClass]="{
+                'is-invalid': profileForm.get('password')?.invalid && profileForm.get('password')?.touched,
+                'is-valid': profileForm.get('password')?.valid && profileForm.get('password')?.touched
+              }"
+              placeholder="Ingrese nueva contraseña (opcional)">
+            <button 
+              type="button" 
+              class="password-toggle-btn"
+              (click)="togglePasswordVisibility()"
+              title="Mostrar/Ocultar contraseña">
+              <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+            </button>
+          </div>
           <div *ngIf="profileForm.get('password')?.invalid && profileForm.get('password')?.touched" class="invalid-feedback">
             <div *ngIf="profileForm.get('password')?.errors?.['pattern']">
               La contraseña debe contener al menos 8 caracteres, una letra mayúscula, una minúscula, un número y un carácter especial
@@ -139,18 +148,27 @@
         <!-- Confirm Password Field -->
         <div class="form-group mb-3">
           <label for="confirmPassword" class="form-label">Confirmar Nueva Contraseña</label>
-          <input 
-            id="confirmPassword" 
-            formControlName="confirmPassword" 
-            type="password" 
-            class="form-control"
-            [ngClass]="{
-              'is-invalid': (profileForm.get('confirmPassword')?.invalid && profileForm.get('confirmPassword')?.touched) || 
-                           (profileForm.errors?.['passwordMismatch'] && profileForm.get('confirmPassword')?.touched),
-              'is-valid': profileForm.get('confirmPassword')?.valid && profileForm.get('confirmPassword')?.touched && 
-                         !profileForm.errors?.['passwordMismatch']
-            }"
-            placeholder="Confirme la nueva contraseña">
+          <div class="password-input-container">
+            <input 
+              id="confirmPassword" 
+              formControlName="confirmPassword" 
+              [type]="showConfirmPassword ? 'text' : 'password'" 
+              class="form-control password-input"
+              [ngClass]="{
+                'is-invalid': (profileForm.get('confirmPassword')?.invalid && profileForm.get('confirmPassword')?.touched) || 
+                             (profileForm.errors?.['passwordMismatch'] && profileForm.get('confirmPassword')?.touched),
+                'is-valid': profileForm.get('confirmPassword')?.valid && profileForm.get('confirmPassword')?.touched && 
+                           !profileForm.errors?.['passwordMismatch']
+              }"
+              placeholder="Confirme la nueva contraseña">
+            <button 
+              type="button" 
+              class="password-toggle-btn"
+              (click)="toggleConfirmPasswordVisibility()"
+              title="Mostrar/Ocultar contraseña">
+              <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+            </button>
+          </div>
           <div *ngIf="(profileForm.errors?.['passwordMismatch'] && profileForm.get('confirmPassword')?.touched)" class="invalid-feedback">
             Las contraseñas no coinciden
           </div>

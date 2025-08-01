@@ -24,6 +24,8 @@ export class ProfileEcoComponent implements OnInit {
   selectedFile: File | null = null;
   previewUrl: string | null = null;
   passwordPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=\\[\\]{}|\\\\:;"\'<>,.?/~`]).{8,}$';
+  showPassword = false;
+  showConfirmPassword = false;
 
   ngOnInit() {
     // Fetch user info when the component is initialized
@@ -132,5 +134,13 @@ export class ProfileEcoComponent implements OnInit {
 
   getProfileImageUrl(): string {
     return this.previewUrl || this.profileService.user$().urlImage || '/assets/icons/default-user.png';
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 }
