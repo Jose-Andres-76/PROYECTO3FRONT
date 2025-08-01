@@ -45,9 +45,7 @@ export class EditProfileServiceService extends BaseService<IUser> {
    * @param user - User object with updated profile data
    */
   updateProfile(userId: number, user: IUser): Observable<any> {
-    alert("Dentro de updateProfile userId: " + userId);
     const url = `${this.source}/editProfile/${userId}`;
-    alert("Dentro de updateProfile user: " + user);
     return this.http.put(url, user);
   }
 
@@ -63,11 +61,10 @@ export class EditProfileServiceService extends BaseService<IUser> {
   }) {
     this.updateProfilePicture(userId, profileData).subscribe({
       next: (response: any) => {
-        console.log('Profile picture updated successfully:', response);
-        this.alertService.displayAlert('success', 'Foto de perfil actualizada exitosamente', 'center', 'top', ['success-snackbar']);
+        this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'Ocurrió un error actualizando la foto de perfil', 'center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'Ocurrió un error actualizando el perfil', 'center', 'top', ['error-snackbar']);
         console.error('Error updating profile picture:', err);
       }
     });
@@ -77,10 +74,8 @@ export class EditProfileServiceService extends BaseService<IUser> {
    * Update profile with success/error handling
    */
   saveProfile(userId: number, user: IUser) {
-    alert("Dentro de saveProfile userId: " + userId);
     this.updateProfile(userId, user).subscribe({
       next: (response: any) => {
-        console.log('Profile updated successfully:', response);
         this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
       },
       error: (err: any) => {
