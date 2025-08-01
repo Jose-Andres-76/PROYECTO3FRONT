@@ -26,12 +26,13 @@ export class ProfileEcoComponent implements OnInit {
 
   ngOnInit() {
     // Fetch user info when the component is initialized
-    this.profileService.getUserInfoSignal();
+    const user = this.profileService.getUserInfoSignal();
+    console.log("user: ", user);
     
     // Initialize form
     this.profileForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      lastname: ['', [Validators.required, Validators.minLength(2)]],
+      name: ['', [Validators.required]],
+      lastname: ['', [Validators.required]],
       age: ['', [Validators.required, Validators.min(1), Validators.max(120)]]
     });
 
