@@ -19,6 +19,11 @@ import { GarbageScannerPageComponent } from './pages/garbage-scanner/garbage-sca
 import { CollectionCentersComponent } from './components/collection-centers/collection-centers.component';
 import { GoogleCallbackComponent } from './pages/auth/google-callback/google-callback.component';
 import { ProfileEcoComponent } from './pages/profile-eco/profile-eco.component';
+import { EcoDashboardComponent } from './pages/eco/eco.component';
+import { EcoRewardsComponent } from './components/eco-rewards/eco-rewards.component';
+import { EcoChallengesComponent } from './components/eco-challenges/eco-challenges.component';
+import { EcoTriviaComponent } from './components/eco-trivia/eco-trivia.component';
+
 
 
 
@@ -108,6 +113,7 @@ export const routes: Routes = [
           showInSidebar: false,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
+        
       },
       {
         path: 'profile',
@@ -169,7 +175,63 @@ export const routes: Routes = [
           showInSidebar: true,
           iconPath: 'assets/icons/sidebar/magnifying-glass-solid (1).svg'
         }
-      }
+      },
+        {
+        path: 'Eco',
+        component: EcoDashboardComponent,
+        data: { 
+          authorities: [
+           // IRoleType.admin, 
+           // IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Modulo infantil',
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
+        }
+      },
+       {
+        path: 'rewards', 
+        component: EcoRewardsComponent, 
+        data: {
+          authorities: [
+            IRoleType.admin,
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Recompensas Eco', 
+          showInSidebar: false 
+          
+        }
+      },
+      {
+        path: 'challenges', 
+        component: EcoChallengesComponent, 
+        data: {
+          authorities: [
+            IRoleType.admin,
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Retos Eco', 
+          showInSidebar: false 
+        }
+      },
+       { path: 'trivias',
+        component: EcoTriviaComponent, 
+        data: {
+          authorities: [
+            IRoleType.admin,
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Retos Eco', 
+          showInSidebar: false 
+        }
+      },
+
+
+
       
     ],
   },

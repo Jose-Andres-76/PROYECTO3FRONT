@@ -1,0 +1,34 @@
+<div class="eco-dashboard">
+   <h1 style="margin-bottom: 0.5rem;">Bienvenido a <strong>EcoAsistente IA</strong>, {{userName}} <i class="fa-solid fa-gamepad fa-bounce"></i></h1>
+  <p>¿Listo para empezar?  Elije tu minijuego!</p>
+  <p></p>
+  <div class="cards">
+    <div class="card">
+      <div class="image"></div>
+      <h2>Eco Trivia</h2>
+      <p>Responde preguntas para ganar.</p>
+      <button (click)="playGame('trivia')" [routerLink]="['/app/trivias']"> <i class="fa-solid fa-play fa-fade"></i>Jugar ahora</button>
+    </div>
+    <div class="card">
+      <div class="image"></div>
+      <h2>Eco Completador</h2>
+      <p>Completa frases correctamente.</p>
+      <button (click)="playGame('completador')"><i class="fa-solid fa-play fa-fade"></i> Jugar ahora </button>
+    </div>
+    <div class="card">
+      <div class="image"></div>
+      <h2>Eco Arrastrador</h2>
+      <p>Arrastra desechos a su lugar.</p>
+      <button (click)="playGame('arrastrador')"><i class="fa-solid fa-play fa-fade"></i>Jugar ahora</button>
+    </div>
+  </div>
+
+  <div class="actions">
+    <i class="fa-sharp-duotone fa-solid fa-coins fa-beat" ></i>
+    <span class="coins"> {{ coins }}</span>
+      <button  class="button" [routerLink]="['/app/challenges']"><i class="fa-solid fa-award"></i>Ver retos</button>
+      <button  class="button" [routerLink]="['/app/rewards' ]"><i class="fa-solid fa-trophy"></i>Ver recompensas</button>
+    
+  </div>
+</div>
+

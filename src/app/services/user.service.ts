@@ -3,6 +3,7 @@ import { BaseService } from './base-service';
 import { ISearch, IUser } from '../interfaces';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { AlertService } from './alert.service';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,7 @@ import { AlertService } from './alert.service';
 export class UserService extends BaseService<IUser> {
   protected override source: string = 'users';
   private userListSignal = signal<IUser[]>([]);
+  
   get users$() {
     return this.userListSignal;
   }
@@ -103,4 +105,19 @@ export class UserService extends BaseService<IUser> {
       }
     });
   }
+
+  updatePoints(userId: number, points: number) {
+  return this.editCustomSource2(`${userId}/points`, { points });
+  }
+
+  getUserById(userId: number): Observable<IUser> {
+    return this.find(userId).pipe(
+      map((response) => response.data),
+      catchError((error) => {
+        console.error('❌ Error al obtener el usuario por ID:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
 }
