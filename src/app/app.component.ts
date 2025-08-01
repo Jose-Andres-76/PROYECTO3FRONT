@@ -28,20 +28,7 @@ interface Calculator {
 export class AppComponent implements OnInit, OnDestroy { 
   title: string = 'demo-angular-front';
   cant: number = 0;
-  operators: Operator[] = [
-    {
-      name: 'addition',
-      symbol: '+'
-    },
-    {
-      name: 'subtraction',
-      symbol: '-'
-    },
-  ];
-  cal: Calculator = {
-    name: 'My caculator',
-    type: 'simple'
-  };
+  
   date: Date = new Date(); 
   
   private tokenCheckInterval: any;
