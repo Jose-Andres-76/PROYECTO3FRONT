@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
 import { ISearch, IChallenge } from '../interfaces';
 import { Observable, catchError, tap, throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AlertService } from './alert.service';
 import { AuthService } from './auth.service';
 
@@ -145,5 +146,50 @@ export class ChallengeService extends BaseService<IChallenge> {
                 this.alertService.displayAlert('error', 'No se ha podido eliminar el desafío', 'center', 'top', ['error-snackbar']);
             }
         });
+    }
+
+
+    completeChallenge(challengeId: number): Observable<any> {
+        const updatedChallenge = {
+            challengeStatus: true
+        };
+
+        return this.edit(challengeId, updatedChallenge).pipe(
+            tap((response: any) => {
+                console.log('Challenge completed successfully:', response);
+                this.alertService.displayAlert('success', 
+                    '¡Desafío completado exitosamente!', 'center', 'top', ['success-snackbar']);
+            }),
+            catchError((error: any) => {
+                console.error('Error completing challenge:', error);
+                this.alertService.displayAlert('error', 
+                    'Error completando el desafío', 'center', 'top', ['error-snackbar']);
+                return throwError(() => error);
+            })
+        );
+    }
+
+    getActiveChallengesByUserAndGame(userId: number, gameId?: number): Observable<any> {
+        return this.findAllWithParamsAndCustomSource(`my-challenges/${userId}`, {}).pipe(
+            map((response: any) => {
+                const challenges = response.data || [];
+                
+                let activeChallenges = challenges.filter((challenge: IChallenge) => 
+                    challenge.challengeStatus === false
+                );
+                
+                if (gameId) {
+                    activeChallenges = activeChallenges.filter((challenge: IChallenge) => 
+                        challenge.game?.id === gameId
+                    );
+                }
+                
+                return activeChallenges;
+            }),
+            catchError((error: any) => {
+                console.error('Error fetching active challenges:', error);
+                return throwError(() => error);
+            })
+        );
     }
 }

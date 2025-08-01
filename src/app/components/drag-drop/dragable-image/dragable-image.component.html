@@ -1,7 +1,15 @@
-<img
-  [src]="imageUrl"
-  [alt]="alt"
-  draggable="true"
-  (dragstart)="onDragStart($event)"
-  class="draggable-image"
-/>
+<div class="draggable-container">
+  <img
+    [src]="imageUrl"
+    [alt]="alt"
+    [draggable]="draggable"
+    (dragstart)="onDragStart($event)"
+    (dragend)="onDragEnd($event)"
+    class="draggable-image"
+    [class.non-draggable]="!draggable"
+    loading="lazy"
+  />
+  <div class="image-label" *ngIf="data?.name">
+    {{ data.name }}
+  </div>
+</div>

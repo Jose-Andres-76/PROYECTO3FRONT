@@ -1,0 +1,67 @@
+<div class="modal-overlay" 
+     *ngIf="isVisible">
+  <div class="modal-content" 
+       (click)="onModalContentClick($event)">
+    
+    <div class="modal-header">
+      <div class="game-over-icon">
+        <i class="fas fa-times-circle"></i>
+      </div>
+      <h2 class="modal-title">Game Over</h2>
+      <p class="modal-subtitle">Inténtalo de nuevo</p>
+    </div>
+
+    <div class="modal-body">
+      <div class="game-over-message">
+        <p class="primary-message">
+          Has cometido demasiados errores
+        </p>
+        <div class="error-summary">
+          <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="error-details">
+            <div class="error-counter">
+              <span class="error-count">{{ errorCount }}</span>
+              <span class="error-separator">/</span>
+              <span class="max-errors">{{ maxErrors }}</span>
+            </div>
+            <p class="error-text">errores cometidos</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="encouragement-content">
+        <div class="motivational-message">
+          <p class="eco-message">
+            <i class="fas fa-heart"></i>
+            Aprender es parte del proceso
+          </p>
+          <p class="motivation-text">
+            Cada error te acerca más al éxito. ¡Sigue intentando!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn--secondary" 
+              (click)="onGoToModule()" 
+              type="button">
+        <span class="btn-icon">
+          <i class="fas fa-home"></i>
+        </span>
+        <span class="btn-text">Módulo Infantil</span>
+      </button>
+      
+      <button class="btn btn--primary" 
+              (click)="onPlayAgain()" 
+              type="button">
+        <span class="btn-icon">
+          <i class="fas fa-redo"></i>
+        </span>
+        <span class="btn-text">Intentar de Nuevo</span>
+      </button>
+    </div>
+  </div>
+</div>

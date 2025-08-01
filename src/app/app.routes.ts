@@ -21,6 +21,7 @@ import { GoogleCallbackComponent } from './pages/auth/google-callback/google-cal
 import { EcoDashboardComponent } from './pages/eco/eco.component';
 import { EcoRewardsComponent } from './components/eco-rewards/eco-rewards.component';
 import { EcoChallengesComponent } from './components/eco-challenges/eco-challenges.component';
+import { DragDropPageComponent } from './pages/drag-drop-page/drag-drop-page.component';
 
 
 
@@ -199,6 +200,19 @@ export const routes: Routes = [
           showInSidebar: false 
         }
       },
+      {
+        path: 'drag-drop-game',
+        component: DragDropPageComponent,
+        data: {
+          authorities: [
+            IRoleType.admin,
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Juego Reciclaje',
+          showInSidebar: true
+        }
+      }
       
     ],
   },

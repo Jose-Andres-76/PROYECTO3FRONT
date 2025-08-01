@@ -1,11 +1,32 @@
 <div
   class="drop-zone"
-  [ngStyle]="{ 'background-color': color }"
-  [class.over]="isOver"
+  [ngStyle]="{ 'border-color': color }"
+  [class.drop-zone--over]="isOver"
+  [class.drop-zone--active]="hasItems"
+  [attr.data-accept-type]="acceptType"
   (dragover)="onDragOver($event)"
   (dragleave)="onDragLeave($event)"
   (drop)="onDrop($event)"
+  [attr.aria-label]="'Zona de ' + label + ' para arrastrar objetos'"
+  role="region"
 >
-  <span class="drop-zone-label">{{ label }}</span>
-  <ng-content></ng-content>
+  <div class="drop-zone-header" *ngIf="!hasItems">
+    <div class="drop-zone-icon">
+      <ng-container [ngSwitch]="acceptType">
+        <i *ngSwitchCase="'reciclable'" class="fas fa-recycle"></i>
+        <i *ngSwitchCase="'no-reciclable'" class="fas fa-trash"></i>
+        <i *ngSwitchDefault class="fas fa-box"></i>
+      </ng-container>
+    </div>
+    <span class="drop-zone-label">{{ label }}</span>
+    <p class="drop-zone-hint">Arrastra aquí los objetos</p>
+  </div>
+  
+  <div class="drop-zone-content" [class.drop-zone-content--empty]="!hasItems" #dropZoneContent>
+    <ng-content></ng-content>
+  </div>
+  
+  <div class="drop-indicator" *ngIf="isOver">
+    <span class="drop-indicator-text">¡Suelta aquí!</span>
+  </div>
 </div>
