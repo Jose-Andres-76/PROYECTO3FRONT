@@ -6,8 +6,7 @@
         <th scope="col" class="text-center text-success">Apellido</th>
         <th scope="col" class="text-center text-success">Correo Electrónico</th>
         <th scope="col" class="text-center text-success">Puntos</th>
-        <th scope="col" class="text-center text-success">Editar</th>
-        <th scope="col" class="text-center text-danger">Eliminar</th>
+        <th scope="col" class="text-center text-success">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -18,10 +17,8 @@
             <td>{{item.son?.email}}</td>
             <td>{{item.son?.points}}</td>
           <td class="text-center">
-            <button (click)="callModalAction.emit(item)" class="btn btn-success" type="button">Editar</button>
-          </td>
-          <td class="text-center">
-            <button (click)="confirmDelete(item)" class="btn btn-danger" type="button">Eliminar</button>
+            <button (click)="callModalAction.emit(item)" class="btn btn-success" type="button"><i class="fas fa-pencil"></i></button>
+            <button (click)="confirmDelete(item)" class="btn btn-danger" type="button"><i class="fas fa-trash"></i></button>
           </td>
         </tr>
       } @empty {

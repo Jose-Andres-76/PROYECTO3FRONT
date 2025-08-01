@@ -81,35 +81,35 @@ export class RewardService extends BaseService<IReward> {
         });
     }
 
-    getAll() {
-        console.log('Fetching all rewards...');
+    // getAll() {
+    //     console.log('Fetching all rewards...');
 
-        if (!this.authService.isAdmin()) {
-            this.getMyRewards();
-            return;
-        }
+    //     if (!this.authService.isAdmin()) {
+    //         this.getMyRewards();
+    //         return;
+    //     }
 
-        this.findAllWithParams({ page: this.search.page, size: this.search.size }).subscribe({
-            next: (response: any) => {
-                console.log('All rewards response:', response);
-                console.log('All rewards data:', response.data);
-                this.search = { ...this.search, ...response.meta };
-                this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
-                this.rewardListSignal.set(response.data);
-            },
-            error: (error: any) => {
-                console.error('Error fetching all rewards:', error);
-                this.alertService.displayAlert('error', 'No se ha podido traer recompensas..', 'center', 'top', ['error-snackbar']);
-            }
-        });     
-    }
+    //     this.findAllWithParams({ page: this.search.page, size: this.search.size }).subscribe({
+    //         next: (response: any) => {
+    //             console.log('All rewards response:', response);
+    //             console.log('All rewards data:', response.data);
+    //             this.search = { ...this.search, ...response.meta };
+    //             this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
+    //             this.rewardListSignal.set(response.data);
+    //         },
+    //         error: (error: any) => {
+    //             console.error('Error fetching all rewards:', error);
+    //             this.alertService.displayAlert('error', 'No se ha podido traer recompensas..', 'center', 'top', ['error-snackbar']);
+    //         }
+    //     });     
+    // }
 
     save(reward: IReward){
         this.add(reward).subscribe({
             next: (response: any) => {
                 console.log('Reward saved successfully:', response);
                 this.alertService.displayAlert('success', 'Recompensa guardada exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyRewards();
             },
             error: (error: any) => {
                 console.error('Error saving reward:', error);
@@ -123,7 +123,7 @@ export class RewardService extends BaseService<IReward> {
             next: (response: any) => {
                 console.log('Reward updated successfully:', response);
                 this.alertService.displayAlert('success', 'Recompensa actualizada exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyRewards();
             },
             error: (error: any) => {
                 console.error('Error updating reward:', error);
@@ -137,7 +137,7 @@ export class RewardService extends BaseService<IReward> {
             next: (response: any) => {
                 console.log('Reward deleted successfully:', response);
                 this.alertService.displayAlert('success', 'Recompensa eliminada exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyRewards();
             },
             error: (error: any) => {
                 console.error('Error deleting reward:', error);

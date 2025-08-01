@@ -30,7 +30,7 @@ export class RewardFormComponent implements OnInit {
 
   ngOnInit() {
     console.log('RewardFormComponent initialized');
-    this.familyService.getAll();
+    this.familyService.getMyFamilies();
     this.initializeForm();
     
     setTimeout(() => {

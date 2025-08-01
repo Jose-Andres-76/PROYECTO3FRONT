@@ -82,34 +82,34 @@ export class FamilyService extends BaseService<IFamily> {
         });
     }
 
-    getAll() {
-        console.log('Fetching families...');
+    // getAll() {
+    //     console.log('Fetching families...');
         
-        if (!this.authService.isAdmin()) {
-            this.getMyFamilies();
-            return;
-        }
+    //     if (!this.authService.isAdmin()) {
+    //         this.getMyFamilies();
+    //         return;
+    //     }
 
-        this.findAllWithParams({ page: this.search.page, size: this.search.size}).subscribe({
-            next: (response: any) => {
-                console.log('Families response:', response);
-                console.log('Families data:', response.data);
-                this.search = {...this.search, ...response.meta};
-                this.totalItems = Array.from({length: this.search.totalPages ? this.search.totalPages: 0}, (_, i) => i+1);
-                this.familyListSignal.set(response.data);
-            },
-            error: (err: any) => {
-                console.error('Error fetching families:', err);
-                this.alertService.displayAlert('error', 'Error cargando miembros', 'center', 'top', ['error-snackbar']);
-            }
-        });
-    }
+    //     this.findAllWithParams({ page: this.search.page, size: this.search.size}).subscribe({
+    //         next: (response: any) => {
+    //             console.log('Families response:', response);
+    //             console.log('Families data:', response.data);
+    //             this.search = {...this.search, ...response.meta};
+    //             this.totalItems = Array.from({length: this.search.totalPages ? this.search.totalPages: 0}, (_, i) => i+1);
+    //             this.familyListSignal.set(response.data);
+    //         },
+    //         error: (err: any) => {
+    //             console.error('Error fetching families:', err);
+    //             this.alertService.displayAlert('error', 'Error cargando miembros', 'center', 'top', ['error-snackbar']);
+    //         }
+    //     });
+    // }
     
     save(family: IFamily) {
         this.add(family).subscribe({
             next: (response: any) => {
                 this.alertService.displayAlert('success', 'Miembro agregado exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyFamilies();
             },
             error: (err: any) => {
                 this.alertService.displayAlert('error', 'Ocurrió un error agregando el miembro','center', 'top', ['error-snackbar']);
@@ -122,7 +122,7 @@ export class FamilyService extends BaseService<IFamily> {
         this.editCustomSource(`${family.id}`, family).subscribe({
             next: (response: any) => {
                 this.alertService.displayAlert('success', 'Miembro actualizado exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyFamilies();
             },
             error: (err: any) => {
                 this.alertService.displayAlert('error', 'Ocurrió un error actualizando el miembro','center', 'top', ['error-snackbar']);
@@ -141,11 +141,11 @@ export class FamilyService extends BaseService<IFamily> {
                 console.log('Delete response:', response);
                 this.alertService.displayAlert('success', 'Miembro eliminado exitosamente', 'center', 'top', ['success-snackbar']);
                 setTimeout(() => {
-                    this.getAll();
+                    this.getMyFamilies();
                 }, 500);
             },
             error: (err: any) => {
-                this.getAll();
+                this.getMyFamilies();
                 this.alertService.displayAlert('error', 'Un error ocurrió eliminando el miembro. Asegúrese que no hay recompensas asignadas al miembro.','center', 'top', ['error-snackbar']);
                 console.error('error', err);
             }
