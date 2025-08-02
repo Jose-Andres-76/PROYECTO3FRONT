@@ -120,7 +120,7 @@ export class GameIntegrationService {
       map((response: any) => {
         const challenges = response.data || response || [];
         return challenges.filter((challenge: IChallenge) => 
-          challenge.challengeStatus === false
+          challenge.challengeStatus === true
         );
       }),
       catchError(() => of([]))

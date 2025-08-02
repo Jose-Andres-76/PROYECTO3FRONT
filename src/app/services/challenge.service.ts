@@ -151,7 +151,7 @@ export class ChallengeService extends BaseService<IChallenge> {
 
     completeChallenge(challengeId: number): Observable<any> {
         const updatedChallenge = {
-            challengeStatus: true
+            challengeStatus: false
         };
 
         return this.edit(challengeId, updatedChallenge).pipe(
@@ -175,7 +175,7 @@ export class ChallengeService extends BaseService<IChallenge> {
                 const challenges = response.data || [];
                 
                 let activeChallenges = challenges.filter((challenge: IChallenge) => 
-                    challenge.challengeStatus === false
+                    challenge.challengeStatus === true
                 );
                 
                 if (gameId) {
