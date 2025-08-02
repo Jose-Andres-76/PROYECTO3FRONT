@@ -3,6 +3,7 @@ import { BaseService } from './base-service';
 import { IUser } from '../interfaces';
 import { Observable } from 'rxjs';
 import { AlertService } from './alert.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { AlertService } from './alert.service';
 export class EditProfileServiceService extends BaseService<IUser> {
   protected override source: string = 'users';
   private alertService: AlertService = inject(AlertService);
+  public authService = inject(AuthService);
 
   constructor() {
     super();
@@ -67,6 +69,10 @@ export class EditProfileServiceService extends BaseService<IUser> {
       next: (response: any) => {
         this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
         // Refresh the page to update all components including topbar
+        if (response.data) {
+          this.authService.user = response.data;
+          this.authService.save();
+        }
         setTimeout(() => {
           window.location.reload();
         }, 1500); // Wait for alert to be visible before refreshing
@@ -85,8 +91,11 @@ export class EditProfileServiceService extends BaseService<IUser> {
     this.updateProfile(userId, user).subscribe({
       next: (response: any) => {
         this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
-        // Refresh the page to update all components including topbar
-        setTimeout(() => {
+        if (response.data) {
+          this.authService.user = response.data;
+          this.authService.save();
+        }
+         setTimeout(() => {
           window.location.reload();
         }, 1500); // Wait for alert to be visible before refreshing
       },

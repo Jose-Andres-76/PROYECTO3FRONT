@@ -1,6 +1,9 @@
 <div class="media profile-media d-flex align-items-center">
   <i class="fa-regular fa-user"></i>
-  <div class="media-body"><span>{{userName}} <i class="fa-solid fa-chevron-down"></i></span>
+  <div class="media-body">
+    @if (service.user$() && service.user$().name) {
+      <span>{{service.user$().name}} <i class="fa-solid fa-chevron-down"></i></span>
+    }
     <!-- <p class="mb-0 font-roboto">Admin </p> -->
   </div>
 </div>
