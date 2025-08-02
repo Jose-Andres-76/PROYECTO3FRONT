@@ -179,6 +179,8 @@ export class EcoTriviaComponent implements OnInit {
       if (finalizo && reto.id != null) {
         this.completedChallenges.add(reto.id);
 
+        this.challengeService.completeChallenge(reto.id).subscribe();
+
         const cantidadPreguntas = this.questions[index].length;
 
         if (this.scores[index] === cantidadPreguntas * 10) {
