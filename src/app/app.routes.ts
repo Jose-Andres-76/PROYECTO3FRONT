@@ -18,6 +18,7 @@ import { ListingComponent } from './pages/listing/listing.component';
 import { GarbageScannerPageComponent } from './pages/garbage-scanner/garbage-scanner.component';
 import { CollectionCentersComponent } from './components/collection-centers/collection-centers.component';
 import { GoogleCallbackComponent } from './pages/auth/google-callback/google-callback.component';
+import { ProfileEcoComponent } from './pages/profile-eco/profile-eco.component';
 import { EcoDashboardComponent } from './pages/eco/eco.component';
 import { EcoRewardsComponent } from './components/eco-rewards/eco-rewards.component';
 import { EcoChallengesComponent } from './components/eco-challenges/eco-challenges.component';
@@ -116,9 +117,10 @@ export const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent,
-        data: {
+        canActivate: [AuthGuard],
+        data: { 
           authorities: [
-            IRoleType.admin,
+            IRoleType.admin, 
             IRoleType.father,
             IRoleType.son
           ],
@@ -127,7 +129,21 @@ export const routes: Routes = [
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
-
+      {
+        path: 'profile-eco',
+        component: ProfileEcoComponent,
+        canActivate: [AuthGuard],
+        data: { 
+          authorities: [
+            IRoleType.admin, 
+            IRoleType.father,
+            IRoleType.son
+          ],
+          name: 'profile-eco',
+          showInSidebar: false,
+          iconPath: 'assets/icons/sidebar/users-solid.svg'
+        }
+      },
       {
         path: 'collection-centers',
         component: CollectionCentersComponent,

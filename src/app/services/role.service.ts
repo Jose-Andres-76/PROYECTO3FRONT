@@ -1,18 +1,18 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IGame, ISearch } from '../interfaces';
+import { IRole, ISearch } from '../interfaces';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GameService extends BaseService<IGame>{
-  protected override source: string = 'games';
-  private itemListSignal = signal<IGame[]>([]);
+export class RoleService extends BaseService<IRole> {
+  protected override source: string = 'roles';
+  private itemListSignal = signal<IRole[]>([]);
   
   get items$() {
-    return this.itemListSignal
+    return this.itemListSignal;
   }
 
   public search: ISearch = {
@@ -25,24 +25,23 @@ export class GameService extends BaseService<IGame>{
 
   constructor() {
     super();
-    console.log('GameService initialized');
+    console.log('RoleService initialized');
   }
 
   getAll() {
-    console.log('Fetching all games...');
+    console.log('Fetching all roles...');
     
     this.findAllWithParams({ page: this.search.page, size: this.search.size }).subscribe({
       next: (response: any) => {
-        console.log('Games fetched successfully:', response);
-        console.log('Games data:', response.data);
+        console.log('Roles fetched successfully:', response);
         this.search = {...this.search, ...response.meta };
         this.totalItems = Array.from({length: this.search.totalPages ? this.search.totalPages : 0}, (_, i) => i + 1);
         this.itemListSignal.set(response.data);
       },
       error: (error: any) => {
-        console.error('Error fetching games:', error);
-        this.alertService.displayAlert('error', 'Error al cargar los juegos', 'center', 'top', ['error-snackbar']);
+        console.error('Error fetching roles:', error);
+        this.alertService.displayAlert('error', 'Error al cargar los roles', 'center', 'top', ['error-snackbar']);
       }
-    })
+    });
   }
 }

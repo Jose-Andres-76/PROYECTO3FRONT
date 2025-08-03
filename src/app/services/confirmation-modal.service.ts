@@ -63,7 +63,7 @@ export class ConfirmationModalService {
   confirmDeleteFamilyMember(memberName: string): Promise<boolean> {
     return this.confirm({
       title: 'Eliminar miembro de familia',
-      message: `¿Estás seguro de que deseas eliminar a "${memberName}" de tu familia? No se eliminará si está ligado a un reto o recompensa`,
+      message: `¿Estás seguro de que deseas eliminar a "${memberName}" de tu familia? Si sigue relacionado con un reto o recompensa, no se realizará la eliminación.`,
       confirmText: 'Eliminar',
       cancelText: 'Cancelar',
       confirmButtonClass: 'btn-danger'
