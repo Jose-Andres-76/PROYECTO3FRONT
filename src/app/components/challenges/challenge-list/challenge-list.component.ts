@@ -39,10 +39,23 @@ export class ChallengeListComponent {
   }
 
   getGameType(challenge: IChallenge): string {
-    const gameType = (challenge as any).game?.typesOfGames || 'N/A';
+    const gameType = (challenge as any).game?.typesOfGames;
+    
+    if (gameType) {
+      switch (gameType) {
+        case 'ECO_DRAG_DROP':
+          return 'Arrastrador ecológico';
+        case 'ECO_FILLER':
+          return 'Completador Ecológico';
+        case 'ECO_TRIVIA':
+          return 'Trivia Ecológica';
+        default:
+          return gameType;
+      }
+    }
     
     console.log('Game type:', gameType);
-    return gameType;
+    return 'N/A';
   }
 
   async confirmDelete(challenge: IChallenge): Promise<void> {

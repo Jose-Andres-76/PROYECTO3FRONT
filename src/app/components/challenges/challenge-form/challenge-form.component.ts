@@ -118,9 +118,17 @@ export class ChallengeFormComponent implements OnInit {
 
   public getGameDisplayName(game: IGame): string {
     if (game.typesOfGames) {
-      return `${game.typesOfGames}`;
+      switch (game.typesOfGames) {
+        case 'ECO_DRAG_DROP':
+          return 'Arrastrador ecológico';
+        case 'ECO_FILLER':
+          return 'Completador Ecológico';
+        case 'ECO_TRIVIA':
+          return 'Trivia Ecológica';
+        default:
+          return game.typesOfGames;
+      }
     }
-    if (game.typesOfGames) return game.typesOfGames;
     return `Game ${game.id}`;
   }
 }
