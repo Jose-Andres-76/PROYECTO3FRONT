@@ -15,6 +15,7 @@ export class ProfileComponent {
   public profileService = inject(ProfileService);
 
   constructor() {
+    // Fetch user info when the component is initialized
     this.profileService.getUserInfoSignal();
   }
 }

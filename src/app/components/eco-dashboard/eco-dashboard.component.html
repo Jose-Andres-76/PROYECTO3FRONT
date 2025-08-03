@@ -7,13 +7,13 @@
       <div class="image"></div>
       <h2>Eco Trivia</h2>
       <p>Responde preguntas para ganar.</p>
-      <button (click)="playGame('trivia')"> <i class="fa-solid fa-play fa-fade"></i>Jugar ahora</button>
+      <button (click)="playGame('trivia')" [routerLink]="['/app/trivias-intro']"> <i class="fa-solid fa-play fa-fade"></i>Jugar ahora</button>
     </div>
     <div class="card">
       <div class="image"></div>
       <h2>Eco Completador</h2>
       <p>Completa frases correctamente.</p>
-      <button (click)="playGame('completador')"><i class="fa-solid fa-play fa-fade"></i> Jugar ahora </button>
+      <button (click)="playGame('completador')" [routerLink]="['/app/filler']"><i class="fa-solid fa-play fa-fade"></i> Jugar ahora </button>
     </div>
     <div class="card">
       <div class="image"></div>

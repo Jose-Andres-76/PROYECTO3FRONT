@@ -15,6 +15,7 @@ import { LogoTituloComponent } from '../../../components/logo-titulo/logo-titulo
 })
 export class LoginComponent implements OnInit, AfterViewInit {
   public loginError!: string;
+  public showPassword: boolean = false;
   @ViewChild('email') emailModel!: NgModel;
   @ViewChild('password') passwordModel!: NgModel;
   @ViewChild('googleButtonContainer') googleButtonContainer!: ElementRef;
@@ -52,6 +53,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if (this.googleButtonContainer) {
       this.authService.renderGoogleSignInButton(this.googleButtonContainer.nativeElement);
     }
+  }
+
+  public togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 
   public handleLogin(event: Event) {

@@ -3,15 +3,21 @@
     <div class="col-12">
       <div class="d-flex justify-content-between align-items-center">
         <h2>Usuarios</h2>
-        <button (click)="modalService.displayModal('md', addUsersModal)" type="button" class="btn btn-primary"><i class="fas fa-plus"></i></button>
+        <div class="d-flex justify-content-center mt-3">
+          <button (click)="openAddUserModal()" type="button" class="btn btn-success">
+            <i class="fas fa-plus"></i> Agregar Usuario
+          </button>
+        </div>
       </div>
     </div>
-    <div class="col-12">
+    <div id="user-list-bg" class="col-12">
+      <div id="user-list" class="mb-3">
       <app-user-list
         (callModalAction)="callEdition($event)"
         (callDeleteAction)="userService.delete($event)"
         [users]="userService.users$()"
       />
+      </div>
       @if(userService.users$().length) {
         <app-pagination
           [service]="userService"
@@ -26,12 +32,16 @@
 <ng-template #addUsersModal>
   <app-modal
     [hideFooter]="true"
+    (callCancelMethod)="onModalClose()"
   >
     <div>
       <app-user-form
         [userForm]="userForm"
+        [isEditMode]="isEditMode"
+        [title]="isEditMode ? 'Editar Usuario' : 'Agregar Usuario'"
         (callSaveMethod)="saveUser($event)"
         (callUpdateMethod)="updateUser($event)"
+        (callCancelMethod)="onModalClose()"
       />
     </div>
   </app-modal>

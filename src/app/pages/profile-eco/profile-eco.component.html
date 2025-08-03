@@ -1,0 +1,189 @@
+<div class="profile-eco-container">
+  <div class="profile-form-wrapper">
+    <div class="profile-header">
+      <h2 class="text-center mb-4">Perfil de Usuario</h2>
+    </div>
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      <!-- Profile Picture Section -->
+      <div class="profile-picture-section text-center mb-4">
+        <div class="profile-picture-container">
+          <img 
+            [src]="getProfileImageUrl()" 
+            alt="Profile Picture" 
+            class="profile-picture">
+          <button 
+            type="button" 
+            class="edit-picture-btn" 
+            (click)="triggerFileInput()"
+            title="Cambiar foto de perfil">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+        </div>
+        <input 
+          type="file" 
+          id="profilePicture" 
+          accept="image/*" 
+          (change)="onFileSelected($event)" 
+          style="display: none;">
+      </div>
+
+      <!-- Name Field -->
+      <div class="form-group mb-3">
+        <label for="name" class="form-label">Nombre</label>
+        <input 
+          id="name" 
+          formControlName="name" 
+          type="text" 
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': profileForm.get('name')?.invalid && profileForm.get('name')?.touched,
+            'is-valid': profileForm.get('name')?.valid && profileForm.get('name')?.touched
+          }"
+          [placeholder]="profileService.user$().name || 'Ingrese su nombre'">
+        <div *ngIf="profileForm.get('name')?.invalid && profileForm.get('name')?.touched" class="invalid-feedback">
+          <div *ngIf="profileForm.get('name')?.errors?.['required']">
+            El nombre es requerido
+          </div>
+          <div *ngIf="profileForm.get('name')?.errors?.['minlength']">
+            El nombre debe tener al menos 2 caracteres
+          </div>
+        </div>
+      </div>
+
+      <!-- Last Name Field -->
+      <div class="form-group mb-3">
+        <label for="lastname" class="form-label">Apellido</label>
+        <input 
+          id="lastname" 
+          formControlName="lastname" 
+          type="text" 
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': profileForm.get('lastname')?.invalid && profileForm.get('lastname')?.touched,
+            'is-valid': profileForm.get('lastname')?.valid && profileForm.get('lastname')?.touched
+          }"
+          [placeholder]="profileService.user$().lastname || 'Ingrese su apellido'">     
+        <div *ngIf="profileForm.get('lastname')?.invalid && profileForm.get('lastname')?.touched" class="invalid-feedback">
+          <div *ngIf="profileForm.get('lastname')?.errors?.['required']">
+            El apellido es requerido
+          </div>
+          <div *ngIf="profileForm.get('lastname')?.errors?.['minlength']">
+            El apellido debe tener al menos 2 caracteres
+          </div>
+        </div>
+      </div>
+
+      <!-- Email Field (Read-only) -->
+      <div class="form-group mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input 
+          id="email" 
+          type="email" 
+          class="form-control bg-light" 
+          [value]="getCurrentUserEmail()"
+          readonly>
+        <small class="form-text text-muted">El email no puede ser modificado</small>
+      </div>
+
+      <!-- Age Field -->
+      <div class="form-group mb-4">
+        <label for="age" class="form-label">Edad</label>
+        <input 
+          id="age" 
+          formControlName="age" 
+          type="number" 
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': profileForm.get('age')?.invalid && profileForm.get('age')?.touched,
+            'is-valid': profileForm.get('age')?.valid && profileForm.get('age')?.touched
+          }"
+          [placeholder]="profileService.user$().age || 'Ingrese su edad'">     
+        <div *ngIf="profileForm.get('age')?.invalid && profileForm.get('age')?.touched" class="invalid-feedback">
+          <div *ngIf="profileForm.get('age')?.errors?.['required']">
+            La edad es requerida
+          </div>
+          <div *ngIf="profileForm.get('age')?.errors?.['min'] || profileForm.get('age')?.errors?.['max']">
+            La edad debe estar entre 1 y 120 años
+          </div>
+        </div>
+      </div>
+
+      <!-- Password Section -->
+      <div class="password-section mb-4">
+        <h5 class="mb-3 text-muted">Cambiar Contraseña (Opcional)</h5>
+        
+        <!-- Password Field -->
+        <div class="form-group mb-3">
+          <label for="password" class="form-label">Nueva Contraseña</label>
+          <div class="password-input-container">
+            <input 
+              id="password" 
+              formControlName="password" 
+              [type]="showPassword ? 'text' : 'password'" 
+              class="form-control password-input"
+              [ngClass]="{
+                'is-invalid': profileForm.get('password')?.invalid && profileForm.get('password')?.touched,
+                'is-valid': profileForm.get('password')?.valid && profileForm.get('password')?.touched
+              }"
+              placeholder="Ingrese nueva contraseña (opcional)">
+            <button 
+              type="button" 
+              class="password-toggle-btn"
+              (click)="togglePasswordVisibility()"
+              title="Mostrar/Ocultar contraseña">
+              <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+            </button>
+          </div>
+          <div *ngIf="profileForm.get('password')?.invalid && profileForm.get('password')?.touched" class="invalid-feedback">
+            <div *ngIf="profileForm.get('password')?.errors?.['pattern']">
+              La contraseña debe contener al menos 8 caracteres, una letra mayúscula, una minúscula, un número y un carácter especial
+            </div>
+          </div>
+          <small class="form-text text-muted">
+            Mínimo 8 caracteres, debe incluir: mayúscula, minúscula, número y carácter especial
+          </small>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="form-group mb-3">
+          <label for="confirmPassword" class="form-label">Confirmar Nueva Contraseña</label>
+          <div class="password-input-container">
+            <input 
+              id="confirmPassword" 
+              formControlName="confirmPassword" 
+              [type]="showConfirmPassword ? 'text' : 'password'" 
+              class="form-control password-input"
+              [ngClass]="{
+                'is-invalid': (profileForm.get('confirmPassword')?.invalid && profileForm.get('confirmPassword')?.touched) || 
+                             (profileForm.errors?.['passwordMismatch'] && profileForm.get('confirmPassword')?.touched),
+                'is-valid': profileForm.get('confirmPassword')?.valid && profileForm.get('confirmPassword')?.touched && 
+                           !profileForm.errors?.['passwordMismatch']
+              }"
+              placeholder="Confirme la nueva contraseña">
+            <button 
+              type="button" 
+              class="password-toggle-btn"
+              (click)="toggleConfirmPasswordVisibility()"
+              title="Mostrar/Ocultar contraseña">
+              <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+            </button>
+          </div>
+          <div *ngIf="(profileForm.errors?.['passwordMismatch'] && profileForm.get('confirmPassword')?.touched)" class="invalid-feedback">
+            Las contraseñas no coinciden
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-center">
+        <button 
+          type="submit" 
+          class="btn btn-success btn-lg px-4"
+          [disabled]="profileForm.invalid">
+          Guardar 
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

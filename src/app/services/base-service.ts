@@ -61,4 +61,8 @@ export class BaseService<T> {
     })
     return queryParams;
   }
+
+    public editCustomSource2(customUrlSource: string, data: {}): Observable<IResponse<T>> {
+    return this.http.patch<IResponse<T>>(`${this.source}${customUrlSource ? '/' + customUrlSource: ''}`, data);
+  }
 }
