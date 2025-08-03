@@ -1,11 +1,3 @@
-.eco-trivia-container {
-  background-color: #eaffea;
-  padding: 2rem;
-  border-radius: 10px;
-  max-width: 600px;
-  margin: auto;
-}
-
 .opciones button {
   display: block;
   margin: 0.5rem 0;
@@ -31,13 +23,6 @@
   color: red;
 }
 
-.resultado-final {
-  text-align: center;
-  background-color: #d9f9d9;
-  padding: 2rem;
-  border-radius: 10px;
-}
-
 .eco-trivia-retos {
   display: flex;
   flex-direction: column;
@@ -48,7 +33,7 @@
 
 .card {
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   padding: 1.5rem;
   background-color: #ffffff;
   border-radius: 12px;
@@ -56,7 +41,7 @@
 }
 
 .reto-img {
-  width: 150px;
+  width: 250px;
   height: auto;
   display: block;
   margin: 0 auto 1rem;
@@ -73,28 +58,41 @@
   flex-direction: column;
   gap: 0.75rem;
 }
-
-.opcion {
+.texto-opcion {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
+  margin-bottom: 1.2rem;
 }
 
-.opcion button {
+.texto-opcion button:first-child {
   flex: 1;
-}
-
-.btn-audio {
-  background-color: #e0f7fa;
-  border: none;
-  border-radius: 50%;
-  padding: 0.6rem 0.8rem;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  text-align: left;
   cursor: pointer;
-  font-size: 1.2rem;
-  transition: background-color 0.3s;
 }
 
-.btn-audio:hover {
+.texto-opcion button.seleccionada {
+  border-color: #4caf50;
+  background-color: #e6ffe6;
+}
+
+.texto-opcion .btn-audio {
+  flex-shrink: 0;
+  padding: 0.6rem 0.8rem;
+  border-radius: 50%;
+  border: none;
+  background-color: #e0f7fa;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.texto-opcion .btn-audio:hover {
   background-color: #b2ebf2;
 }
 
@@ -102,6 +100,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+    margin-bottom: 1.5rem;
 }
 
 .texto-pregunta {
@@ -155,8 +154,8 @@ button {
 }
 .actions {
   display: flex;
-  justify-content: center; /* Centra los botones horizontalmente */
-  gap: 1rem; /* 👉 Espacio entre los botones */
+  justify-content: center;
+  gap: 1rem;
   margin-top: 1.5rem;
 }
 
@@ -176,3 +175,4 @@ button {
 .actions .button:hover {
   background-color: #388e3c;
 }
+

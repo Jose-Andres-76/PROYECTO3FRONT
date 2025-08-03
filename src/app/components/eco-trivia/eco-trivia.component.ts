@@ -7,6 +7,7 @@ import { IChallenge } from '../../interfaces';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { UserService } from '../../services/user.service';
 import { RouterModule } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -32,12 +33,16 @@ export class EcoTriviaComponent implements OnInit {
   private router = inject(Router);
   private userService = inject(UserService);
   private userId: number | null = null;
+  private route = inject(ActivatedRoute);
 
   challenges = this.challengeService.challenges$;
 
   private challenges$ = toObservable(this.challengeService.challenges$);
 
   ngOnInit(): void {
+
+    const retoIdParam = this.route.snapshot.queryParamMap.get('reto');
+    const retoId = retoIdParam ? Number(retoIdParam) : null;
     const user = this.authService.getUser();
     this.userId = user?.id ?? null;
 
@@ -56,8 +61,7 @@ export class EcoTriviaComponent implements OnInit {
 
     this.challenges$.subscribe((challenges: IChallenge[]) => {
       this.ecoTriviaChallenges = challenges.filter(
-
-        c => c.game?.id === 3 && c.challengeStatus == true
+        c => c.game?.id === 3 && c.challengeStatus === true && (retoId === null || c.id === retoId)
       );
 
       this.ecoTriviaChallenges.forEach((reto, index) => {
@@ -170,11 +174,12 @@ export class EcoTriviaComponent implements OnInit {
       this.respuestaCorrecta[index] = null;
       this.selectedOption[index] = null;
       this.currentQuestionIndex[index]++;
-
       const finalizo = this.currentQuestionIndex[index] >= this.questions[index].length;
 
       if (finalizo && reto.id != null) {
         this.completedChallenges.add(reto.id);
+
+        this.challengeService.completeChallenge(reto.id).subscribe();
 
         const cantidadPreguntas = this.questions[index].length;
 
