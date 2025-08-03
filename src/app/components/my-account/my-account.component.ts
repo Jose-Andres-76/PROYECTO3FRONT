@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, effect, inject } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 
@@ -10,18 +10,18 @@ import { AuthService } from "../../services/auth.service";
   ],
   templateUrl: "./my-account.component.html",
 })
-export class MyAccountComponent implements OnInit {
-  public userName: string = '';
-  private service = inject(AuthService);
+export class MyAccountComponent {
+  public service = inject(AuthService);
+  public router = inject(Router);
 
-  constructor(public router: Router) {
-    let user = localStorage.getItem('auth_user');
-    if(user) {
-      this.userName = JSON.parse(user)?.name;
-    } 
+  constructor() {
+    // effect(() => {
+    //   const user = this.service.user$();
+    //   if (user && user.name) {
+    //     this.userName = user.name;
+    //   }
+    // });
   }
-
-  ngOnInit() {}
 
   logout() {
     this.service.logout();

@@ -24,15 +24,14 @@ import { EcoRewardsComponent } from './components/eco-rewards/eco-rewards.compon
 import { EcoChallengesComponent } from './components/eco-challenges/eco-challenges.component';
 import { EcoTriviaComponent } from './components/eco-trivia/eco-trivia.component';
 import { EcoFillerComponent } from './components/eco-filler/eco-filler.component';
-
-
+import { EcoTriviaIntroComponent } from './components/eco-trivia-intro/eco-trivia-intro.component';
 
 
 export const routes: Routes = [
   {
     path: '',
     component: LandingComponent,
-     canActivate: [GuestGuard],
+    canActivate: [GuestGuard],
   },
   {
     path: 'login',
@@ -76,10 +75,10 @@ export const routes: Routes = [
       {
         path: 'family',
         component: ListingComponent,
-        canActivate:[FatherRoleGuard],
-        data: { 
+        canActivate: [FatherRoleGuard],
+        data: {
           authorities: [
-            IRoleType.admin, 
+            IRoleType.admin,
             IRoleType.father,
           ],
           name: 'Mi Familia',
@@ -90,8 +89,8 @@ export const routes: Routes = [
       {
         path: 'users',
         component: UsersComponent,
-        canActivate:[AdminRoleGuard],
-        data: { 
+        canActivate: [AdminRoleGuard],
+        data: {
           authorities: [
             IRoleType.admin
           ],
@@ -104,9 +103,9 @@ export const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent,
         canActivate: [AuthGuard],
-        data: { 
+        data: {
           authorities: [
-            IRoleType.admin, 
+            IRoleType.admin,
             IRoleType.father,
             IRoleType.son
           ],
@@ -114,7 +113,7 @@ export const routes: Routes = [
           showInSidebar: false,
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
-        
+
       },
       {
         path: 'profile',
@@ -146,14 +145,13 @@ export const routes: Routes = [
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
-    
       {
         path: 'collection-centers',
         component: CollectionCentersComponent,
         canActivate: [AuthGuard],
-        data: { 
+        data: {
           authorities: [
-            IRoleType.admin, 
+            IRoleType.admin,
             IRoleType.father,
             IRoleType.son,
           ],
@@ -162,13 +160,13 @@ export const routes: Routes = [
           iconPath: 'assets/icons/sidebar/compass-regular.svg'
         }
       },
-        {
+      {
         path: 'garbage-scanner',
         component: GarbageScannerPageComponent,
         canActivate: [AuthGuard],
-        data: { 
+        data: {
           authorities: [
-            IRoleType.admin, 
+            IRoleType.admin,
             IRoleType.father,
             IRoleType.son,
           ],
@@ -177,13 +175,13 @@ export const routes: Routes = [
           iconPath: 'assets/icons/sidebar/magnifying-glass-solid (1).svg'
         }
       },
-        {
+      {
         path: 'Eco',
         component: EcoDashboardComponent,
-        data: { 
+        data: {
           authorities: [
-           // IRoleType.admin, 
-           // IRoleType.father,
+            // IRoleType.admin, 
+            // IRoleType.father,
             IRoleType.son,
           ],
           name: 'Modulo infantil',
@@ -191,43 +189,57 @@ export const routes: Routes = [
           iconPath: 'assets/icons/sidebar/users-solid.svg'
         }
       },
-       {
-        path: 'rewards', 
-        component: EcoRewardsComponent, 
+      {
+        path: 'rewards',
+        component: EcoRewardsComponent,
         data: {
           authorities: [
             IRoleType.admin,
             IRoleType.father,
             IRoleType.son,
           ],
-          name: 'Recompensas Eco', 
-          showInSidebar: false 
-          
+          name: 'Recompensas Eco',
+          showInSidebar: false
+
         }
       },
       {
-        path: 'challenges', 
-        component: EcoChallengesComponent, 
+        path: 'challenges',
+        component: EcoChallengesComponent,
         data: {
           authorities: [
             IRoleType.admin,
             IRoleType.father,
             IRoleType.son,
           ],
-          name: 'Retos Eco', 
-          showInSidebar: false 
+          name: 'Retos Eco',
+          showInSidebar: false
         }
       },
-       { path: 'trivias',
-        component: EcoTriviaComponent, 
+      {
+        path: 'trivias',
+        component: EcoTriviaComponent,
         data: {
           authorities: [
             IRoleType.admin,
             IRoleType.father,
             IRoleType.son,
           ],
-          name: 'Retos Eco', 
-          showInSidebar: false 
+          name: 'Retos Eco',
+          showInSidebar: false
+        }
+      },
+      {
+        path: 'trivias-intro',
+        component: EcoTriviaIntroComponent,
+        data: {
+          authorities: [
+            IRoleType.admin,
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Retos Eco',
+          showInSidebar: false
         }
       },
       {
@@ -246,8 +258,9 @@ export const routes: Routes = [
 
 
 
-      
+
+
     ],
   },
-   { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' }
 ];
