@@ -1,0 +1,82 @@
+:host {
+  --primary: #2e7d32; --secondary: #43a047; --success: #4caf50; --victory: #ffd700;
+  --text: #333; --text-muted: #666; --radius: 12px; --space: 1rem; --transition: all .3s ease;
+}
+
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center; z-index: 1000; padding: var(--space);
+  animation: fadeIn .3s ease-out;
+}
+
+.modal-content {
+  background: white; border-radius: var(--radius); box-shadow: 0 20px 40px rgba(0,0,0,.1);
+  max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto;
+  animation: slideInUp .4s cubic-bezier(.34,1.56,.64,1);
+  @media (max-width: 768px) { margin: calc(var(--space) * .75); max-height: 85vh; }
+}
+
+.modal-header {
+  background: linear-gradient(135deg, var(--success) 0%, var(--secondary) 100%);
+  color: white; padding: calc(var(--space) * 2); text-align: center;
+  border-radius: var(--radius) var(--radius) 0 0;
+  .victory-icon i {
+    font-size: 3rem; color: var(--victory); text-shadow: 0 2px 4px rgba(0,0,0,.3);
+    animation: bounce 2s infinite; margin-bottom: var(--space); display: block;
+  }
+  .modal-title {
+    margin: 0; font-size: 2rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,.3);
+    @media (max-width: 768px) { font-size: 1.75rem; }
+  }
+}
+
+.modal-body {
+  padding: calc(var(--space) * 2);
+  .victory-message { text-align: center; margin-bottom: calc(var(--space) * 1.5); }
+  .primary-message { color: var(--text); font-size: 1.125rem; line-height: 1.6; margin-bottom: var(--space); }
+  .achievement-summary {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6; border-radius: 8px; padding: var(--space);
+    display: flex; align-items: center; gap: var(--space);
+    .achievement-icon i { font-size: 2rem; color: var(--victory); }
+    .achievement-text {
+      .achievement-title { font-size: 1.1rem; font-weight: 600; color: var(--text); margin: 0 0 .25rem; }
+      .achievement-detail { font-size: .9rem; color: var(--text-muted); margin: 0 0 .5rem; }
+      .points-earned { font-size: .9rem; color: var(--success); font-weight: 600; margin: 0;
+        i { margin-right: .25rem; }
+      }
+    }
+  }
+  .celebration-content { text-align: center; margin-top: calc(var(--space) * 1.5); }
+  .success-message {
+    .eco-message { color: var(--success); font-size: 1rem; font-weight: 500; margin: 0 0 .5rem;
+      i { margin-right: .5rem; }
+    }
+    .motivation-text { color: var(--text-muted); font-size: .9rem; margin: 0; }
+  }
+}
+
+.modal-footer {
+  padding: calc(var(--space) * 1.5) calc(var(--space) * 2);
+  background: #f8f9fa; border-radius: 0 0 var(--radius) var(--radius);
+  display: flex; gap: var(--space); justify-content: center;
+  @media (max-width: 480px) { flex-direction: column; }
+  .btn {
+    padding: .75rem 1.5rem; border: none; border-radius: 6px; font-weight: 600;
+    cursor: pointer; transition: var(--transition); font-size: .9rem; min-width: 120px;
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+    .btn-icon { font-size: .9rem; }
+    &.btn--primary {
+      background: var(--success); color: white;
+      &:hover { background: var(--primary); transform: translateY(-1px); }
+    }
+    &.btn--secondary {
+      background: #6c757d; color: white;
+      &:hover { background: #5a6268; transform: translateY(-1px); }
+    }
+  }
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideInUp { from { opacity: 0; transform: translateY(60px) scale(.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }

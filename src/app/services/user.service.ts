@@ -106,18 +106,33 @@ export class UserService extends BaseService<IUser> {
     });
   }
 
+  updateUserPoints(userId: number, points: number): Observable<any> {
+    const payload = { points };
+    return this.http.patch(`${this.source}/${userId}/points`, payload)
+      .pipe(
+        tap((response: any) => {
+          console.log('Points updated successfully:', response);
+          this.alertService.displayAlert('success', `Puntos actualizados: ${points}`, 'center', 'top', ['success-snackbar']);
+        }),
+        catchError((error: any) => {
+          console.error('Error updating points:', error);
+          this.alertService.displayAlert('error', 'Error actualizando puntos', 'center', 'top', ['error-snackbar']);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  getUserById(userId: number): Observable<any> {
+    return this.http.get(`${this.source}/${userId}`)
+      .pipe(
+        catchError((error: any) => {
+          console.error('Error getting user by ID:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
   updatePoints(userId: number, points: number) {
-  return this.editCustomSource2(`${userId}/points`, { points });
+  return this.editCustomSource(`${userId}/points`, { points });
   }
-
-  getUserById(userId: number): Observable<IUser> {
-    return this.find(userId).pipe(
-      map((response) => response.data),
-      catchError((error) => {
-        console.error('❌ Error al obtener el usuario por ID:', error);
-        return throwError(() => error);
-      })
-    );
-  }
-
 }

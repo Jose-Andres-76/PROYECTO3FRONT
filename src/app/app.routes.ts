@@ -22,6 +22,8 @@ import { ProfileEcoComponent } from './pages/profile-eco/profile-eco.component';
 import { EcoDashboardComponent } from './pages/eco/eco.component';
 import { EcoRewardsComponent } from './components/eco-rewards/eco-rewards.component';
 import { EcoChallengesComponent } from './components/eco-challenges/eco-challenges.component';
+import { DragDropPageComponent } from './pages/drag-drop-page/drag-drop-page.component';
+
 import { EcoTriviaComponent } from './components/eco-trivia/eco-trivia.component';
 import { EcoFillerComponent } from './components/eco-filler/eco-filler.component';
 import { EcoTriviaIntroComponent } from './components/eco-trivia-intro/eco-trivia-intro.component';
@@ -243,6 +245,19 @@ export const routes: Routes = [
         }
       },
       {
+        path: 'drag-drop-game',
+        component: DragDropPageComponent,
+        data: {
+          authorities: [
+            IRoleType.admin,
+            IRoleType.father,
+            IRoleType.son,
+          ],
+          name: 'Juego Reciclaje',
+          showInSidebar: true
+        }
+      },
+      {
         path: 'filler',
         component: EcoFillerComponent,
         data: {
@@ -255,11 +270,6 @@ export const routes: Routes = [
           showInSidebar: false
         }
       }
-
-
-
-
-
     ],
   },
   { path: '**', redirectTo: '' }

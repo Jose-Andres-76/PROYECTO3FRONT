@@ -1,0 +1,167 @@
+<div class="drag-drop-game-container">
+  <!-- Header del juego -->
+  <header class="game-header">
+    <h1 class="game-title">Juego de Clasificación de Residuos</h1>
+    <p class="game-subtitle">Arrastra los objetos a su contenedor correspondiente</p>
+  </header>
+
+  <!-- Sistema de notificaciones mejorado -->
+  <div class="notification-container" *ngIf="hasMessage()">
+    <div [class]="messageClass()" 
+         [@slideIn] 
+         [attr.aria-live]="'polite'"
+         [attr.role]="'alert'">
+      <div class="notification-content">
+        <i [class]="messageIcon()" class="notification-icon"></i>
+        <span class="notification-text">{{ messageText() }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Área principal del juego -->
+  <div class="main-game-area">
+    <!-- Área de objetos arrastrables -->
+    <section class="draggable-section" *ngIf="isGameActive() && draggableImages().length > 0">
+      <h2 class="section-title">Objetos para clasificar</h2>
+      <div class="draggable-images-grid">
+        <app-draggable-image
+          *ngFor="let img of draggableImages(); trackBy: trackByImageName"
+          [imageUrl]="img.imageUrl"
+          [alt]="img.alt"
+          [data]="img"
+          class="game-image"
+        ></app-draggable-image>
+      </div>
+    </section>
+
+    <!-- Zonas de drop -->
+    <section class="drop-zones-section">
+      <h2 class="section-title" *ngIf="isGameActive()">Contenedores de reciclaje</h2>
+      
+      <div class="drop-zones-grid">
+        <!-- Zona Reciclable -->
+        <div class="drop-zone-container reciclable-container">
+          <div class="zone-header">
+            <div class="zone-icon">
+              <i class="fas fa-recycle"></i>
+            </div>
+            <h3 class="zone-title">Reciclable</h3>
+            <p class="zone-description">Papel, vidrio, plástico, metal</p>
+          </div>
+          <app-drop-zone
+            label="Reciclable"
+            color="#4caf50"
+            acceptType="reciclable"
+            (itemDropped)="onDropReciclable($event)"
+            class="drop-zone reciclable-zone"
+          >
+            <div class="dropped-items">
+              <app-draggable-image
+                *ngFor="let item of reciclableDropped(); trackBy: trackByImageName"
+                [imageUrl]="item.imageUrl"
+                [alt]="item.alt"
+                [data]="item"
+                [draggable]="false"
+                class="dropped-image"
+              ></app-draggable-image>
+            </div>
+          </app-drop-zone>
+          <div class="zone-counter">
+            <span class="counter-text">{{ reciclableDropped().length }} objetos</span>
+          </div>
+        </div>
+
+        <!-- Zona No Reciclable -->
+        <div class="drop-zone-container no-reciclable-container">
+          <div class="zone-header">
+            <div class="zone-icon">
+              <i class="fas fa-trash"></i>
+            </div>
+            <h3 class="zone-title">No Reciclable</h3>
+            <p class="zone-description">Residuos orgánicos, desechos</p>
+          </div>
+          <app-drop-zone
+            label="No Reciclable"
+            color="#f44336"
+            acceptType="no-reciclable"
+            (itemDropped)="onDropNoReciclable($event)"
+            class="drop-zone no-reciclable-zone"
+          >
+            <div class="dropped-items">
+              <app-draggable-image
+                *ngFor="let item of noReciclableDropped(); trackBy: trackByImageName"
+                [imageUrl]="item.imageUrl"
+                [alt]="item.alt"
+                [data]="item"
+                [draggable]="false"
+                class="dropped-image"
+              ></app-draggable-image>
+            </div>
+          </app-drop-zone>
+          <div class="zone-counter">
+            <span class="counter-text">{{ noReciclableDropped().length }} objetos</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Botones de acción y progreso -->
+  <footer class="game-footer">
+    <!-- Barra de progreso -->
+    <div class="progress-section" *ngIf="isGameActive()">
+      <div class="progress-info">
+        <span class="progress-text">Progreso: {{ totalDropped() }}/{{ draggableImages().length + totalDropped() }}</span>
+        <span class="error-count" [class.error-warning]="errorCount() >= 2">
+          Errores: {{ errorCount() }}/3
+        </span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="progress()"></div>
+      </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="action-buttons">
+      <button 
+        *ngIf="isGameOver() || hasWon()" 
+        (click)="initializeGame()"
+        class="btn btn--primary"
+        type="button"
+        [attr.aria-label]="isGameOver() ? 'Reiniciar juego después de Game Over' : 'Jugar nuevamente después de la victoria'"
+      >
+        <span class="btn-icon"><i class="fas fa-redo"></i></span>
+        <span class="btn-text">{{ isGameOver() ? 'Reiniciar Juego' : 'Jugar de Nuevo' }}</span>
+      </button>
+      
+      <button 
+        *ngIf="isGameActive()" 
+        (click)="initializeGame()"
+        class="btn btn--success"
+        type="button"
+        aria-label="Reiniciar el juego actual"
+      >
+        <span class="btn-icon"><i class="fas fa-redo"></i></span>
+        <span class="btn-text">Reiniciar</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- Modal de Game Over -->
+  <app-game-over-modal
+    [isVisible]="isGameOver()"
+    [errorCount]="errorCount()"
+    [maxErrors]="3"
+    (playAgain)="onPlayAgain()"
+    (goToModule)="onGoToModule()"
+  ></app-game-over-modal>
+
+  <!-- Modal de Victoria -->
+  <app-victory-modal
+    [isVisible]="hasWon()"
+    [totalObjects]="5"
+    [pointsEarned]="pointsEarned()"
+    (playAgain)="onPlayAgain()"
+    (goToModule)="onGoToModule()"
+  ></app-victory-modal>
+</div>
