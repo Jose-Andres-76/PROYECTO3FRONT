@@ -149,6 +149,14 @@ export class EcoFillerComponent implements OnInit {
     this.router.navigate(['/app/Eco']);
   }
 
+  // New text-to-speech method
+  speak(text: string): void {
+    const speech = new SpeechSynthesisUtterance();
+    speech.text = text;
+    speech.lang = 'es-CR';
+    window.speechSynthesis.speak(speech);
+  }
+
   private showSessionCompletedMessage() {
     const finalScore = this.score();
     const questionsAnswered = this.maxQuestions;

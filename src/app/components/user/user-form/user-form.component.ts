@@ -358,4 +358,20 @@ export class UserFormComponent {
         }
       });
     }
+
+    public getRoleDisplayName(role: any): string {
+      if (role.name) {
+        switch (role.name) {
+          case 'FATHER':
+            return 'Padre';
+          case 'SON':
+            return 'Hijo';
+          case 'ADMIN':
+            return 'Administrador';
+          default:
+            return role.name;
+        }
+      }
+      return `Role ${role.id}`;
+    }
   }

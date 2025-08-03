@@ -22,7 +22,7 @@
           <td>{{item.updatedAt | date: 'dd/MM/yyyy HH:mm'}}</td>
           <td>
             <button (click)="callModalAction.emit(item);" class="btn btn-success" type="button"><i class="fas fa-pencil"></i></button>
-            <button (click)="callDeleteAction.emit(item)" class="btn btn-danger" type="button"><i class="fas fa-trash"></i></button>
+            <button (click)="confirmDelete(item)" class="btn btn-danger" type="button"><i class="fas fa-trash"></i></button>
           </td>
         </tr>
       } @empty {

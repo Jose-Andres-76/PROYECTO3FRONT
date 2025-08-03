@@ -32,17 +32,26 @@
   <div class="game-content" *ngIf="!isLoading() && !sessionCompleted(); else loadingOrCompletedTemplate">
     <div class="question-section" *ngIf="currentGame()">
       <div class="question-card">
-        <h3>{{ currentGame()?.question }}</h3>
+        <div class="question-with-audio">
+          <h3>{{ currentGame()?.question }}</h3>
+          <button class="btn-audio" (click)="speak(currentGame()?.question!)">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+        </div>
       </div>
       
       <div class="options-container">
-        <button 
-          *ngFor="let option of currentGame()?.options" 
-          [class]="getButtonClass(option)"
-          (click)="selectOption(option)"
-          [disabled]="isAnswered() || isUpdatingPoints()">
-          {{ option }}
-        </button>
+        <div class="option-wrapper" *ngFor="let option of currentGame()?.options">
+          <button 
+            [class]="getButtonClass(option)"
+            (click)="selectOption(option)"
+            [disabled]="isAnswered() || isUpdatingPoints()">
+            {{ option }}
+          </button>
+          <button class="btn-audio" (click)="speak(option)">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+        </div>
       </div>
       
       <div class="action-section" *ngIf="isAnswered()">

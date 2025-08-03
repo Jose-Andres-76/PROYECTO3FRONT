@@ -53,7 +53,7 @@ export class ConfirmationModalService {
   confirmDelete(itemName: string): Promise<boolean> {
     return this.confirm({
       title: 'Confirmar eliminación',
-      message: `¿Estás seguro de que deseas eliminar "${itemName}"? Esta acción no se puede deshacer.`,
+      message: `¿Estás seguro de que deseas eliminar ${itemName}? Esta acción no se puede deshacer.`,
       confirmText: 'Eliminar',
       cancelText: 'Cancelar',
       confirmButtonClass: 'btn-danger'

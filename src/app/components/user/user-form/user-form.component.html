@@ -104,7 +104,7 @@
       <select id="roleId" formControlName="roleId" class="form-control">
         <option value="">Seleccione un rol</option>
         @for (role of roleService.items$(); track role.id) {
-          <option [value]="role.id">{{ role.name }}</option>
+          <option [value]="role.id">{{ getRoleDisplayName(role) }}</option>
         }
       </select>
       @if (userForm.controls['roleId'].invalid && (userForm.controls['roleId'].dirty || userForm.controls['roleId'].touched)) {
