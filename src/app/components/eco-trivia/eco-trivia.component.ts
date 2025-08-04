@@ -53,11 +53,7 @@ export class EcoTriviaComponent implements OnInit {
       return;
     }
 
-    this.userService.getUserById(this.userId).subscribe({
-      next: (updatedUser) => {
-        this.userPoints = updatedUser.points ?? 0;
-      }
-    });
+    this.updateUserPoints();
 
     this.challengeService.getMyChallenges();
 
@@ -194,6 +190,21 @@ export class EcoTriviaComponent implements OnInit {
       }
     }, 1400);
   }
+  
+  private updateUserPoints(): void {
+    if (!this.userId) return;
+    
+    this.userService.getUserById(this.userId).subscribe({
+      next: (response) => {
+        this.userPoints = response.data?.points ?? response.points ?? 0;
+      },
+      error: (error) => {
+        console.error('Error actualizando puntos del usuario:', error);
+        const user = this.authService.getUser();
+        this.userPoints = user?.points ?? 0;
+      }
+    });
+  }
 
   savePoints(reto: IChallenge): void {
     if (!reto.id || !this.userId) return;
@@ -204,11 +215,7 @@ export class EcoTriviaComponent implements OnInit {
     this.gameIntegrationService.processEcoTriviaResult(reto.id, score, cantidadPreguntas).subscribe({
       next: (result) => {
         if (result?.success) {
-          this.userService.getUserById(this.userId!).subscribe({
-            next: (updatedUser) => {
-              this.userPoints = updatedUser.data?.points ?? 0;
-            }
-          });
+          this.updateUserPoints();
         }
       },
       error: (error) => {
