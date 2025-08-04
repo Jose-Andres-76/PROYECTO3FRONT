@@ -81,6 +81,39 @@ export class RewardService extends BaseService<IReward> {
         });
     }
 
+     getAllActiveRewards(): void {
+        console.log('Fetching my rewards...');
+
+        this.monitorUserChanges();
+        const userId = this.authService.getUser()?.id;
+        if (!userId) {
+            this.alertService.displayAlert('error', 'Usuario no encontrado...', 'center', 'top', ['error-snackbar']);
+            console.error('User ID not found');
+            return;
+        }
+
+        this.findAllWithParamsAndCustomSource(`active/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
+            next: (response: any) => {
+                console.log('My rewards response:', response);
+                console.log('My rewards data:', response.data);
+                
+                if (!response.data || response.data.length === 0) {
+                    this.clearRewards();
+                    return;
+                }
+                
+            this.search = { ...this.search, ...response.meta };
+            this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
+            this.rewardListSignal.set(response.data);
+            },
+            error: (error: any) => {
+                console.error('Error fetching my rewards:', error);
+                this.alertService.displayAlert('error', 'No se ha podido traer recompensas..', 'center', 'top', ['error-snackbar']);
+            }
+        });
+    }
+
+
     // getAll() {
     //     console.log('Fetching all rewards...');
 

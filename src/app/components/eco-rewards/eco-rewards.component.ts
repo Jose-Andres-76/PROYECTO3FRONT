@@ -23,7 +23,7 @@ export class EcoRewardsComponent {
   );
 
   constructor() {
-    this.rewardService.getMyRewards();
+    this.rewardService.getAllActiveRewards();
   }
   claimReward(reward: IReward) {
   console.log(`Recompensa seleccionada: ${reward.description}`);
