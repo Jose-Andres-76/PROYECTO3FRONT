@@ -1,7 +1,111 @@
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .pagination-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: #718096;
+
+    .page-size-select {
+      padding: 0.5rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      
+      &:focus {
+        outline: none;
+        border-color: #4299e1;
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0.25rem;
+
+    .page-item {
+      .page-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 0.75rem;
+        min-width: 2.5rem;
+        border: 2px solid #e2e8f0;
+        background: white;
+        color: #4a5568;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover:not(:disabled) {
+          background-color: #f7fafc;
+          border-color: #cbd5e0;
+        }
+
+        &:disabled {
+          cursor: not-allowed;
+          background: #f7fafc;
+          color: #a0aec0;
+          border-color: #e2e8f0;
+        }
+
+        &.active {
+          background-color: #4299e1;
+          border-color: #4299e1;
+          color: white;
+        }
+
+        i {
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .pagination-container {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.75rem;
+
+    .pagination-info {
+      order: 2;
+      justify-content: center;
+    }
+
+    .pagination {
+      order: 1;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      .page-item .page-link {
+        padding: 0.5rem;
+        min-width: 2rem;
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
 button:disabled {
-  cursor: pointer;
-  background: #e6e6e6;
-  color: #a39c9c !important;
+  cursor: not-allowed !important;
+  background: #f7fafc !important;
+  color: #a0aec0 !important;
 }
 
 .pagination .page-item .page-link{

@@ -1,0 +1,51 @@
+<div class="table-container">
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Cargando datos...</p>
+  </div>
+
+  <div *ngIf="!loading && wasteData.length === 0" class="empty-state">
+    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="m9 12 2 2 4-4"></path>
+    </svg>
+    <h3>No hay datos disponibles</h3>
+    <p>No se encontraron registros de residuos con los filtros aplicados.</p>
+  </div>
+
+  <div *ngIf="!loading && wasteData.length > 0" class="table-wrapper">
+    <table class="waste-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Usuario</th>
+          <th>Tipo de Producto</th>
+          <th>Respuesta</th>
+          <th>Fecha de Creación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let waste of wasteData; trackBy: trackByWasteId">
+          <td class="id-cell">{{ waste.id }}</td>
+          <td class="user-cell">
+            <div class="user-info">
+              <span class="user-name">{{ waste.user?.name }} {{ waste.user?.lastname }}</span>
+              <span class="user-id">ID: {{ waste.user?.id }}</span>
+            </div>
+          </td>
+          <td class="type-cell">
+            <span class="status-badge" [class]="getStatusClass(waste.productType)">
+              {{ getProductTypeLabel(waste.productType) }}
+            </span>
+          </td>
+          <td class="answer-cell">
+            <div class="answer-content">
+              {{ waste.answer }}
+            </div>
+          </td>
+          <td class="date-cell">{{ formatDate(waste.createdAt) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

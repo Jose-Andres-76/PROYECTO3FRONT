@@ -27,6 +27,7 @@ import { DragDropPageComponent } from './pages/drag-drop-page/drag-drop-page.com
 import { EcoTriviaComponent } from './components/eco-trivia/eco-trivia.component';
 import { EcoFillerComponent } from './components/eco-filler/eco-filler.component';
 import { EcoTriviaIntroComponent } from './components/eco-trivia-intro/eco-trivia-intro.component';
+import { WasteReportComponent } from './pages/waste-report/waste-report.component';
 
 
 export const routes: Routes = [
@@ -175,6 +176,19 @@ export const routes: Routes = [
           name: 'Escáner de Basura',
           showInSidebar: true,
           iconPath: 'assets/icons/sidebar/magnifying-glass-solid (1).svg'
+        }
+      },
+      {
+        path: 'waste-report',
+        component: WasteReportComponent,
+        canActivate: [AdminRoleGuard],
+        data: {
+          authorities: [
+            IRoleType.admin,
+          ],
+          name: 'Reporte de Residuos',
+          showInSidebar: true,
+          iconPath: 'assets/icons/sidebar/chart-bar-solid.svg'
         }
       },
       {
