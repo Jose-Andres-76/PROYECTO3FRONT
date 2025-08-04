@@ -159,31 +159,13 @@ export class RewardService extends BaseService<IReward> {
     }
     
 
-    redeemRewards(reward:IReward ): void {
-        console.log('Fetching my rewards...');
 
-        this.monitorUserChanges();
-        // const userId = this.authService.getUser()?.id;
-        // if (!userId) {
-        //     this.alertService.displayAlert('error', 'Usuario no encontrado...', 'center', 'top', ['error-snackbar']);
-        //     console.error('User ID not found');
-        //     return;
-        // }
 
+    redeemRewards(reward: IReward): void {
         this.redeemPoint(`redeem/${reward.id}`, { page: this.search.page, size: this.search.size }).subscribe({
             next: (response: any) => {
-                console.log('My rewards response:', response);
-                console.log('My rewards data:', response.data);
-                
-                if (!response.data || response.data.length === 0) {
-                    this.clearRewards();
-                    return;
-                }
-                
-            this.search = { ...this.search, ...response.meta };
-            this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
-            this.rewardListSignal.set(response.data);
-             this.alertService.displayAlert('success', 'Recompensa Redimida de forma exitosa exitosamente', 'center', 'top', ['success-snackbar']);
+                this.alertService.displayAlert('success', 'Recompensa eliminada exitosamente', 'center', 'top', ['success-snackbar']);
+                this.getAllActiveRewards(); 
             },
             error: (error: any) => {
                 console.error('Error fetching my rewards:', error);
