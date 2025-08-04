@@ -1,59 +1,30 @@
-<div class="pagination-container">
-  <div class="pagination-info">
-    <span>{{ getPaginationInfo() }}</span>
-    <select 
-      *ngIf="showPageSizeSelector"
-      (change)="onPageSizeSelectChange($event)" 
-      [value]="pageSize" 
-      class="page-size-select">
-      <option *ngFor="let size of pageSizeOptions" [value]="size">
-        {{ size }} por página
-      </option>
-    </select>
-  </div>
-
-  <nav aria-label="pagination" *ngIf="totalPages > 1">
+<div class="d-flex align-items-center justify-content-center my-3">
+  <nav aria-label="pagination">
     <ul class="pagination">
       <li class="page-item">
-        <button 
-          (click)="onPage(0)" 
-          [disabled]="currentPage === 0" 
-          class="page-link">
+        <button (click)="onPage(1)" [disabled]="service.search.pageNumber === 1" class="page-link" >
           <i class="fas fa-angles-left"></i>
         </button>
       </li>
       <li class="page-item">
-        <button 
-          (click)="onPage(currentPage - 1)" 
-          [disabled]="currentPage === 0" 
-          class="page-link">
+        <button (click)="onPage(service.search.pageNumber - 1)" [disabled]="service.search.pageNumber === 1" class="page-link">
           <i class="fas fa-angle-left"></i>
         </button>
       </li>
-      
-      <li class="page-item" *ngFor="let page of getVisiblePages()">
-        <button 
-          [disabled]="currentPage === page" 
-          (click)="onPage(page)" 
-          class="page-link"
-          [class.active]="currentPage === page">
-          {{ page + 1 }}
-        </button>
-      </li>
-      
+      @for (item of service.totalItems; track $index) {
+        @if (service.search.pageNumber - 2 <= item && item <= service.search.pageNumber + 2) {
+          <li class="page-item">
+            <button [disabled]="service.search.pageNumber === item" (click)="onPage(item)" class="page-link">{{item}}</button>
+          </li>
+        }
+      }
       <li class="page-item">
-        <button 
-          (click)="onPage(currentPage + 1)" 
-          [disabled]="currentPage === totalPages - 1" 
-          class="page-link">
+        <button (click)="onPage(service.search.pageNumber + 1)" [disabled]="service.search.pageNumber === service.totalItems.length" class="page-link">
           <i class="fas fa-angle-right"></i>
         </button>
       </li>
       <li class="page-item">
-        <button 
-          (click)="onPage(totalPages - 1)" 
-          [disabled]="currentPage === totalPages - 1" 
-          class="page-link">
+        <button (click)="onPage(service.totalItems.length)" [disabled]="service.search.pageNumber === service.totalItems.length" class="page-link">
           <i class="fas fa-angles-right"></i>
         </button>
       </li>

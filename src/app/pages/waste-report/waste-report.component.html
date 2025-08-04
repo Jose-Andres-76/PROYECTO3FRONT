@@ -23,12 +23,7 @@
 
   <div class="pagination-section">
     <app-pagination 
-      [currentPage]="pagination.page || 0"
-      [totalPages]="pagination.totalPages || 0"
-      [pageSize]="pagination.size || 10"
-      [totalElements]="pagination.totalElements || 0"
-      (pageChange)="onPageChange($event)"
-      (pageSizeChange)="onPageSizeChange($event)">
+      [service]="wasteReportService">
     </app-pagination>
   </div>
 </div>
