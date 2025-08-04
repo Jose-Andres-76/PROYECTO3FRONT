@@ -8,6 +8,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { UserService } from '../../services/user.service';
 import { RouterModule } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { GameIntegrationService } from '../../services/game-integration.service';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class EcoTriviaComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private userService = inject(UserService);
+  private gameIntegrationService = inject(GameIntegrationService);
   private userId: number | null = null;
   private route = inject(ActivatedRoute);
 
@@ -194,18 +196,23 @@ export class EcoTriviaComponent implements OnInit {
   }
 
   savePoints(reto: IChallenge): void {
-    if (!reto.points || !this.userId) return;
+    if (!reto.id || !this.userId) return;
 
-    const user = this.authService.getUser();
-    const newPoints = (user?.points ?? 0) + reto.points;
+    const cantidadPreguntas = this.questions[this.ecoTriviaChallenges.indexOf(reto)].length;
+    const score = this.scores[this.ecoTriviaChallenges.indexOf(reto)];
 
-    this.userService.updatePoints(this.userId, newPoints).subscribe({
-      next: () => {
-        this.userService.getUserById(this.userId!).subscribe({
-          next: (updatedUser) => {
-            this.userPoints = updatedUser.points ?? 0;
-          }
-        });
+    this.gameIntegrationService.processEcoTriviaResult(reto.id, score, cantidadPreguntas).subscribe({
+      next: (result) => {
+        if (result?.success) {
+          this.userService.getUserById(this.userId!).subscribe({
+            next: (updatedUser) => {
+              this.userPoints = updatedUser.data?.points ?? 0;
+            }
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error processing trivia result:', error);
       }
     });
   }
