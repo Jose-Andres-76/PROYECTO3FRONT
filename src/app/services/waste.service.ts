@@ -18,6 +18,11 @@ export class WasteService extends BaseService<IWaste> {
     return this.findAllWithParams(params);
   }
 
+  public getAllWasteForFiltering(): Observable<IResponse<IWaste[]>> {
+    const params = { page: 1, size: 1000 };
+    return this.findAllWithParams(params);
+  }
+
   public getWasteById(id: number): Observable<IResponse<IWaste>> {
     return this.find(id);
   }

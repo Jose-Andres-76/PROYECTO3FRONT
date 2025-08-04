@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WasteSearchBarComponent, WasteFilters } from '../../components/waste/waste-search-bar/waste-search-bar.component';
 import { WasteTableComponent } from '../../components/waste/waste-table/waste-table.component';
@@ -6,6 +6,7 @@ import { WasteStatsComponent } from '../../components/waste/waste-stats/waste-st
 import { PaginationComponent } from '../../components/pagination/pagination.component';
 import { IWaste } from '../../interfaces';
 import { WasteService } from '../../services/waste.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-waste-report',
@@ -20,11 +21,17 @@ import { WasteService } from '../../services/waste.service';
   templateUrl: './waste-report.component.html',
   styleUrls: ['./waste-report.component.scss']
 })
-export class WasteReportComponent implements OnInit {
+export class WasteReportComponent implements OnInit, OnDestroy {
   wasteData: IWaste[] = [];
   allWasteData: IWaste[] = [];
+  filteredData: IWaste[] = [];
   loading = false;
   filters: WasteFilters = {};
+  isFiltered = false;
+  
+  private destroy$ = new Subject<void>();
+  private readonly DEFAULT_PAGE_SIZE = 10;
+  private readonly MAX_FILTER_SIZE = 1000;
   
   wasteReportService = {
     search: {
@@ -35,10 +42,10 @@ export class WasteReportComponent implements OnInit {
         this.pageNumber = value; 
       },
       pageNumber: 1,
-      size: 10
+      size: this.DEFAULT_PAGE_SIZE
     },
     totalItems: [] as number[],
-    getAll: () => this.loadWasteData()
+    getAll: () => this.handlePageChange()
   };
 
   constructor(private wasteService: WasteService) {}
@@ -47,31 +54,63 @@ export class WasteReportComponent implements OnInit {
     this.loadWasteData();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   onFiltersChange(filters: WasteFilters): void {
     this.filters = filters;
     this.wasteReportService.search.page = 1;
-    this.loadWasteData();
+    this.isFiltered = Object.keys(filters).length > 0;
+    
+    this.isFiltered ? this.loadAllDataForFiltering() : this.loadWasteData();
+  }
+
+  private handlePageChange(): void {
+    this.isFiltered ? this.applyLocalPagination() : this.loadWasteData();
   }
 
   private loadWasteData(): void {
+    if (this.loading) return; 
+    
     this.loading = true;
     const { page, size } = this.wasteReportService.search;
     
-    this.wasteService.getAllWaste(page - 1, size).subscribe({
-      next: (response: any) => {
-        const { wasteArray, totalPages } = this.parseResponse(response);
-        this.allWasteData = wasteArray;
-        this.applyLocalFilters();
-        this.wasteReportService.totalItems = Array.from({length: totalPages}, (_, i) => i + 1);
-        this.loading = false;
-      },
-      error: () => {
-        this.wasteData = [];
-        this.allWasteData = [];
-        this.wasteReportService.totalItems = [];
-        this.loading = false;
-      }
-    });
+    this.wasteService.getAllWaste(page - 1, size)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          const { wasteArray, totalPages } = this.parseResponse(response);
+          this.allWasteData = wasteArray;
+          
+          if (!this.isFiltered) {
+            this.wasteData = wasteArray;
+            this.wasteReportService.totalItems = this.generatePageArray(totalPages);
+          }
+          
+          this.loading = false;
+        },
+        error: () => this.handleError()
+      });
+  }
+
+  private loadAllDataForFiltering(): void {
+    if (this.loading) return;
+    
+    this.loading = true;
+    
+    this.wasteService.getAllWasteForFiltering()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          const { wasteArray } = this.parseResponse(response);
+          this.allWasteData = wasteArray;
+          this.applyLocalFilters();
+          this.loading = false;
+        },
+        error: () => this.handleError()
+      });
   }
 
   private parseResponse(response: any): { wasteArray: IWaste[], totalPages: number } {
@@ -97,33 +136,52 @@ export class WasteReportComponent implements OnInit {
   }
 
   private applyLocalFilters(): void {
-    const hasFilters = this.filters && Object.keys(this.filters).length > 0;
-    
-    if (!hasFilters) {
-      this.wasteData = this.allWasteData;
-      return;
-    }
+    this.filteredData = this.allWasteData.filter(waste => this.matchesFilters(waste));
+    this.applyLocalPagination();
+  }
 
-    this.wasteData = this.allWasteData.filter(waste => {
-      const { search, userId, productType, startDate, endDate } = this.filters;
+  private matchesFilters(waste: IWaste): boolean {
+    const { search, userId, productType, startDate, endDate } = this.filters;
+    
+    if (search && !waste.answer?.toLowerCase().includes(search.toLowerCase())) return false;
+    if (userId && waste.userId !== userId && waste.user?.id !== userId) return false;
+    if (productType && waste.productType !== productType) return false;
+    
+    if (startDate || endDate) {
+      if (!waste.createdAt) return false;
+      const wasteDate = new Date(waste.createdAt);
       
-      if (search && !waste.answer?.toLowerCase().includes(search.toLowerCase())) return false;
-      if (userId && waste.userId !== userId && waste.user?.id !== userId) return false;
-      if (productType && waste.productType !== productType) return false;
-      
-      if (startDate || endDate) {
-        if (!waste.createdAt) return false;
-        const wasteDate = new Date(waste.createdAt);
-        
-        if (startDate && wasteDate < new Date(startDate)) return false;
-        if (endDate) {
-          const end = new Date(endDate);
-          end.setHours(23, 59, 59, 999);
-          if (wasteDate > end) return false;
-        }
+      if (startDate && wasteDate < new Date(startDate)) return false;
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        if (wasteDate > end) return false;
       }
-      
-      return true;
-    });
+    }
+    
+    return true;
+  }
+
+  private applyLocalPagination(): void {
+    const { page, size } = this.wasteReportService.search;
+    const dataToUse = this.isFiltered ? this.filteredData : this.allWasteData;
+    
+    const startIndex = (page - 1) * size;
+    this.wasteData = dataToUse.slice(startIndex, startIndex + size);
+    
+    const totalPages = Math.ceil(dataToUse.length / size) || 1;
+    this.wasteReportService.totalItems = this.generatePageArray(totalPages);
+  }
+
+  private generatePageArray(totalPages: number): number[] {
+    return Array.from({length: totalPages}, (_, i) => i + 1);
+  }
+
+  private handleError(): void {
+    this.wasteData = [];
+    this.allWasteData = [];
+    this.filteredData = [];
+    this.wasteReportService.totalItems = [];
+    this.loading = false;
   }
 }
