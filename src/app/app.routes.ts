@@ -254,7 +254,7 @@ export const routes: Routes = [
             IRoleType.son,
           ],
           name: 'Juego Reciclaje',
-          showInSidebar: true
+          showInSidebar: false
         }
       },
       {
