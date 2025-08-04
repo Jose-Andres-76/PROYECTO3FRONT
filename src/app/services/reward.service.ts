@@ -114,28 +114,7 @@ export class RewardService extends BaseService<IReward> {
     }
 
 
-    // getAll() {
-    //     console.log('Fetching all rewards...');
 
-    //     if (!this.authService.isAdmin()) {
-    //         this.getMyRewards();
-    //         return;
-    //     }
-
-    //     this.findAllWithParams({ page: this.search.page, size: this.search.size }).subscribe({
-    //         next: (response: any) => {
-    //             console.log('All rewards response:', response);
-    //             console.log('All rewards data:', response.data);
-    //             this.search = { ...this.search, ...response.meta };
-    //             this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
-    //             this.rewardListSignal.set(response.data);
-    //         },
-    //         error: (error: any) => {
-    //             console.error('Error fetching all rewards:', error);
-    //             this.alertService.displayAlert('error', 'No se ha podido traer recompensas..', 'center', 'top', ['error-snackbar']);
-    //         }
-    //     });     
-    // }
 
     save(reward: IReward){
         this.add(reward).subscribe({
@@ -175,6 +154,40 @@ export class RewardService extends BaseService<IReward> {
             error: (error: any) => {
                 console.error('Error deleting reward:', error);
                 this.alertService.displayAlert('error', 'No se ha podido eliminar recompensa', 'center', 'top', ['error-snackbar']);
+            }
+        });
+    }
+    
+
+    redeemRewards(reward:IReward ): void {
+        console.log('Fetching my rewards...');
+
+        this.monitorUserChanges();
+        // const userId = this.authService.getUser()?.id;
+        // if (!userId) {
+        //     this.alertService.displayAlert('error', 'Usuario no encontrado...', 'center', 'top', ['error-snackbar']);
+        //     console.error('User ID not found');
+        //     return;
+        // }
+
+        this.redeemPoint(`redeem/${reward.id}`, { page: this.search.page, size: this.search.size }).subscribe({
+            next: (response: any) => {
+                console.log('My rewards response:', response);
+                console.log('My rewards data:', response.data);
+                
+                if (!response.data || response.data.length === 0) {
+                    this.clearRewards();
+                    return;
+                }
+                
+            this.search = { ...this.search, ...response.meta };
+            this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
+            this.rewardListSignal.set(response.data);
+             this.alertService.displayAlert('success', 'Recompensa Redimida de forma exitosa exitosamente', 'center', 'top', ['success-snackbar']);
+            },
+            error: (error: any) => {
+                console.error('Error fetching my rewards:', error);
+                this.alertService.displayAlert('error', 'No se ha podido Redimir su recompensas..', 'center', 'top', ['error-snackbar']);
             }
         });
     }

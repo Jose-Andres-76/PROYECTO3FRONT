@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -13,7 +13,7 @@ import { IReward } from '../../interfaces';
   templateUrl: './eco-rewards.component.html',
   styleUrls: ['./eco-rewards.component.scss'],
 })
-export class EcoRewardsComponent {
+export class EcoRewardsComponent implements OnInit {
   private rewardService = inject(RewardService);
 
   rewards = this.rewardService.rewards$;
@@ -22,11 +22,17 @@ export class EcoRewardsComponent {
     this.rewards().reduce((total, r) => total + (r.cost || 0), 0)
   );
 
-  constructor() {
+  // constructor() {
+  //   this.rewardService.getAllActiveRewards();
+  // }
+  ngOnInit(): void {
     this.rewardService.getAllActiveRewards();
   }
   claimReward(reward: IReward) {
+
+    this.rewardService.redeemRewards(reward)
   console.log(`Recompensa seleccionada: ${reward.description}`);
+  this.ngOnInit();
 }
 
 }
