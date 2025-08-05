@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 
 import { RewardService } from '../../services/reward.service';
 import { IReward } from '../../interfaces';
+import { AuthService } from '../../services/auth.service';
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
   selector: 'app-eco-rewards',
@@ -15,24 +17,21 @@ import { IReward } from '../../interfaces';
 })
 export class EcoRewardsComponent implements OnInit {
   private rewardService = inject(RewardService);
-
+  private authService = inject(AuthService);
+  private profileService = inject(ProfileService);
+  
   rewards = this.rewardService.rewards$;
+  coins = computed(() => this.profileService.user$()?.points || 0);
 
-  coins = computed(() =>
-    this.rewards().reduce((total, r) => total + (r.cost || 0), 0)
-  );
-
-  // constructor() {
-  //   this.rewardService.getAllActiveRewards();
-  // }
   ngOnInit(): void {
+    // Refresh user data to get latest points
+    this.profileService.getUserInfoSignal();
     this.rewardService.getAllActiveRewards();
   }
-  claimReward(reward: IReward) {
 
-    this.rewardService.redeemRewards(reward)
-  console.log(`Recompensa seleccionada: ${reward.description}`);
-  this.ngOnInit();
-}
-
+  claimReward(reward: IReward): void {
+    this.rewardService.redeemRewards(reward);
+    console.log(`Recompensa canjeada: ${reward.description}`);
+    // Service handles the refresh automatically
+  }
 }

@@ -4,6 +4,7 @@ import { ISearch, IReward } from '../interfaces';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { AlertService } from './alert.service';
 import { AuthService } from './auth.service';
+import { ProfileService } from './profile.service';
 
 @Injectable({
     providedIn: 'root',
@@ -12,6 +13,7 @@ export class RewardService extends BaseService<IReward> {
     protected override source: string = 'rewards';
     private rewardListSignal = signal<IReward[]>([]);
     private authService: AuthService = inject(AuthService);
+    private profileService: ProfileService = inject(ProfileService);
     private currentUserId: number | null = null;
 
     get rewards$() {
@@ -164,8 +166,10 @@ export class RewardService extends BaseService<IReward> {
     redeemRewards(reward: IReward): void {
         this.redeemPoint(`redeem/${reward.id}`, { page: this.search.page, size: this.search.size }).subscribe({
             next: (response: any) => {
-                this.alertService.displayAlert('success', 'Recompensa eliminada exitosamente', 'center', 'top', ['success-snackbar']);
+                this.alertService.displayAlert('success', 'Recompensa reclamada exitosamente', 'center', 'top', ['success-snackbar']);
+                // Refresh both rewards and user data to show updated points
                 this.getAllActiveRewards(); 
+                this.profileService.getUserInfoSignal(); // Update user points
             },
             error: (error: any) => {
                 console.error('Error fetching my rewards:', error);
