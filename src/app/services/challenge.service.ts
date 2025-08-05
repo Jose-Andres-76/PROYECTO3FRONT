@@ -5,6 +5,7 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AlertService } from './alert.service';
 import { AuthService } from './auth.service';
+import { ProfileService } from './profile.service';
 
 @Injectable({
     providedIn: 'root',
@@ -14,6 +15,7 @@ export class ChallengeService extends BaseService<IChallenge> {
     private challengeListSignal = signal<IChallenge[]>([]);
     private authService: AuthService = inject(AuthService);
     private currentUserId: number | null = null;
+    private profileService = inject(ProfileService);
 
     get challenges$() {
         return this.challengeListSignal;
@@ -83,28 +85,40 @@ export class ChallengeService extends BaseService<IChallenge> {
         });
     }
 
-    // getAll() {
-    //     console.log('Fetching all challenges...');
+    getAllActiveChallenges() {
+        console.log('Fetching my challenges...');
 
-    //     if (!this.authService.isAdmin()) {
-    //         this.getMyChallenges();
-    //         return;
-    //     }
+        this.monitorUserChanges();
+        const userId = this.authService.getUser()?.id;
+        if (!userId) {
+            this.alertService.displayAlert('error', 'Usuario no encontrado...', 'center', 'top', ['error-snackbar']);
+            console.error('User ID not found');
+            return;
+        }
 
-    //     this.findAllWithParams({ page: this.search.page, size: this.search.size }).subscribe({
-    //         next: (response: any) => {
-    //             console.log('All challenges response:', response);
-    //             console.log('All challenges data:', response.data);
-    //             this.search = { ...this.search, ...response.meta };
-    //             this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
-    //             this.challengeListSignal.set(response.data);
-    //         },
-    //         error: (error: any) => {
-    //             console.error('Error fetching all challenges:', error);
-    //             this.alertService.displayAlert('error', 'No se han podido traer los desafíos...', 'center', 'top', ['error-snackbar']);
-    //         }
-    //     });     
-    // }
+        this.findAllWithParamsAndCustomSource(`active/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
+            next: (response: any) => {
+                console.log('My Challenges response:', response);
+                console.log('My Challenges data:', response.data);
+                
+                if (!response.data || response.data.length === 0) {
+                    this.clearChallenges();
+                    return;
+                }
+                
+            this.search = { ...this.search, ...response.meta };
+            this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
+            this.challengeListSignal.set(response.data);
+            this.profileService.getUserInfoSignal(); // Update user points
+            },
+            error: (error: any) => {
+                console.error('Error fetching my Challenges:', error);
+                this.alertService.displayAlert('error', 'No se ha podido traer los desafíos..', 'center', 'top', ['error-snackbar']);
+            }
+        });
+    }
+
+   
 
     save(challenge: IChallenge) {
         this.add(challenge).subscribe({

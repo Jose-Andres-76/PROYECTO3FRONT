@@ -4,6 +4,7 @@ import { ISearch, IReward } from '../interfaces';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { AlertService } from './alert.service';
 import { AuthService } from './auth.service';
+import { ProfileService } from './profile.service';
 
 @Injectable({
     providedIn: 'root',
@@ -12,6 +13,7 @@ export class RewardService extends BaseService<IReward> {
     protected override source: string = 'rewards';
     private rewardListSignal = signal<IReward[]>([]);
     private authService: AuthService = inject(AuthService);
+    private profileService: ProfileService = inject(ProfileService);
     private currentUserId: number | null = null;
 
     get rewards$() {
@@ -81,28 +83,40 @@ export class RewardService extends BaseService<IReward> {
         });
     }
 
-    // getAll() {
-    //     console.log('Fetching all rewards...');
+     getAllActiveRewards(): void {
+        console.log('Fetching my rewards...');
 
-    //     if (!this.authService.isAdmin()) {
-    //         this.getMyRewards();
-    //         return;
-    //     }
+        this.monitorUserChanges();
+        const userId = this.authService.getUser()?.id;
+        if (!userId) {
+            this.alertService.displayAlert('error', 'Usuario no encontrado...', 'center', 'top', ['error-snackbar']);
+            console.error('User ID not found');
+            return;
+        }
 
-    //     this.findAllWithParams({ page: this.search.page, size: this.search.size }).subscribe({
-    //         next: (response: any) => {
-    //             console.log('All rewards response:', response);
-    //             console.log('All rewards data:', response.data);
-    //             this.search = { ...this.search, ...response.meta };
-    //             this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
-    //             this.rewardListSignal.set(response.data);
-    //         },
-    //         error: (error: any) => {
-    //             console.error('Error fetching all rewards:', error);
-    //             this.alertService.displayAlert('error', 'No se ha podido traer recompensas..', 'center', 'top', ['error-snackbar']);
-    //         }
-    //     });     
-    // }
+        this.findAllWithParamsAndCustomSource(`active/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
+            next: (response: any) => {
+                console.log('My rewards response:', response);
+                console.log('My rewards data:', response.data);
+                
+                if (!response.data || response.data.length === 0) {
+                    this.clearRewards();
+                    return;
+                }
+                
+            this.search = { ...this.search, ...response.meta };
+            this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
+            this.rewardListSignal.set(response.data);
+            },
+            error: (error: any) => {
+                console.error('Error fetching my rewards:', error);
+                this.alertService.displayAlert('error', 'No se ha podido traer recompensas..', 'center', 'top', ['error-snackbar']);
+            }
+        });
+    }
+
+
+
 
     save(reward: IReward){
         this.add(reward).subscribe({
@@ -142,6 +156,24 @@ export class RewardService extends BaseService<IReward> {
             error: (error: any) => {
                 console.error('Error deleting reward:', error);
                 this.alertService.displayAlert('error', 'No se ha podido eliminar recompensa', 'center', 'top', ['error-snackbar']);
+            }
+        });
+    }
+    
+
+
+
+    redeemRewards(reward: IReward): void {
+        this.redeemPoint(`redeem/${reward.id}`, { page: this.search.page, size: this.search.size }).subscribe({
+            next: (response: any) => {
+                this.alertService.displayAlert('success', 'Recompensa reclamada exitosamente', 'center', 'top', ['success-snackbar']);
+                // Refresh both rewards and user data to show updated points
+                this.getAllActiveRewards(); 
+                this.profileService.getUserInfoSignal(); // Update user points
+            },
+            error: (error: any) => {
+                console.error('Error fetching my rewards:', error);
+                this.alertService.displayAlert('error', 'No se ha podido Redimir su recompensas..', 'center', 'top', ['error-snackbar']);
             }
         });
     }

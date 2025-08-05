@@ -65,4 +65,8 @@ export class BaseService<T> {
     public editCustomSource2(customUrlSource: string, data: {}): Observable<IResponse<T>> {
     return this.http.patch<IResponse<T>>(`${this.source}${customUrlSource ? '/' + customUrlSource: ''}`, data);
   }
+
+   public redeemPoint(customUrlSource: string, params: any = {}): Observable<IResponse<T[]>> {
+    return this.http.put<IResponse<T[]>>(`${this.source}/${customUrlSource}`, {params: this.buildUrlParams(params)});
+  }
 }
