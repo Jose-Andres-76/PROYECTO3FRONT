@@ -1,10 +1,11 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { ChallengeService } from '../../services/challenge.service';
 import { IChallenge } from '../../interfaces';
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
   selector: 'app-eco-challenges',
@@ -13,21 +14,23 @@ import { IChallenge } from '../../interfaces';
   templateUrl: './eco-challenges.component.html',
   styleUrls: ['./eco-challenges.component.scss'],
 })
-export class EcoChallengesComponent {
+export class EcoChallengesComponent implements OnInit{
   private challengeService = inject(ChallengeService);
+  private profileService = inject(ProfileService);
   getGameType(challenge: IChallenge): string {
   return (challenge as any).game?.typesOfGames || 'N/A';
 }
-  challenges = this.challengeService.challenges$;
 
-  coins = computed(() =>
-    this.challenges()
-      .filter((c) => c.challengeStatus)
-      .reduce((total, c) => total + (c.points || 0), 0)
-  );
+coins = computed(() => this.profileService.user$()?.points || 0);
+challenges = this.challengeService.challenges$;
 
+
+
+  ngOnInit(): void {
+    this.profileService.getUserInfoSignal();
+    this.challengeService.getAllActiveChallenges();
+  }
   constructor() {
-    this.challengeService.getMyChallenges();
   }
 }
 
