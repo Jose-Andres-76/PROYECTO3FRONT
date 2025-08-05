@@ -316,22 +316,23 @@ export class UserFormComponent {
       this.isSubmitting = false;
       
       if (!this.isEditMode) {
-          this.userForm.patchValue({
-              id: '',
-              name: '',
-              lastname: '',
-              email: '',
-              age: 0,
-              password: '',
-              points: 0,
-              roleId: ''
-          });
-          this.user = {};
+        this.userForm.patchValue({
+          id: '',
+          name: '',
+          lastname: '',
+          email: '',
+          age: 0,
+          password: '',
+          points: 0,
+          roleId: ''
+        });
+        this.user = {};
       } else {
-          this.userForm.patchValue({
-              password: '',
-              points: this.userForm.get('points')?.value || 0
-          });
+        // In edit mode, don't reset password to empty
+        this.userForm.patchValue({
+          // Don't reset password field in edit mode
+          points: this.userForm.get('points')?.value || 0
+        });
       }
       
       this.setupFormValidators();
