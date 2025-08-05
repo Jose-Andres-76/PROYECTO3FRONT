@@ -9,6 +9,8 @@ import { ModalService } from '../../services/modal.service';
 import { RoleService } from '../../services/role.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { IUser } from '../../interfaces';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-users',
@@ -18,7 +20,9 @@ import { IUser } from '../../interfaces';
     PaginationComponent,
     ModalComponent,
     LoaderComponent,
-    UserFormComponent
+    UserFormComponent,
+    CommonModule,
+    FormsModule
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
@@ -32,6 +36,14 @@ export class UsersComponent implements OnInit {
   @ViewChild(UserFormComponent) public userFormComponent!: UserFormComponent;
   
   public fb: FormBuilder = inject(FormBuilder);
+  
+  // Search functionality
+  public searchEmail: string = '';
+  public searchedUser: IUser | null = null;
+  public isSearching: boolean = false;
+  public hasSearched: boolean = false;
+  public searchError: string = '';
+  
   userForm = this.fb.group({
     id: [''],
     email: ['', [Validators.required, Validators.email]],
@@ -56,6 +68,45 @@ export class UsersComponent implements OnInit {
     this.roleService.getAll(); 
   }
 
+  // Search methods
+  searchUserByEmail() {
+    if (!this.searchEmail.trim()) {
+      this.clearSearch();
+      return;
+    }
+
+    this.isSearching = true;
+    this.searchError = '';
+    
+    this.userService.getUserByEmail(this.searchEmail.trim()).subscribe({
+      next: (response: any) => {
+        this.searchedUser = response.data || response;
+        this.hasSearched = true;
+        this.isSearching = false;
+      },
+      error: (err: any) => {
+        this.searchedUser = null;
+        this.hasSearched = true;
+        this.isSearching = false;
+        this.searchError = 'No hay usuarios con este email';
+      }
+    });
+  }
+
+  clearSearch() {
+    this.searchEmail = '';
+    this.searchedUser = null;
+    this.hasSearched = false;
+    this.searchError = '';
+    this.isSearching = false;
+  }
+
+  onSearchInputChange() {
+    if (!this.searchEmail.trim()) {
+      this.clearSearch();
+    }
+  }
+
   openAddUserModal() {
     this.isEditMode = false;
     this.resetForm();
@@ -69,7 +120,6 @@ export class UsersComponent implements OnInit {
   }
 
   callEdition(user: IUser) {
-   
     this.userForm.controls['id'].setValue(user.id ? JSON.stringify(user.id) : '');
     this.userForm.controls['email'].setValue(user.email ? user.email : '');
     this.userForm.controls['name'].setValue(user.name ? user.name : '');
@@ -81,7 +131,6 @@ export class UsersComponent implements OnInit {
       email: user.email || '',
       name: user.name || '',
       lastname: user.lastname || '',
-      password: '', 
       points: user.points || 0,
       age: user.age || 0,
       roleId: user.role?.id?.toString() || '' 
