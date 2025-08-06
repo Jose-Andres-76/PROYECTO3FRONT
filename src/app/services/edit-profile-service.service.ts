@@ -28,6 +28,7 @@ export class EditProfileServiceService extends BaseService<IUser> {
     age: number;
     points: number;
     password: string;
+    currentPassword: string;
     image: File;
   }): Observable<any> {
     const formData = new FormData();
@@ -36,6 +37,7 @@ export class EditProfileServiceService extends BaseService<IUser> {
     formData.append('age', profileData.age.toString());
     formData.append('points', profileData.points.toString());
     formData.append('password', profileData.password.toString());
+    formData.append('passwordConfirmation', profileData.currentPassword.toString());
     formData.append('image', profileData.image);
 
     const url = `${this.source}/editProfilePicture/${userId}`;
@@ -48,9 +50,19 @@ export class EditProfileServiceService extends BaseService<IUser> {
    * @param userId - The ID of the user to update
    * @param user - User object with updated profile data
    */
-  updateProfile(userId: number, user: IUser): Observable<any> {
+  updateProfile(userId: number, user: IUser & { currentPassword?: string }): Observable<any> {
     const url = `${this.source}/editProfile/${userId}`;
-    return this.http.put(url, user);
+    
+    // Map currentPassword to passwordConfirmation for backend compatibility
+    const userToUpdate = {
+      ...user,
+      passwordConfirmation: user.currentPassword || null
+    };
+    
+    // Remove currentPassword as it's not expected by backend
+    delete userToUpdate.currentPassword;
+    
+    return this.http.put(url, userToUpdate);
   }
 
   /**
@@ -63,6 +75,7 @@ export class EditProfileServiceService extends BaseService<IUser> {
     points: number;
     password: string;
     image: File;
+    currentPassword: string;
   }) {
   
     this.updateProfilePicture(userId, profileData).subscribe({
@@ -87,7 +100,7 @@ export class EditProfileServiceService extends BaseService<IUser> {
   /**
    * Update profile with success/error handling
    */
-  saveProfile(userId: number, user: IUser) {
+  saveProfile(userId: number, user: IUser & { currentPassword?: string }) {
     this.updateProfile(userId, user).subscribe({
       next: (response: any) => {
         this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);

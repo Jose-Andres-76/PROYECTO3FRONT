@@ -26,6 +26,7 @@ export interface IUser {
   updatedAt?: string;
   authorities?: IAuthority[];
   role?: IRole
+  confirmPassword?: string;
 }
 
 export interface IAuthority {
