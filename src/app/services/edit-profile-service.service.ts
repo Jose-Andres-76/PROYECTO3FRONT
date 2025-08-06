@@ -50,19 +50,45 @@ export class EditProfileServiceService extends BaseService<IUser> {
    * @param userId - The ID of the user to update
    * @param user - User object with updated profile data
    */
-  updateProfile(userId: number, user: IUser & { currentPassword?: string }): Observable<any> {
+  // updateProfile(userId: number, user: IUser & { currentPassword?: string }): Observable<any> {
+  //   const url = `${this.source}/editProfile/${userId}`;
+    
+  //   // Map currentPassword to passwordConfirmation for backend compatibility
+  //   const userToUpdate = {
+  //     ...user,
+  //     passwordConfirmation: user.currentPassword || null
+  //   };
+    
+  //   // Remove currentPassword as it's not expected by backend
+  //   delete userToUpdate.currentPassword;
+    
+  //   return this.http.put(url, userToUpdate);
+  // }
+
+   /**
+   * Update user profile without image using PUT with JSON data
+   * @param userId - The ID of the user to update
+   * @param user - User object with updated profile data
+   */
+   updateProfileNoPic(userId: number, profileData: {
+    name: string;
+    lastname: string;
+    age: number;
+    points: number;
+    password: string;
+    currentPassword: string;
+  }): Observable<any> {
+    const formData = new FormData();
+    formData.append('name', profileData.name);
+    formData.append('lastname', profileData.lastname);
+    formData.append('age', profileData.age.toString());
+    formData.append('points', profileData.points.toString());
+    formData.append('password', profileData.password.toString());
+    formData.append('passwordConfirmation', profileData.currentPassword.toString());
+
     const url = `${this.source}/editProfile/${userId}`;
     
-    // Map currentPassword to passwordConfirmation for backend compatibility
-    const userToUpdate = {
-      ...user,
-      passwordConfirmation: user.currentPassword || null
-    };
-    
-    // Remove currentPassword as it's not expected by backend
-    delete userToUpdate.currentPassword;
-    
-    return this.http.put(url, userToUpdate);
+    return this.http.patch(url, formData);
   }
 
   /**
@@ -97,25 +123,56 @@ export class EditProfileServiceService extends BaseService<IUser> {
     });
   }
 
-  /**
-   * Update profile with success/error handling
-   */
-  saveProfile(userId: number, user: IUser & { currentPassword?: string }) {
-    this.updateProfile(userId, user).subscribe({
+  saveProfileNormal(userId: number, profileData: {
+    name: string;
+    lastname: string;
+    age: number;
+    points: number;
+    password: string;
+    currentPassword: string;
+  }) {
+  
+    this.updateProfileNoPic(userId, profileData).subscribe({
       next: (response: any) => {
         this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
+        // Refresh the page to update all components including topbar
         if (response.data) {
           this.authService.user = response.data;
           this.authService.save();
         }
-         setTimeout(() => {
+        setTimeout(() => {
           window.location.reload();
         }, 1500); // Wait for alert to be visible before refreshing
       },
       error: (err: any) => {
         this.alertService.displayAlert('error', 'Ocurrió un error actualizando el perfil', 'center', 'top', ['error-snackbar']);
-        console.error('Error updating profile:', err);
+        console.error('Error updating profile picture:', err);
       }
     });
   }
+
+
+  
+
+  /**
+   * Update profile with success/error handling
+   */
+  // saveProfile(userId: number, user: IUser & { currentPassword?: string }) {
+  //   this.updateProfile(userId, user).subscribe({
+  //     next: (response: any) => {
+  //       this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
+  //       if (response.data) {
+  //         this.authService.user = response.data;
+  //         this.authService.save();
+  //       }
+  //        setTimeout(() => {
+  //         window.location.reload();
+  //       }, 1500);
+  //     },
+  //     error: (err: any) => {
+  //       this.alertService.displayAlert('error', 'Ocurrió un error actualizando el perfil', 'center', 'top', ['error-snackbar']);
+  //       console.error('Error updating profile:', err);
+  //     }
+  //   });
+  // }
 }

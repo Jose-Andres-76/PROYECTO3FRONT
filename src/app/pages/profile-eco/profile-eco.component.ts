@@ -134,8 +134,13 @@ export class ProfileEcoComponent implements OnInit {
         };
         this.editProfileService.saveProfilePicture(user.id, profileData);
       } else {
-        const updatedUser = baseProfileData as IUser & { currentPassword?: string };
-        this.editProfileService.saveProfile(user.id, updatedUser);
+
+        const profileDataNoPicture = {
+          ...baseProfileData,
+          password: formData.password || '',
+          currentPassword: formData.currentPassword || '' };
+        // const updatedUser = baseProfileData as IUser & { currentPassword?: string };
+        this.editProfileService.saveProfileNormal(user.id, profileDataNoPicture);
       }
     } else {
       // Mark all fields as touched to show validation errors
