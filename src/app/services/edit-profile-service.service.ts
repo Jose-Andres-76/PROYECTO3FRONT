@@ -17,11 +17,6 @@ export class EditProfileServiceService extends BaseService<IUser> {
     super();
   }
 
-  /**
-   * Update user profile picture and basic info using PATCH with multipart form data
-   * @param userId - The ID of the user to update
-   * @param profileData - Object containing name, lastname, age, points, and image file
-   */
   updateProfilePicture(userId: number, profileData: {
     name: string;
     lastname: string;
@@ -45,31 +40,7 @@ export class EditProfileServiceService extends BaseService<IUser> {
     return this.http.patch(url, formData);
   }
 
-  /**
-   * Update user profile without image using PUT with JSON data
-   * @param userId - The ID of the user to update
-   * @param user - User object with updated profile data
-   */
-  // updateProfile(userId: number, user: IUser & { currentPassword?: string }): Observable<any> {
-  //   const url = `${this.source}/editProfile/${userId}`;
-    
-  //   // Map currentPassword to passwordConfirmation for backend compatibility
-  //   const userToUpdate = {
-  //     ...user,
-  //     passwordConfirmation: user.currentPassword || null
-  //   };
-    
-  //   // Remove currentPassword as it's not expected by backend
-  //   delete userToUpdate.currentPassword;
-    
-  //   return this.http.put(url, userToUpdate);
-  // }
-
-   /**
-   * Update user profile without image using PUT with JSON data
-   * @param userId - The ID of the user to update
-   * @param user - User object with updated profile data
-   */
+ 
    updateProfileNoPic(userId: number, profileData: {
     name: string;
     lastname: string;
@@ -91,9 +62,6 @@ export class EditProfileServiceService extends BaseService<IUser> {
     return this.http.patch(url, formData);
   }
 
-  /**
-   * Update profile picture with success/error handling
-   */
   saveProfilePicture(userId: number, profileData: {
     name: string;
     lastname: string;
@@ -107,11 +75,11 @@ export class EditProfileServiceService extends BaseService<IUser> {
     this.updateProfilePicture(userId, profileData).subscribe({
       next: (response: any) => {
         this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
-        // Refresh the page to update all components including topbar
+  
 
         setTimeout(() => {
           window.location.reload();
-        }, 1500); // Wait for alert to be visible before refreshing
+        }, 1500); 
       },
       error: (err: any) => {
         this.alertService.displayAlert('error', 'Ocurrió un error actualizando el perfil', 'center', 'top', ['error-snackbar']);
@@ -132,11 +100,11 @@ export class EditProfileServiceService extends BaseService<IUser> {
     this.updateProfileNoPic(userId, profileData).subscribe({
       next: (response: any) => {
         this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
-        // Refresh the page to update all components including topbar
+
         
         setTimeout(() => {
           window.location.reload();
-        }, 1500); // Wait for alert to be visible before refreshing
+        }, 1500);
       },
       error: (err: any) => {
         this.alertService.displayAlert('error', 'Ocurrió un error actualizando el perfil', 'center', 'top', ['error-snackbar']);
@@ -146,27 +114,5 @@ export class EditProfileServiceService extends BaseService<IUser> {
   }
 
 
-  
 
-  /**
-   * Update profile with success/error handling
-   */
-  // saveProfile(userId: number, user: IUser & { currentPassword?: string }) {
-  //   this.updateProfile(userId, user).subscribe({
-  //     next: (response: any) => {
-  //       this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
-  //       if (response.data) {
-  //         this.authService.user = response.data;
-  //         this.authService.save();
-  //       }
-  //        setTimeout(() => {
-  //         window.location.reload();
-  //       }, 1500);
-  //     },
-  //     error: (err: any) => {
-  //       this.alertService.displayAlert('error', 'Ocurrió un error actualizando el perfil', 'center', 'top', ['error-snackbar']);
-  //       console.error('Error updating profile:', err);
-  //     }
-  //   });
-  // }
 }

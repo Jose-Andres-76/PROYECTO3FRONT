@@ -31,7 +31,7 @@ export class ChallengeService extends BaseService<IChallenge> {
 
     constructor() {
         super();
-        console.log('ChallengeService initialized');
+   
         this.monitorUserChanges();
     }
 
@@ -44,7 +44,7 @@ export class ChallengeService extends BaseService<IChallenge> {
     }
 
     clearChallenges(): void {
-        console.log('Clearing challenges data...');
+  
         this.challengeListSignal.set([]);
         this.search = {
             page: 1,
@@ -54,7 +54,6 @@ export class ChallengeService extends BaseService<IChallenge> {
     }
 
     getMyChallenges(): void {
-        console.log('Fetching my challenges...');
 
         this.monitorUserChanges();
         const userId = this.authService.getUser()?.id;
@@ -66,8 +65,7 @@ export class ChallengeService extends BaseService<IChallenge> {
 
         this.findAllWithParamsAndCustomSource(`my-challenges/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
             next: (response: any) => {
-                console.log('My challenges response:', response);
-                console.log('My challenges data:', response.data);
+
                 
                 if (!response.data || response.data.length === 0) {
                     this.clearChallenges();
@@ -86,7 +84,7 @@ export class ChallengeService extends BaseService<IChallenge> {
     }
 
     getAllActiveChallenges() {
-        console.log('Fetching my challenges...');
+
 
         this.monitorUserChanges();
         const userId = this.authService.getUser()?.id;
@@ -98,8 +96,7 @@ export class ChallengeService extends BaseService<IChallenge> {
 
         this.findAllWithParamsAndCustomSource(`active/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
             next: (response: any) => {
-                console.log('My Challenges response:', response);
-                console.log('My Challenges data:', response.data);
+ 
                 
                 if (!response.data || response.data.length === 0) {
                     this.clearChallenges();
@@ -123,7 +120,7 @@ export class ChallengeService extends BaseService<IChallenge> {
     save(challenge: IChallenge) {
         this.add(challenge).subscribe({
             next: (response: any) => {
-                console.log('Challenge saved successfully:', response);
+   
                 this.alertService.displayAlert('success', 'Desafío guardado exitosamente', 'center', 'top', ['success-snackbar']);
                 this.getMyChallenges();
             },
@@ -137,7 +134,7 @@ export class ChallengeService extends BaseService<IChallenge> {
     update(challenge: IChallenge) {
         this.edit(challenge.id, challenge).subscribe({
             next: (response: any) => {
-                console.log('Challenge updated successfully:', response);
+       
                 this.alertService.displayAlert('success', 'Desafío actualizado exitosamente', 'center', 'top', ['success-snackbar']);
                 this.getMyChallenges();
             },
@@ -151,7 +148,7 @@ export class ChallengeService extends BaseService<IChallenge> {
     delete(challenge: IChallenge) {
         this.delCustomSource(`${challenge.id}`).subscribe({
             next: (response: any) => {
-                console.log('Challenge deleted successfully:', response);
+           
                 this.alertService.displayAlert('success', 'Desafío eliminado exitosamente', 'center', 'top', ['success-snackbar']);
                 this.getMyChallenges();
             },
@@ -170,7 +167,7 @@ export class ChallengeService extends BaseService<IChallenge> {
 
         return this.edit(challengeId, updatedChallenge).pipe(
             tap((response: any) => {
-                console.log('Challenge completed successfully:', response);
+              
                 this.alertService.displayAlert('success', 
                     '¡Desafío completado exitosamente!', 'center', 'top', ['success-snackbar']);
             }),

@@ -11,7 +11,6 @@ import { SonRoleGuard } from './guards/son-role-guard.guard';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { GuestGuard } from './guards/guest.guard';
 import { IRoleType } from './interfaces';
-import { ProfileComponent } from './pages/profile/profile.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
 import { ListingComponent } from './pages/listing/listing.component';
@@ -124,21 +123,7 @@ export const routes: Routes = [
         }
 
       },
-      {
-        path: 'profile',
-        component: ProfileComponent,
-        canActivate: [AuthGuard],
-        data: { 
-          authorities: [
-            IRoleType.admin, 
-            IRoleType.father,
-            IRoleType.son
-          ],
-          name: 'profile',
-          showInSidebar: false,
-          iconPath: 'assets/icons/sidebar/users-solid.svg'
-        }
-      },
+      
       {
         path: 'profile-eco',
         component: ProfileEcoComponent,
@@ -194,16 +179,15 @@ export const routes: Routes = [
           ],
           name: 'Reporte de Residuos',
           showInSidebar: true,
-          iconPath: 'assets/icons/sidebar/chart-bar-solid.svg'
+          iconPath: 'assets/icons/sidebar/box-archive-solid.svg'
         }
       },
       {
         path: 'Eco',
         component: EcoDashboardComponent,
+        canActivate: [SonRoleGuard],
         data: {
           authorities: [
-            // IRoleType.admin, 
-            // IRoleType.father,
             IRoleType.son,
           ],
           name: 'Modulo infantil',
@@ -214,10 +198,9 @@ export const routes: Routes = [
       {
         path: 'rewards',
         component: EcoRewardsComponent,
+        canActivate: [SonRoleGuard],
         data: {
           authorities: [
-            IRoleType.admin,
-            IRoleType.father,
             IRoleType.son,
           ],
           name: 'Recompensas Eco',
@@ -228,10 +211,9 @@ export const routes: Routes = [
       {
         path: 'challenges',
         component: EcoChallengesComponent,
+        canActivate: [SonRoleGuard],
         data: {
           authorities: [
-            IRoleType.admin,
-            IRoleType.father,
             IRoleType.son,
           ],
           name: 'Retos Eco',
@@ -241,10 +223,9 @@ export const routes: Routes = [
       {
         path: 'trivias',
         component: EcoTriviaComponent,
+        canActivate: [SonRoleGuard],
         data: {
           authorities: [
-            IRoleType.admin,
-            IRoleType.father,
             IRoleType.son,
           ],
           name: 'Retos Eco',
@@ -254,10 +235,9 @@ export const routes: Routes = [
       {
         path: 'trivias-intro',
         component: EcoTriviaIntroComponent,
+        canActivate: [SonRoleGuard],
         data: {
           authorities: [
-            IRoleType.admin,
-            IRoleType.father,
             IRoleType.son,
           ],
           name: 'Retos Eco',
@@ -267,10 +247,9 @@ export const routes: Routes = [
       {
         path: 'drag-drop-game',
         component: DragDropPageComponent,
+        canActivate: [SonRoleGuard],
         data: {
           authorities: [
-            IRoleType.admin,
-            IRoleType.father,
             IRoleType.son,
           ],
           name: 'Juego Reciclaje',
@@ -280,10 +259,9 @@ export const routes: Routes = [
       {
         path: 'filler',
         component: EcoFillerComponent,
+        canActivate: [SonRoleGuard],
         data: {
           authorities: [
-            IRoleType.admin,
-            IRoleType.father,
             IRoleType.son,
           ],
           name: 'Rellenador Eco',
