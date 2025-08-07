@@ -5,7 +5,6 @@
 <table>
   <thead>
     <tr>
-      <th>Activo</th>
       <th>Juego</th>
       <th>Descripción</th>
       <th>Puntos</th>
@@ -13,13 +12,6 @@
   </thead>
   <tbody>
     <tr *ngFor="let challenge of challenges()">
-      <td>
-        <input 
-          type="checkbox"
-          [checked]="challenge.challengeStatus"
-          disabled
-        >
-      </td>
       <td>{{ getGameType(challenge) }}</td>
       <td>{{ challenge.description }}</td>
       <td>{{ challenge.points }}</td>

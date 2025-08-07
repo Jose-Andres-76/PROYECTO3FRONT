@@ -3,7 +3,6 @@ import { BaseService } from './base-service';
 import { ISearch, IUser } from '../interfaces';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { AlertService } from './alert.service';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -134,5 +133,16 @@ export class UserService extends BaseService<IUser> {
 
   updatePoints(userId: number, points: number) {
   return this.editCustomSource(`${userId}/points`, { points });
+  }
+
+  getUserByEmail(email: string): Observable<any> {
+    return this.http.get(`${this.source}/by-email`, { params: { email } })
+      .pipe(
+        catchError((error: any) => {
+          console.error('Error getting user by email:', error);
+          this.alertService.displayAlert('error', 'Error buscando usuario por email', 'center', 'top', ['error-snackbar']);
+          return throwError(() => error);
+        })
+      );
   }
 }

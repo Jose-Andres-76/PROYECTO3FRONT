@@ -14,7 +14,12 @@ export class WasteService extends BaseService<IWaste> {
   }
 
   public getAllWaste(page: number = 0, size: number = 10): Observable<IResponse<IWaste[]>> {
-    const params = { page, size };
+    const params = { page: page + 1, size };
+    return this.findAllWithParams(params);
+  }
+
+  public getAllWasteForFiltering(): Observable<IResponse<IWaste[]>> {
+    const params = { page: 1, size: 1000 };
     return this.findAllWithParams(params);
   }
 
@@ -48,25 +53,5 @@ export class WasteService extends BaseService<IWaste> {
 
   public getWasteStatsByProductType(productType: string): Observable<IResponse<IWasteStats>> {
     return this.http.get<IResponse<IWasteStats>>(`${this.source}/stats/product-type/${productType}`);
-  }
-
-  public getRecentWasteByUser(userId: number): Observable<IResponse<IWaste[]>> {
-    return this.findAllWithParamsAndCustomSource(`user/${userId}`, { recent: true });
-  }
-
-  public searchWasteByAnswer(searchTerm: string): Observable<IResponse<IWaste[]>> {
-    const params = { search: searchTerm };
-    return this.findAllWithParams(params);
-  }
-
-  public getWasteWithFilters(filters: {
-    page?: number;
-    size?: number;
-    userId?: number;
-    productType?: string;
-    startDate?: string;
-    endDate?: string;
-  }): Observable<IResponse<IWaste[]>> {
-    return this.findAllWithParams(filters);
   }
 }
