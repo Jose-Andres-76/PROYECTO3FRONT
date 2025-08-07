@@ -36,7 +36,7 @@ export class EcoFillerComponent implements OnInit {
   isUpdatingPoints = signal<boolean>(false);
   
   currentQuestion = signal<number>(1);
-  maxQuestions = 10;
+  maxQuestions = 3;
   sessionCompleted = signal<boolean>(false);
 
   ngOnInit() {
