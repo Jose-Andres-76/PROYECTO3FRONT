@@ -113,6 +113,36 @@
       <div class="password-section mb-4">
         <h5 class="mb-3 text-muted">Cambiar Contraseña (Opcional)</h5>
         
+        <!-- Current Password Field -->
+        <div class="form-group mb-3">
+          <label for="currentPassword" class="form-label">Contraseña Actual</label>
+          <div class="password-input-container">
+            <input 
+              id="currentPassword" 
+              formControlName="currentPassword" 
+              [type]="showCurrentPassword ? 'text' : 'password'" 
+              class="form-control password-input"
+              [ngClass]="{
+                'is-invalid': profileForm.errors?.['currentPasswordRequired'] && profileForm.get('currentPassword')?.touched,
+                'is-valid': profileForm.get('currentPassword')?.valid && profileForm.get('currentPassword')?.touched
+              }"
+              placeholder="Ingrese su contraseña actual">
+            <button 
+              type="button" 
+              class="password-toggle-btn"
+              (click)="toggleCurrentPasswordVisibility()"
+              title="Mostrar/Ocultar contraseña">
+              <i [class]="showCurrentPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+            </button>
+          </div>
+          <div *ngIf="profileForm.errors?.['currentPasswordRequired'] && profileForm.get('currentPassword')?.touched" class="invalid-feedback">
+            La contraseña actual es requerida para cambiar la contraseña
+          </div>
+          <small class="form-text text-muted">
+            Requerida solo si desea cambiar su contraseña
+          </small>
+        </div>
+        
         <!-- Password Field -->
         <div class="form-group mb-3">
           <label for="password" class="form-label">Nueva Contraseña</label>

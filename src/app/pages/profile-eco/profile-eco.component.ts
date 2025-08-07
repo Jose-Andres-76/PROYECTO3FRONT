@@ -26,6 +26,7 @@ export class ProfileEcoComponent implements OnInit {
   passwordPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=\\[\\]{}|\\\\:;"\'<>,.?/~`]).{8,}$';
   showPassword = false;
   showConfirmPassword = false;
+  showCurrentPassword = false;
 
   ngOnInit() {
     // Fetch user info when the component is initialized
@@ -37,9 +38,10 @@ export class ProfileEcoComponent implements OnInit {
       name: ['', [Validators.required]],
       lastname: ['', [Validators.required]],
       age: ['', [Validators.required, Validators.min(1), Validators.max(120)]],
+      currentPassword: [''],
       password: ['', [Validators.pattern(this.passwordPattern)]],
       confirmPassword: ['']
-    }, { validators: this.passwordMatchValidator });
+    }, { validators: [this.passwordMatchValidator, this.currentPasswordValidator] });
 
     // Watch for user data changes and populate form
     effect(() => {
@@ -62,6 +64,19 @@ export class ProfileEcoComponent implements OnInit {
     
     if (password && confirmPassword && password.value !== confirmPassword.value) {
       return { passwordMismatch: true };
+    }
+    return null;
+  }
+
+  // Custom validator to check if current password is provided when changing password
+  currentPasswordValidator(control: AbstractControl): ValidationErrors | null {
+    const currentPassword = control.get('currentPassword');
+    const newPassword = control.get('password');
+    
+    if (newPassword && newPassword.value && newPassword.value.trim() !== '') {
+      if (!currentPassword || !currentPassword.value || currentPassword.value.trim() === '') {
+        return { currentPasswordRequired: true };
+      }
     }
     return null;
   }
@@ -100,26 +115,32 @@ export class ProfileEcoComponent implements OnInit {
         name: formData.name,
         lastname: formData.lastname,
         age: formData.age,
-        points: user.points || 0,
-        password: formData.password || ''
+        points: user.points || 0
       };
 
-      // Add password to profile data if provided
+      // Add password fields only if user is changing password
       if (formData.password && formData.password.trim() !== '') {
         (baseProfileData as any).password = formData.password;
+        (baseProfileData as any).currentPassword = formData.currentPassword || '';
       }
 
       if (this.selectedFile) {
         // Update with profile picture
         const profileData = {
           ...baseProfileData,
+          password: formData.password || '',
+          currentPassword: formData.currentPassword || '',
           image: this.selectedFile
         };
         this.editProfileService.saveProfilePicture(user.id, profileData);
       } else {
-        const updatedUser: IUser = baseProfileData as IUser;
-       
-        this.editProfileService.saveProfile(user.id, updatedUser);
+
+        const profileDataNoPicture = {
+          ...baseProfileData,
+          password: formData.password || '',
+          currentPassword: formData.currentPassword || '' };
+        // const updatedUser = baseProfileData as IUser & { currentPassword?: string };
+        this.editProfileService.saveProfileNormal(user.id, profileDataNoPicture);
       }
     } else {
       // Mark all fields as touched to show validation errors
@@ -143,5 +164,9 @@ export class ProfileEcoComponent implements OnInit {
 
   toggleConfirmPasswordVisibility() {
     this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  toggleCurrentPasswordVisibility() {
+    this.showCurrentPassword = !this.showCurrentPassword;
   }
 }
