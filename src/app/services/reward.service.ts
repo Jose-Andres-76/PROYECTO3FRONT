@@ -30,7 +30,6 @@ export class RewardService extends BaseService<IReward> {
 
     constructor() {
         super();
-        console.log('RewardService initialized');
         this.monitorUserChanges();
     }
 
@@ -42,7 +41,7 @@ export class RewardService extends BaseService<IReward> {
         this.currentUserId = newUserId || null;
     }
     clearRewards(): void {
-        console.log('Clearing rewards data...');
+
         this.rewardListSignal.set([]);
         this.search = {
             page: 1,
@@ -52,7 +51,7 @@ export class RewardService extends BaseService<IReward> {
     }
 
     getMyRewards(): void {
-        console.log('Fetching my rewards...');
+
 
         this.monitorUserChanges();
         const userId = this.authService.getUser()?.id;
@@ -64,8 +63,7 @@ export class RewardService extends BaseService<IReward> {
 
         this.findAllWithParamsAndCustomSource(`my-family-rewards/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
             next: (response: any) => {
-                console.log('My rewards response:', response);
-                console.log('My rewards data:', response.data);
+
                 
                 if (!response.data || response.data.length === 0) {
                     this.clearRewards();
@@ -84,7 +82,7 @@ export class RewardService extends BaseService<IReward> {
     }
 
      getAllActiveRewards(): void {
-        console.log('Fetching my rewards...');
+  
 
         this.monitorUserChanges();
         const userId = this.authService.getUser()?.id;
@@ -96,8 +94,8 @@ export class RewardService extends BaseService<IReward> {
 
         this.findAllWithParamsAndCustomSource(`active/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
             next: (response: any) => {
-                console.log('My rewards response:', response);
-                console.log('My rewards data:', response.data);
+      
+
                 
                 if (!response.data || response.data.length === 0) {
                     this.clearRewards();
@@ -121,7 +119,6 @@ export class RewardService extends BaseService<IReward> {
     save(reward: IReward){
         this.add(reward).subscribe({
             next: (response: any) => {
-                console.log('Reward saved successfully:', response);
                 this.alertService.displayAlert('success', 'Recompensa guardada exitosamente', 'center', 'top', ['success-snackbar']);
                 this.getMyRewards();
             },
@@ -135,7 +132,7 @@ export class RewardService extends BaseService<IReward> {
     update(reward: IReward) {
         this.edit(reward.id, reward).subscribe({
             next: (response: any) => {
-                console.log('Reward updated successfully:', response);
+      
                 this.alertService.displayAlert('success', 'Recompensa actualizada exitosamente', 'center', 'top', ['success-snackbar']);
                 this.getMyRewards();
             },
@@ -149,7 +146,7 @@ export class RewardService extends BaseService<IReward> {
     delete(reward: IReward) {
         this.delCustomSource(`${reward.id}`).subscribe({
             next: (response: any) => {
-                console.log('Reward deleted successfully:', response);
+              
                 this.alertService.displayAlert('success', 'Recompensa eliminada exitosamente', 'center', 'top', ['success-snackbar']);
                 this.getMyRewards();
             },
