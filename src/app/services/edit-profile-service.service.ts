@@ -108,10 +108,7 @@ export class EditProfileServiceService extends BaseService<IUser> {
       next: (response: any) => {
         this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
         // Refresh the page to update all components including topbar
-        if (response.data) {
-          this.authService.user = response.data;
-          this.authService.save();
-        }
+
         setTimeout(() => {
           window.location.reload();
         }, 1500); // Wait for alert to be visible before refreshing
@@ -136,10 +133,7 @@ export class EditProfileServiceService extends BaseService<IUser> {
       next: (response: any) => {
         this.alertService.displayAlert('success', 'Perfil actualizado exitosamente', 'center', 'top', ['success-snackbar']);
         // Refresh the page to update all components including topbar
-        if (response.data) {
-          this.authService.user = response.data;
-          this.authService.save();
-        }
+        
         setTimeout(() => {
           window.location.reload();
         }, 1500); // Wait for alert to be visible before refreshing
