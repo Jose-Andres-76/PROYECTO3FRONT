@@ -22,7 +22,7 @@ export class RewardService extends BaseService<IReward> {
 
     public search: ISearch = {
         page: 1,
-        size: 5
+        size: 3
     }
 
     public totalItems: any = [];
@@ -45,14 +45,12 @@ export class RewardService extends BaseService<IReward> {
         this.rewardListSignal.set([]);
         this.search = {
             page: 1,
-            size: 5
+            size: 3
         };
         this.totalItems = [];
     }
 
     getMyRewards(): void {
-
-
         this.monitorUserChanges();
         const userId = this.authService.getUser()?.id;
         if (!userId) {
@@ -61,18 +59,27 @@ export class RewardService extends BaseService<IReward> {
             return;
         }
 
-        this.findAllWithParamsAndCustomSource(`my-family-rewards/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
+        this.findAllWithParamsAndCustomSource(`my-family-rewards/${userId}`, { 
+            page: this.search.page, 
+            size: this.search.size 
+        }).subscribe({
             next: (response: any) => {
-
-                
                 if (!response.data || response.data.length === 0) {
                     this.clearRewards();
                     return;
                 }
                 
-            this.search = { ...this.search, ...response.meta };
-            this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
-            this.rewardListSignal.set(response.data);
+                this.search = { 
+                    ...this.search, 
+                    ...response.meta,
+                    pageNumber: response.meta.pageNumber || this.search.page // Ensure pageNumber is set
+                };
+                
+                this.totalItems = Array.from({ 
+                    length: this.search.totalPages ? this.search.totalPages : 0 
+                }, (_, i) => i + 1);
+                
+                this.rewardListSignal.set(response.data);
             },
             error: (error: any) => {
                 console.error('Error fetching my rewards:', error);

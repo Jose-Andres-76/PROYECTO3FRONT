@@ -23,7 +23,7 @@ export class ChallengeService extends BaseService<IChallenge> {
 
     public search: ISearch = {
         page: 1,
-        size: 5
+        size: 3
     }
 
     public totalItems: any = [];
@@ -48,13 +48,11 @@ export class ChallengeService extends BaseService<IChallenge> {
         this.challengeListSignal.set([]);
         this.search = {
             page: 1,
-            size: 5
+            size: 3
         };
         this.totalItems = [];
     }
-
     getMyChallenges(): void {
-
         this.monitorUserChanges();
         const userId = this.authService.getUser()?.id;
         if (!userId) {
@@ -63,17 +61,26 @@ export class ChallengeService extends BaseService<IChallenge> {
             return;
         }
 
-        this.findAllWithParamsAndCustomSource(`my-challenges/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
+        this.findAllWithParamsAndCustomSource(`my-challenges/${userId}`, { 
+            page: this.search.page, 
+            size: this.search.size 
+        }).subscribe({
             next: (response: any) => {
-
-                
                 if (!response.data || response.data.length === 0) {
                     this.clearChallenges();
                     return;
                 }
                 
-                this.search = { ...this.search, ...response.meta };
-                this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
+                this.search = { 
+                    ...this.search, 
+                    ...response.meta,
+                    pageNumber: response.meta.pageNumber || this.search.page // Ensure pageNumber is set
+                };
+                
+                this.totalItems = Array.from({ 
+                    length: this.search.totalPages ? this.search.totalPages : 0 
+                }, (_, i) => i + 1);
+                
                 this.challengeListSignal.set(response.data);
             },
             error: (error: any) => {
@@ -84,8 +91,6 @@ export class ChallengeService extends BaseService<IChallenge> {
     }
 
     getAllActiveChallenges() {
-
-
         this.monitorUserChanges();
         const userId = this.authService.getUser()?.id;
         if (!userId) {
@@ -94,19 +99,28 @@ export class ChallengeService extends BaseService<IChallenge> {
             return;
         }
 
-        this.findAllWithParamsAndCustomSource(`active/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
+        this.findAllWithParamsAndCustomSource(`active/${userId}`, { 
+            page: this.search.page, 
+            size: this.search.size 
+        }).subscribe({
             next: (response: any) => {
- 
-                
                 if (!response.data || response.data.length === 0) {
                     this.clearChallenges();
                     return;
                 }
                 
-            this.search = { ...this.search, ...response.meta };
-            this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
-            this.challengeListSignal.set(response.data);
-            this.profileService.getUserInfoSignal(); // Update user points
+                this.search = { 
+                    ...this.search, 
+                    ...response.meta,
+                    pageNumber: response.meta.pageNumber || this.search.page 
+                };
+                
+                this.totalItems = Array.from({ 
+                    length: this.search.totalPages ? this.search.totalPages : 0 
+                }, (_, i) => i + 1);
+                
+                this.challengeListSignal.set(response.data);
+                this.profileService.getUserInfoSignal(); 
             },
             error: (error: any) => {
                 console.error('Error fetching my Challenges:', error);
@@ -202,6 +216,11 @@ export class ChallengeService extends BaseService<IChallenge> {
                 return throwError(() => error);
             })
         );
+    }
+
+    changePage(page: number): void {
+        this.search.page = page;
+        this.search.pageNumber = page; 
     }
 }
 

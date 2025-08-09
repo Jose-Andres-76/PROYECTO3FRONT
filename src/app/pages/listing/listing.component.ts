@@ -384,4 +384,8 @@ private showErrorMessage(message: string) {
     
     console.error(message);
 }
+
+onChallengePagination(): void {
+    this.challengeService.getMyChallenges();
+}
 }

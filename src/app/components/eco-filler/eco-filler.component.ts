@@ -112,7 +112,7 @@ export class EcoFillerComponent implements OnInit {
     try {
       const newTotalPoints = this.userTotalPoints() + pointsToAdd;
       
-      const response = await this.userService.updatePoints(currentUser.id, newTotalPoints).toPromise();
+      const response = await this.userService.updateUserPoints(currentUser.id, newTotalPoints).toPromise();
       
       this.userTotalPoints.set(newTotalPoints);
       
@@ -164,7 +164,7 @@ export class EcoFillerComponent implements OnInit {
     
     this.alertService.displayAlert(
       'success', 
-      `¡Sesión completada! Puntuación: ${finalScore}/${questionsAnswered * 5} (${accuracy}% de acierto)`, 
+      `¡Sesión completada! Puntuación: ${finalScore} con (${accuracy}% de acierto)`, 
       'center', 
       'top', 
       ['success-snackbar']
