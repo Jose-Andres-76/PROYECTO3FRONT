@@ -68,10 +68,9 @@ export class SignUpFormComponent implements OnInit, AfterViewInit {
       this.authService.signup(this.user).subscribe({
         next: () => {
           this.validSignup = true;
-          // Redirect to login page after successful registration
           setTimeout(() => {
             this.router.navigate(['/login']);
-          }, 1500); // Wait 1.5 seconds to show success message
+          }, 1500); 
         },
         error: (err: any) => (this.signUpError = err.description),
       });
