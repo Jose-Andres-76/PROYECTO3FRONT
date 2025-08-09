@@ -52,39 +52,7 @@ export class ChallengeService extends BaseService<IChallenge> {
         };
         this.totalItems = [];
     }
-
-//     @GetMapping("/my-challenges/{userId}")
-// @PreAuthorize("isAuthenticated()")
-// public ResponseEntity<?> getChallengesByUserId(
-//         @PathVariable Long userId,
-//         @RequestParam(defaultValue = "1") int page,
-//         @RequestParam(defaultValue = "10") int size,
-//         HttpServletRequest request) {
-    
-//     Optional<User> user = userRepository.findById(userId);
-//     if (user.isPresent()) {
-//         List<Challenge> allChallenges = challengeRepository.findByFamilyId_UserId(userId);
-//         int totalElements = allChallenges.size();
-//         int totalPages = (int) Math.ceil((double) totalElements / size);
-        
-//         // Apply pagination manually since the repository method doesn't support Pageable
-//         int startIndex = (page - 1) * size;
-//         int endIndex = Math.min(startIndex + size, totalElements);
-//         List<Challenge> challenges = allChallenges.subList(startIndex, endIndex);
-        
-//         Meta meta = new Meta(request.getMethod(), request.getRequestURL().toString());
-//         meta.setTotalPages(totalPages);
-//         meta.setTotalElements(totalElements);
-//         meta.setPageNumber(page);
-//         meta.setPageSize(size);
-        
-//         return new GlobalResponseHandler().handleResponse("Challenges found for user with id: " + userId, challenges, HttpStatus.OK, meta);
-//     } else {
-//         return new GlobalResponseHandler().handleResponse("No challenges found for user with id: " + userId, HttpStatus.NOT_FOUND, request);
-//     }
-// }
     getMyChallenges(): void {
-
         this.monitorUserChanges();
         const userId = this.authService.getUser()?.id;
         if (!userId) {
@@ -93,17 +61,26 @@ export class ChallengeService extends BaseService<IChallenge> {
             return;
         }
 
-        this.findAllWithParamsAndCustomSource(`my-challenges/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
+        this.findAllWithParamsAndCustomSource(`my-challenges/${userId}`, { 
+            page: this.search.page, 
+            size: this.search.size 
+        }).subscribe({
             next: (response: any) => {
-
-                
                 if (!response.data || response.data.length === 0) {
                     this.clearChallenges();
                     return;
                 }
                 
-                this.search = { ...this.search, ...response.meta };
-                this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
+                this.search = { 
+                    ...this.search, 
+                    ...response.meta,
+                    pageNumber: response.meta.pageNumber || this.search.page // Ensure pageNumber is set
+                };
+                
+                this.totalItems = Array.from({ 
+                    length: this.search.totalPages ? this.search.totalPages : 0 
+                }, (_, i) => i + 1);
+                
                 this.challengeListSignal.set(response.data);
             },
             error: (error: any) => {
@@ -114,8 +91,6 @@ export class ChallengeService extends BaseService<IChallenge> {
     }
 
     getAllActiveChallenges() {
-
-
         this.monitorUserChanges();
         const userId = this.authService.getUser()?.id;
         if (!userId) {
@@ -124,19 +99,28 @@ export class ChallengeService extends BaseService<IChallenge> {
             return;
         }
 
-        this.findAllWithParamsAndCustomSource(`active/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
+        this.findAllWithParamsAndCustomSource(`active/${userId}`, { 
+            page: this.search.page, 
+            size: this.search.size 
+        }).subscribe({
             next: (response: any) => {
- 
-                
                 if (!response.data || response.data.length === 0) {
                     this.clearChallenges();
                     return;
                 }
                 
-            this.search = { ...this.search, ...response.meta };
-            this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
-            this.challengeListSignal.set(response.data);
-            this.profileService.getUserInfoSignal(); // Update user points
+                this.search = { 
+                    ...this.search, 
+                    ...response.meta,
+                    pageNumber: response.meta.pageNumber || this.search.page 
+                };
+                
+                this.totalItems = Array.from({ 
+                    length: this.search.totalPages ? this.search.totalPages : 0 
+                }, (_, i) => i + 1);
+                
+                this.challengeListSignal.set(response.data);
+                this.profileService.getUserInfoSignal(); 
             },
             error: (error: any) => {
                 console.error('Error fetching my Challenges:', error);
@@ -232,6 +216,11 @@ export class ChallengeService extends BaseService<IChallenge> {
                 return throwError(() => error);
             })
         );
+    }
+
+    changePage(page: number): void {
+        this.search.page = page;
+        this.search.pageNumber = page; 
     }
 }
 
