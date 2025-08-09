@@ -45,3 +45,11 @@
     </tbody>
   </table>
 </div>
+
+@if (showPagination && rewardService.totalItems.length > 1) {
+  <app-pagination 
+    [service]="rewardService" 
+    [customCall]="true"
+    (callCustomPaginationMethod)="onCustomPagination()">
+  </app-pagination>
+}
