@@ -107,25 +107,21 @@ export class GarbageScannerFormComponent implements OnDestroy {
       }
     } catch (error: any) {
 
-//TODO PREGUNTAR AL PROFESOR
-      // Manejo de errores mejorado
-      // console.error('Error al analizar imagen:', error);
-      // this.alertService.displayAlert('error', 'Error al analizar la imagen');
-      // catch (error: any) {
+
     console.error('Error al analizar imagen:', error);
 
-    // Clasificación del error
+
     if (error.status === 0) {
-      // Sin conexión o timeout
+
       this.alertService.displayAlert('error', 'No hay conexión con el servidor. Verifica tu conexión a Internet.');
     } else if (error.status >= 400 && error.status < 500) {
-      // Error del cliente (validación, formato incorrecto, etc.)
+   
       this.alertService.displayAlert('error', `Error al enviar la imagen: ${error.error?.message || 'verifica el archivo o intenta nuevamente.'}`);
     } else if (error.status >= 500) {
-      // Error interno del servidor
+  
       this.alertService.displayAlert('error', 'El servidor encontró un problema. Intenta más tarde.');
     } else {
-      // Error desconocido
+
       this.alertService.displayAlert('error', 'Ocurrió un error inesperado al analizar la imagen.');
     }
     } finally {
