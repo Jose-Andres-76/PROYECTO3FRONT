@@ -5,15 +5,6 @@ import { AuthService } from './services/auth.service';
 import { AlertService } from './services/alert.service';
 
 
-interface Operator {
-  name?: string
-  symbol?: string
-}
-
-interface Calculator {
-  name?: string
-  type?: string
-}
 
 @Component({
   selector: 'app-root',
