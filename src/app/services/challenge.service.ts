@@ -23,7 +23,7 @@ export class ChallengeService extends BaseService<IChallenge> {
 
     public search: ISearch = {
         page: 1,
-        size: 5
+        size: 3
     }
 
     public totalItems: any = [];
@@ -48,11 +48,41 @@ export class ChallengeService extends BaseService<IChallenge> {
         this.challengeListSignal.set([]);
         this.search = {
             page: 1,
-            size: 5
+            size: 3
         };
         this.totalItems = [];
     }
 
+//     @GetMapping("/my-challenges/{userId}")
+// @PreAuthorize("isAuthenticated()")
+// public ResponseEntity<?> getChallengesByUserId(
+//         @PathVariable Long userId,
+//         @RequestParam(defaultValue = "1") int page,
+//         @RequestParam(defaultValue = "10") int size,
+//         HttpServletRequest request) {
+    
+//     Optional<User> user = userRepository.findById(userId);
+//     if (user.isPresent()) {
+//         List<Challenge> allChallenges = challengeRepository.findByFamilyId_UserId(userId);
+//         int totalElements = allChallenges.size();
+//         int totalPages = (int) Math.ceil((double) totalElements / size);
+        
+//         // Apply pagination manually since the repository method doesn't support Pageable
+//         int startIndex = (page - 1) * size;
+//         int endIndex = Math.min(startIndex + size, totalElements);
+//         List<Challenge> challenges = allChallenges.subList(startIndex, endIndex);
+        
+//         Meta meta = new Meta(request.getMethod(), request.getRequestURL().toString());
+//         meta.setTotalPages(totalPages);
+//         meta.setTotalElements(totalElements);
+//         meta.setPageNumber(page);
+//         meta.setPageSize(size);
+        
+//         return new GlobalResponseHandler().handleResponse("Challenges found for user with id: " + userId, challenges, HttpStatus.OK, meta);
+//     } else {
+//         return new GlobalResponseHandler().handleResponse("No challenges found for user with id: " + userId, HttpStatus.NOT_FOUND, request);
+//     }
+// }
     getMyChallenges(): void {
 
         this.monitorUserChanges();

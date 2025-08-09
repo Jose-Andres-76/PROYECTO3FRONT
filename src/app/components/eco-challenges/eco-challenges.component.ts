@@ -17,19 +17,34 @@ import { ProfileService } from '../../services/profile.service';
 export class EcoChallengesComponent implements OnInit{
   private challengeService = inject(ChallengeService);
   private profileService = inject(ProfileService);
+  
   getGameType(challenge: IChallenge): string {
-  return (challenge as any).game?.typesOfGames || 'N/A';
-}
+    const gameType = (challenge as any).game?.typesOfGames;
+    
+    if (gameType) {
+      switch (gameType) {
+        case 'ECO_DRAG_DROP':
+          return 'Arrastrador ecológico';
+        case 'ECO_FILLER':
+          return 'Completador Ecológico';
+        case 'ECO_TRIVIA':
+          return 'Trivia Ecológica';
+        default:
+          return gameType;
+      }
+    }
+    
+    return 'N/A';
+  }
 
-coins = computed(() => this.profileService.user$()?.points || 0);
-challenges = this.challengeService.challenges$;
-
-
+  coins = computed(() => this.profileService.user$()?.points || 0);
+  challenges = this.challengeService.challenges$;
 
   ngOnInit(): void {
     this.profileService.getUserInfoSignal();
     this.challengeService.getAllActiveChallenges();
   }
+  
   constructor() {
   }
 }

@@ -47,3 +47,11 @@
     </tbody>
   </table>
 </div>
+
+@if (showPagination && challengeService.totalItems.length > 1) {
+  <app-pagination 
+    [service]="challengeService" 
+    [customCall]="true"
+    (callCustomPaginationMethod)="onCustomPagination()">
+  </app-pagination>
+}
