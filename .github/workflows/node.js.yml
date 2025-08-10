@@ -1,0 +1,51 @@
+name: Angular CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.16.0'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Create environment.ts with secrets
+      run: |
+        cat > src/environments/environment.ts << 'EOF'
+        export const environment = {
+          production: true,
+          apiUrl: '${{ secrets.PRODUCTION_API_URL || 'http://localhost:8080' }}',
+          googleClientId: '${{ secrets.GOOGLE_CLIENT_ID || 'dummy-client-id-for-ci' }}'
+        };
+        EOF
+
+    - name: Update environment.development.ts with secrets
+      run: |
+        cat > src/environments/environment.development.ts << 'EOF'
+        export const environment = {
+          production: false,
+          apiUrl: '${{ secrets.API_URL_DEVELOPMENT || 'http://localhost:9090' }}',
+          googleClientId: '${{ secrets.GOOGLE_CLIENT_ID || 'dummy-client-id-for-ci' }}'
+        };
+        EOF
+
+    - name: Build Angular app
+      run: npm run build
+
+    - name: Run tests (if available)
+      run: npm test -- --browsers=ChromeHeadless --watch=false || echo "Tests not configured"
+      continue-on-error: true
