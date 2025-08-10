@@ -1,0 +1,53 @@
+#user-list-bg {
+  padding: 1.5%;
+  background-color: #f0fcf7; // Pale green color
+  border-radius: 0.5rem; // Optional: adds rounded corners for a nicer look
+}
+
+#user-list {
+  background-color: #fafafb;
+}
+
+#search-bar-bg {
+  background-color: #f0fcf7;
+}
+
+#search-results-bg {
+  padding: 1.5%;
+  background-color: #dcf8ff;
+  border-radius: 0.5rem;
+  border: 1px solid #9ebbfa;
+}
+
+button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.input-group {
+  .form-control:focus {
+    border-color: #198754;
+  }
+  
+  .btn-outline-success:hover {
+    background-color: #198754;
+    border-color: #198754;
+  }
+}
+
+.table-container {
+  .text-muted {
+    color: #6c757d !important;
+    font-style: italic;
+  }
+}
+
+h5 {
+  color: #198754;
+  font-weight: 600;
+  
+  i {
+    margin-right: 8px;
+  }
+}

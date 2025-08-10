@@ -3,21 +3,125 @@
     <div class="col-12">
       <div class="d-flex justify-content-between align-items-center">
         <h2>Usuarios</h2>
-        <button (click)="modalService.displayModal('md', addUsersModal)" type="button" class="btn btn-primary"><i class="fas fa-plus"></i></button>
+        <div class="d-flex justify-content-center mt-3">
+          <button (click)="openAddUserModal()" type="button" class="btn btn-success">
+            <i class="fas fa-plus"></i> Agregar Usuario
+          </button>
+        </div>
       </div>
     </div>
-    <div class="col-12">
-      <app-user-list
-        (callModalAction)="callEdition($event)"
-        (callDeleteAction)="userService.delete($event)"
-        [users]="userService.users$()"
-      />
-      @if(userService.users$().length) {
-        <app-pagination
-          [service]="userService"
-        />
-      }
+
+    <!-- Search Bar -->
+    <div class="col-12 mb-4">
+      <div id="search-bar-bg" class="p-3">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <div class="input-group">
+              <input 
+                type="email" 
+                class="form-control" 
+                placeholder="Buscar usuario por email..."
+                [(ngModel)]="searchEmail"
+                (input)="onSearchInputChange()"
+                (keyup.enter)="searchUserByEmail()"
+              >
+              <button 
+                class="btn btn-outline-success" 
+                type="button" 
+                (click)="searchUserByEmail()"
+                [disabled]="isSearching || !searchEmail.trim()"
+              >
+                @if (isSearching) {
+                  <i class="fas fa-spinner fa-spin"></i>
+                } @else {
+                  <i class="fas fa-search"></i>
+                }
+                Buscar
+              </button>
+            </div>
+          </div>
+          <div class="col-md-4">
+            @if (hasSearched || searchEmail.trim()) {
+              <button 
+                class="btn btn-outline-secondary" 
+                type="button" 
+                (click)="clearSearch()"
+              >
+                <i class="fas fa-times"></i> Limpiar
+              </button>
+            }
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- Search Results -->
+    @if (hasSearched) {
+      <div class="col-12 mb-4">
+        <div id="search-results-bg" class="mb-3">
+          <h5 class="mb-3">
+            <i class="fas fa-search"></i> Resultados de búsqueda para: "{{ searchEmail }}"
+          </h5>
+          @if (searchedUser) {
+            <app-user-list
+              (callModalAction)="callEdition($event)"
+              (callDeleteAction)="userService.delete($event)"
+              [users]="[searchedUser]"
+            />
+          } @else {
+            <div class="table-container table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col" class="text-center text-success">ID</th>
+                    <th scope="col" class="text-center text-success">Nombre</th>
+                    <th scope="col" class="text-center text-success">Apellido</th>
+                    <th scope="col" class="text-center text-success">Email</th>
+                    <th scope="col" class="text-center text-success">Creado</th>
+                    <th scope="col" class="text-center text-success">Actualizado</th>
+                    <th scope="col" class="text-center text-success">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="7">
+                      <div class="d-flex justify-content-center align-items-center w-100">
+                        <p class="mb-0 text-muted">
+                          <i class="fas fa-user-slash"></i> No hay usuarios con este email
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- All Users List -->
+    @if (!hasSearched) {
+      <div class="col-12">
+        <div id="user-list-bg" class="mb-3">
+          <h5 class="mb-3">
+            <i class="fas fa-users"></i> Todos los usuarios
+          </h5>
+          <div id="user-list" class="mb-3">
+            <app-user-list
+              (callModalAction)="callEdition($event)"
+              (callDeleteAction)="userService.delete($event)"
+              [users]="userService.users$()"
+            />
+          </div>
+          @if(userService.users$().length) {
+            <app-pagination
+              [service]="userService"
+            />
+          }
+        </div>
+      </div>
+    }
   </div>
 } @loading (minimum 1.5s){
   <app-loader></app-loader>
@@ -26,12 +130,16 @@
 <ng-template #addUsersModal>
   <app-modal
     [hideFooter]="true"
+    (callCancelMethod)="onModalClose()"
   >
     <div>
       <app-user-form
         [userForm]="userForm"
+        [isEditMode]="isEditMode"
+        [title]="isEditMode ? 'Editar Usuario' : 'Agregar Usuario'"
         (callSaveMethod)="saveUser($event)"
         (callUpdateMethod)="updateUser($event)"
+        (callCancelMethod)="onModalClose()"
       />
     </div>
   </app-modal>

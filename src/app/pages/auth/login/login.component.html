@@ -32,11 +32,17 @@
             <div class="form-group mb-4">
               <label for="password" class="form-label mb-2">Contraseña</label>
               <div class="form-input position-relative">
-                <input #password="ngModel" type="password" class="form-control" id="password" name="password"
+                <input #password="ngModel" [type]="showPassword ? 'text' : 'password'" class="form-control" id="password" name="password"
                 placeholder="Ingrese al menos 8 caracteres" [(ngModel)]="loginForm.password" [ngClass]="{
                   'is-invalid': password.invalid && password.touched,
                   'is-valid': password.valid && password.touched
-                }" required />
+                }" required style="padding-right: 45px;" />
+                <button type="button" class="btn btn-outline-secondary position-absolute end-0 top-0 h-100 px-3 border-0" 
+                        (click)="togglePasswordVisibility()" 
+                        style="z-index: 10;"
+                        [title]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                  <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                </button>
                 <div *ngIf="password.invalid" class="invalid-feedback">
                   Por favor ingrese una contraseña válida
                 </div>

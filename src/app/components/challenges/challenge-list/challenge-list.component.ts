@@ -5,21 +5,26 @@ import { IChallenge } from '../../../interfaces';
 import { ChallengeService } from '../../../services/challenge.service';
 import { AuthService } from '../../../services/auth.service';
 import { ConfirmationModalService } from '../../../services/confirmation-modal.service';
+import { PaginationComponent } from '../../pagination/pagination.component';
 
 @Component({
   selector: 'app-challenge-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PaginationComponent],
   templateUrl: './challenge-list.component.html',
   styleUrls: ['./challenge-list.component.scss']
 })
 export class ChallengeListComponent {
   @Input() title: string = '';
   @Input() challenges: IChallenge[] = [];
+  @Input() showPagination: boolean = true;
+  @Input() paginationMethod: 'getMyChallenges' | 'getAllActiveChallenges' = 'getMyChallenges';
+  
   public challengeService: ChallengeService = inject(ChallengeService);
   public authService: AuthService = inject(AuthService);
   private confirmationModalService = inject(ConfirmationModalService);
   public user = this.authService.getUser();
+  
   @Output() callModalAction: EventEmitter<IChallenge> = new EventEmitter<IChallenge>();
   @Output() callDeleteAction: EventEmitter<IChallenge> = new EventEmitter<IChallenge>();
 
@@ -39,10 +44,23 @@ export class ChallengeListComponent {
   }
 
   getGameType(challenge: IChallenge): string {
-    const gameType = (challenge as any).game?.typesOfGames || 'N/A';
+    const gameType = (challenge as any).game?.typesOfGames;
+    
+    if (gameType) {
+      switch (gameType) {
+        case 'ECO_DRAG_DROP':
+          return 'Arrastrador ecológico';
+        case 'ECO_FILLER':
+          return 'Completador Ecológico';
+        case 'ECO_TRIVIA':
+          return 'Trivia Ecológica';
+        default:
+          return gameType;
+      }
+    }
     
     console.log('Game type:', gameType);
-    return gameType;
+    return 'N/A';
   }
 
   async confirmDelete(challenge: IChallenge): Promise<void> {
@@ -52,6 +70,20 @@ export class ChallengeListComponent {
     
     if (confirmed) {
         this.callDeleteAction.emit(challenge);
+    }
+  }
+
+  onCustomPagination(): void {
+    switch (this.paginationMethod) {
+      case 'getMyChallenges':
+        this.challengeService.getMyChallenges();
+        break;
+      case 'getAllActiveChallenges':
+        this.challengeService.getAllActiveChallenges();
+        break;
+      default:
+        this.challengeService.getMyChallenges();
+        break;
     }
   }
 }

@@ -17,7 +17,7 @@ export class GameService extends BaseService<IGame>{
 
   public search: ISearch = {
     page: 1,
-    size: 5
+    size: 3
   };
 
   public totalItems: any = [];

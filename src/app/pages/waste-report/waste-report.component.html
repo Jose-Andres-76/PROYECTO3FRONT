@@ -1,0 +1,29 @@
+<div class="waste-report-container">
+  <div class="header">
+    <h1>Reporte de Residuos</h1>
+    <p>Gestiona y visualiza los datos de residuos registrados en el sistema</p>
+  </div>
+
+  <div class="stats-section">
+    <app-waste-stats></app-waste-stats>
+  </div>
+
+  <div class="filters-section">
+    <app-waste-search-bar 
+      (filtersChange)="onFiltersChange($event)">
+    </app-waste-search-bar>
+  </div>
+
+  <div class="table-section">
+    <app-waste-table 
+      [wasteData]="wasteData"
+      [loading]="loading">
+    </app-waste-table>
+  </div>
+
+  <div class="pagination-section">
+    <app-pagination 
+      [service]="wasteReportService">
+    </app-pagination>
+  </div>
+</div>

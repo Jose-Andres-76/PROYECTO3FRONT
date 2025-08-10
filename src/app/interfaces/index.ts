@@ -26,6 +26,7 @@ export interface IUser {
   updatedAt?: string;
   authorities?: IAuthority[];
   role?: IRole
+  confirmPassword?: string;
 }
 
 export interface IAuthority {
@@ -131,4 +132,11 @@ export interface IWasteUpdateRequest {
 
 export interface IWasteStats {
   totalCount: number;
+}
+
+export interface ITextGame {
+  id?: number;
+  game?: IGame;
+  text?: string;
+  answer?: string;
 }

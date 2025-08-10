@@ -5,15 +5,6 @@ import { AuthService } from './services/auth.service';
 import { AlertService } from './services/alert.service';
 
 
-interface Operator {
-  name?: string
-  symbol?: string
-}
-
-interface Calculator {
-  name?: string
-  type?: string
-}
 
 @Component({
   selector: 'app-root',
@@ -28,20 +19,7 @@ interface Calculator {
 export class AppComponent implements OnInit, OnDestroy { 
   title: string = 'demo-angular-front';
   cant: number = 0;
-  operators: Operator[] = [
-    {
-      name: 'addition',
-      symbol: '+'
-    },
-    {
-      name: 'subtraction',
-      symbol: '-'
-    },
-  ];
-  cal: Calculator = {
-    name: 'My caculator',
-    type: 'simple'
-  };
+  
   date: Date = new Date(); 
   
   private tokenCheckInterval: any;

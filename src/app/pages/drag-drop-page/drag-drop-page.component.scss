@@ -1,0 +1,109 @@
+:host {
+  --primary: #4caf50; --error: #f44336; --warning: #ff9800; --bg: #f5f5f5;
+  --card-bg: rgba(255,255,255,.95); --text: #333; --text-muted: #666;
+  --shadow: 0 4px 16px rgba(0,0,0,.1); --shadow-hover: 0 8px 24px rgba(0,0,0,.15);
+  --radius: 12px; --transition: all .3s ease; --space: 1rem;
+}
+
+.drag-drop-game-container {
+  min-height: 100vh; background: var(--bg); padding: var(--space);
+  display: grid; grid-template-rows: auto auto 1fr auto; gap: var(--space);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.game-header { text-align: center; color: var(--text);
+  .game-title { font-size: 2rem; font-weight: 700; margin: 0; color: var(--primary); }
+  .game-subtitle { font-size: 1rem; margin: .5rem 0 0; color: var(--text-muted); }
+}
+
+.card-base {
+  background: var(--card-bg); backdrop-filter: blur(10px); border-radius: var(--radius);
+  padding: var(--space); box-shadow: var(--shadow);
+}
+
+.progress-section { @extend .card-base;
+  width: 100%; max-width: 500px; justify-self: center;
+  .progress-info {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: .75rem; font-weight: 600; font-size: .9rem;
+    .progress-text { color: var(--text); }
+    .error-count { color: var(--warning);
+      &.error-warning { color: var(--error); animation: pulse 1.5s infinite; }
+    }
+  }
+  .progress-bar {
+    height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden;
+    .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width .6s ease; }
+  }
+}
+
+.notification-container {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;
+  max-width: 90vw; min-width: 300px;
+  .notification {
+    backdrop-filter: blur(10px); border-radius: var(--radius); box-shadow: 0 8px 32px rgba(0,0,0,.15);
+    border: 1px solid rgba(255,255,255,.2);
+    .notification-content {
+      display: flex; align-items: center; gap: 12px; padding: 16px 20px;
+      font-weight: 500; font-size: .95rem;
+      .notification-icon { font-size: 1.2rem; flex-shrink: 0; }
+    }
+    &--success { background: rgba(76,175,80,.95); color: white; border-left: 4px solid #2e7d32; }
+    &--error { background: rgba(244,67,54,.95); color: white; border-left: 4px solid #c62828; }
+    &--challenge { background: rgba(46,125,50,.95); color: white; border-left: 4px solid #1b5e20;
+      .notification-icon { color: #ffd700; }
+    }
+  }
+}
+
+.main-game-area { display: grid; grid-template-rows: auto 1fr; gap: var(--space); height: 100%; min-height: 0; }
+.section-title { text-align: center; color: var(--text); font-size: 1.2rem; font-weight: 600; margin: 0 0 var(--space); }
+
+.draggable-section { @extend .card-base;
+  .draggable-images-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: var(--space); justify-items: center;
+    .game-image { transition: var(--transition); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.1);
+      &:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 4px 16px rgba(0,0,0,.15); }
+    }
+  }
+}
+
+.drop-zones-section {
+  display: grid; grid-template-rows: auto 1fr; gap: var(--space); height: 100%; min-height: 0;
+  .drop-zones-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; height: 100%; min-height: 200px;
+    @media (max-width: 640px) { grid-template-columns: 1fr; gap: .75rem; }
+  }
+}
+
+.drop-zone-container { @extend .card-base;
+  transition: var(--transition); display: grid; grid-template-rows: auto 1fr auto; gap: .75rem; height: 100%; min-height: 200px;
+  &:hover { transform: translateY(-1px); box-shadow: var(--shadow-hover); }
+  .zone-header { text-align: center;
+    .zone-icon { font-size: 2rem; margin-bottom: .5rem; display: block; }
+    .zone-title { font-size: 1.1rem; font-weight: 600; margin: 0 0 .5rem; color: var(--text); }
+    .zone-description { font-size: .875rem; color: var(--text-muted); margin: 0; line-height: 1.4; }
+  }
+  .zone-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); gap: .5rem; padding: .75rem; background: rgba(255,255,255,.5); border-radius: 8px; border: 2px dashed #ddd; min-height: 100px; align-content: start; }
+  .zone-footer { text-align: center; padding-top: .5rem; border-top: 1px solid #eee;
+    .zone-count { font-size: .875rem; color: var(--text-muted); font-weight: 500; }
+  }
+  &.reciclable {
+    .zone-icon { color: var(--primary); }
+    .zone-content { border-color: var(--primary); background: rgba(76,175,80,.05); }
+  }
+  &.no-reciclable {
+    .zone-icon { color: var(--error); }
+    .zone-content { border-color: var(--error); background: rgba(244,67,54,.05); }
+  }
+}
+
+.game-footer { @extend .card-base; text-align: center;
+  .new-game-button {
+    background: var(--primary); color: white; border: none; padding: 12px 24px; font-size: 1rem; font-weight: 600; border-radius: var(--radius); cursor: pointer; transition: var(--transition);
+    &:hover { background: #45a049; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(76,175,80,.3); }
+    &:active { transform: translateY(0); }
+  }
+}
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .7; } }
