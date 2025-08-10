@@ -105,9 +105,25 @@ export class GarbageScannerFormComponent implements OnDestroy {
       } else {
         throw new Error('No response received from analysis service');
       }
-    } catch (error) {
-      console.error('Error al analizar imagen:', error);
-      this.alertService.displayAlert('error', 'Error al analizar la imagen');
+    } catch (error: any) {
+
+
+    console.error('Error al analizar imagen:', error);
+
+
+    if (error.status === 0) {
+
+      this.alertService.displayAlert('error', 'No hay conexión con el servidor. Verifica tu conexión a Internet.');
+    } else if (error.status >= 400 && error.status < 500) {
+   
+      this.alertService.displayAlert('error', `Error al enviar la imagen: ${error.error?.message || 'verifica el archivo o intenta nuevamente.'}`);
+    } else if (error.status >= 500) {
+  
+      this.alertService.displayAlert('error', 'El servidor encontró un problema. Intenta más tarde.');
+    } else {
+
+      this.alertService.displayAlert('error', 'Ocurrió un error inesperado al analizar la imagen.');
+    }
     } finally {
       this.isAnalyzing = false;
     }

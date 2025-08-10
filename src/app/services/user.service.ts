@@ -10,6 +10,7 @@ import { AlertService } from './alert.service';
 export class UserService extends BaseService<IUser> {
   protected override source: string = 'users';
   private userListSignal = signal<IUser[]>([]);
+  
   get users$() {
     return this.userListSignal;
   }
@@ -102,5 +103,46 @@ export class UserService extends BaseService<IUser> {
         console.error('error', err);
       }
     });
+  }
+
+  updateUserPoints(userId: number, points: number): Observable<any> {
+    const payload = { points };
+    return this.http.patch(`${this.source}/${userId}/points`, payload)
+      .pipe(
+        tap((response: any) => {
+          console.log('Points updated successfully:', response);
+          this.alertService.displayAlert('success', `Puntos actualizados: ${points}`, 'center', 'top', ['success-snackbar']);
+        }),
+        catchError((error: any) => {
+          console.error('Error updating points:', error);
+          this.alertService.displayAlert('error', 'Error actualizando puntos', 'center', 'top', ['error-snackbar']);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  getUserById(userId: number): Observable<any> {
+    return this.http.get(`${this.source}/${userId}`)
+      .pipe(
+        catchError((error: any) => {
+          console.error('Error getting user by ID:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  updatePoints(userId: number, points: number) {
+  return this.editCustomSource(`${userId}/points`, { points });
+  }
+
+  getUserByEmail(email: string): Observable<any> {
+    return this.http.get(`${this.source}/by-email`, { params: { email } })
+      .pipe(
+        catchError((error: any) => {
+          console.error('Error getting user by email:', error);
+          this.alertService.displayAlert('error', 'Error buscando usuario por email', 'center', 'top', ['error-snackbar']);
+          return throwError(() => error);
+        })
+      );
   }
 }

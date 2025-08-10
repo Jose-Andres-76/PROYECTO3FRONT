@@ -69,7 +69,7 @@ export class ListingComponent {
     name: ['', [Validators.required, Validators.minLength(2)]],
     lastname: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
-    age: ['', [Validators.required, Validators.min(10), Validators.max(100)]], // Add age field
+    age: ['', [Validators.required, Validators.min(10), Validators.max(120)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     points: [0, [Validators.min(0), Validators.pattern(/^\d+$/)]]
 });
@@ -95,13 +95,13 @@ export class ListingComponent {
 
     constructor() {
         this.familyService.search.page = 1;
-        this.familyService.getAll();
+        this.familyService.getMyFamilies();
         
         this.rewardService.search.page = 1;
         this.rewardService.getMyRewards();
 
         this.challengeService.search.page = 1;
-        this.challengeService.getAll();
+        this.challengeService.getMyChallenges();
     }
 
     openAddFamilyModal() {
@@ -268,7 +268,7 @@ export class ListingComponent {
         this.userService.updateFamilyMember(memberWithRole);
         this.modalService.closeAll();
         setTimeout(() => {
-            this.familyService.getAll();
+            this.familyService.getMyFamilies();
         }, 500);
     }
 
@@ -366,11 +366,11 @@ saveFamilyMember(member: IUser) {
         this.closeAddFamilyModal();
         
         setTimeout(() => {
-            this.familyService.getAll();
+            this.familyService.getMyFamilies();
         }, 500);
     } else {
         console.error('No user ID found for family creation:', member);
-        this.showErrorMessage('User was created but family relationship could not be established. Please try again.');
+        this.showErrorMessage('Usuerio fue creado, pero no se pudo crear la familia. Por favor, inténtalo de nuevo más tarde.');
     }
 }
 
@@ -383,5 +383,9 @@ private showErrorMessage(message: string) {
     alert(message);
     
     console.error(message);
+}
+
+onChallengePagination(): void {
+    this.challengeService.getMyChallenges();
 }
 }

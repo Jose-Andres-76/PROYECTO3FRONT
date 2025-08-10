@@ -1,0 +1,24 @@
+<h2>🎉 ¡Bienvenido a EcoTrivia!</h2>
+
+
+<div class="eco-intro-content">
+    <h1>Escoge el reto que más te guste para comenzar a jugar y aprender 🧠🌱</h1>
+    <img src="assets/img/challenges/ninoJugando2.png" alt="Niño jugando EcoTrivia" style="margin-bottom: 2rem;" />
+</div>
+
+
+<div *ngIf="ecoTriviaChallenges.length > 0; else noRetos" class="retos">
+    <div class="reto-card" *ngFor="let reto of ecoTriviaChallenges">
+        <h3>{{ reto.description }}</h3>
+        <button (click)="comenzarTrivia(reto.id!)">🎮 Jugar</button>
+    </div>
+</div>
+
+<ng-template #noRetos>
+    <p>No hay retos disponibles por el momento. 🚫</p>
+</ng-template>
+
+ <div class="actions">
+      <button  class="button" [routerLink]="['/app/challenges']"><i class="fa-solid fa-award"></i>Ver retos</button>
+      <button  class="button" [routerLink]="['/app/rewards' ]"><i class="fa-solid fa-trophy"></i>Ver recompensas</button>
+  </div>

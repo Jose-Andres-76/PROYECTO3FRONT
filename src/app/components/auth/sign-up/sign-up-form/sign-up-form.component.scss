@@ -66,4 +66,21 @@ h4 {
 .invalid-feedback {
   position: absolute;
   margin-top: 0px;
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 100%;
+  z-index: 10;
+}
+
+// Specific styling for age validation to ensure it stays within container
+.form-group {
+  position: relative;
+  
+  .invalid-feedback {
+    left: 0;
+    right: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.25rem 0.5rem;
+  }
 }

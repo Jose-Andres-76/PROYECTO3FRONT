@@ -1,0 +1,154 @@
+body {
+   font-family: 'Fredoka', sans-serif;
+}
+
+.landing-container {
+  padding: 2rem;
+  font-family: 'Fredoka', sans-serif;
+  background-color: #d2dff3;
+  color: #333;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.hero-left img {
+  max-width: 500px;
+  height: auto;
+}
+
+.hero-right {
+  max-width: 500px;
+}
+
+.hero-right h1 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 9rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #0056b3;
+  line-height: 1.2;
+}
+
+.hero-right p {
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.hero-image {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+}
+
+.section {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  margin: 1.5rem auto;
+  max-width: 900px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.section h2 {
+  margin-bottom: 0.8rem;
+}
+.section ul {
+  list-style: none;
+  padding: 0;
+}
+.section li {
+  margin-bottom: 0.6rem;
+}
+
+.gallery {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gallery img {
+  width: 400px;
+  height: 300px; 
+  object-fit: cover; 
+  border-radius: 10px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 3rem;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+
+.btn-ir-producto {
+  background-color: #00b8ff;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 3px 10px rgba(0, 184, 255, 0.4);
+}
+
+.btn-ir-producto:hover {
+  background-color: #005ea6;
+}
+
+.equipo-img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.highlight {
+  color: #0056b3;
+}
+
+.resaltado {
+  color: #0a83c9;
+  font-weight: bold;
+}
+
+.section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.8rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.integrantes-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  font-size: 1rem;
+
+}
+
+.integrantes-lista li {
+  margin-bottom: 0.6rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+.contacto-centro {
+  text-align: center;
+  margin-top: 2rem;
+}

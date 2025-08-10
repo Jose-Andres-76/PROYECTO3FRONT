@@ -7,8 +7,7 @@
         <th scope="col" class="text-center text-success">Nombre</th>
         <th scope="col" class="text-center text-success">Apellido</th>
         <th scope="col" class="text-center text-success">Estado</th>
-        <th scope="col" class="text-center text-success">Editar</th>
-        <th scope="col" class="text-center text-danger">Eliminar</th>
+        <th scope="col" class="text-center text-success">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -27,12 +26,10 @@
           </td>
           <td class="text-center">
             <button (click)="callModalAction.emit(item)" class="btn btn-success" type="button">
-              Editar
+              <i class="fas fa-pencil"></i>
             </button>
-          </td>
-          <td class="text-center">
             <button (click)="confirmDelete(item)" class="btn btn-danger" type="button">
-              Eliminar
+              <i class="fas fa-trash"></i>
             </button>
           </td>
         </tr>
@@ -48,3 +45,11 @@
     </tbody>
   </table>
 </div>
+
+@if (showPagination && rewardService.totalItems.length > 1) {
+  <app-pagination 
+    [service]="rewardService" 
+    [customCall]="true"
+    (callCustomPaginationMethod)="onCustomPagination()">
+  </app-pagination>
+}

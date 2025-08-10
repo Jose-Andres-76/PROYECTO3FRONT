@@ -4,6 +4,7 @@ import { ISearch, IReward } from '../interfaces';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { AlertService } from './alert.service';
 import { AuthService } from './auth.service';
+import { ProfileService } from './profile.service';
 
 @Injectable({
     providedIn: 'root',
@@ -12,6 +13,7 @@ export class RewardService extends BaseService<IReward> {
     protected override source: string = 'rewards';
     private rewardListSignal = signal<IReward[]>([]);
     private authService: AuthService = inject(AuthService);
+    private profileService: ProfileService = inject(ProfileService);
     private currentUserId: number | null = null;
 
     get rewards$() {
@@ -20,7 +22,7 @@ export class RewardService extends BaseService<IReward> {
 
     public search: ISearch = {
         page: 1,
-        size: 5
+        size: 3
     }
 
     public totalItems: any = [];
@@ -28,7 +30,6 @@ export class RewardService extends BaseService<IReward> {
 
     constructor() {
         super();
-        console.log('RewardService initialized');
         this.monitorUserChanges();
     }
 
@@ -40,17 +41,55 @@ export class RewardService extends BaseService<IReward> {
         this.currentUserId = newUserId || null;
     }
     clearRewards(): void {
-        console.log('Clearing rewards data...');
+
         this.rewardListSignal.set([]);
         this.search = {
             page: 1,
-            size: 5
+            size: 3
         };
         this.totalItems = [];
     }
 
     getMyRewards(): void {
-        console.log('Fetching my rewards...');
+        this.monitorUserChanges();
+        const userId = this.authService.getUser()?.id;
+        if (!userId) {
+            this.alertService.displayAlert('error', 'Usuario no encontrado...', 'center', 'top', ['error-snackbar']);
+            console.error('User ID not found');
+            return;
+        }
+
+        this.findAllWithParamsAndCustomSource(`my-family-rewards/${userId}`, { 
+            page: this.search.page, 
+            size: this.search.size 
+        }).subscribe({
+            next: (response: any) => {
+                if (!response.data || response.data.length === 0) {
+                    this.clearRewards();
+                    return;
+                }
+                
+                this.search = { 
+                    ...this.search, 
+                    ...response.meta,
+                    pageNumber: response.meta.pageNumber || this.search.page // Ensure pageNumber is set
+                };
+                
+                this.totalItems = Array.from({ 
+                    length: this.search.totalPages ? this.search.totalPages : 0 
+                }, (_, i) => i + 1);
+                
+                this.rewardListSignal.set(response.data);
+            },
+            error: (error: any) => {
+                console.error('Error fetching my rewards:', error);
+                this.alertService.displayAlert('error', 'No se ha podido traer recompensas..', 'center', 'top', ['error-snackbar']);
+            }
+        });
+    }
+
+     getAllActiveRewards(): void {
+  
 
         this.monitorUserChanges();
         const userId = this.authService.getUser()?.id;
@@ -60,10 +99,10 @@ export class RewardService extends BaseService<IReward> {
             return;
         }
 
-        this.findAllWithParamsAndCustomSource(`my-family-rewards/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
+        this.findAllWithParamsAndCustomSource(`active/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
             next: (response: any) => {
-                console.log('My rewards response:', response);
-                console.log('My rewards data:', response.data);
+      
+
                 
                 if (!response.data || response.data.length === 0) {
                     this.clearRewards();
@@ -81,35 +120,14 @@ export class RewardService extends BaseService<IReward> {
         });
     }
 
-    getAll() {
-        console.log('Fetching all rewards...');
 
-        if (!this.authService.isAdmin()) {
-            this.getMyRewards();
-            return;
-        }
 
-        this.findAllWithParams({ page: this.search.page, size: this.search.size }).subscribe({
-            next: (response: any) => {
-                console.log('All rewards response:', response);
-                console.log('All rewards data:', response.data);
-                this.search = { ...this.search, ...response.meta };
-                this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
-                this.rewardListSignal.set(response.data);
-            },
-            error: (error: any) => {
-                console.error('Error fetching all rewards:', error);
-                this.alertService.displayAlert('error', 'No se ha podido traer recompensas..', 'center', 'top', ['error-snackbar']);
-            }
-        });     
-    }
 
     save(reward: IReward){
         this.add(reward).subscribe({
             next: (response: any) => {
-                console.log('Reward saved successfully:', response);
                 this.alertService.displayAlert('success', 'Recompensa guardada exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyRewards();
             },
             error: (error: any) => {
                 console.error('Error saving reward:', error);
@@ -121,9 +139,9 @@ export class RewardService extends BaseService<IReward> {
     update(reward: IReward) {
         this.edit(reward.id, reward).subscribe({
             next: (response: any) => {
-                console.log('Reward updated successfully:', response);
+      
                 this.alertService.displayAlert('success', 'Recompensa actualizada exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyRewards();
             },
             error: (error: any) => {
                 console.error('Error updating reward:', error);
@@ -135,13 +153,31 @@ export class RewardService extends BaseService<IReward> {
     delete(reward: IReward) {
         this.delCustomSource(`${reward.id}`).subscribe({
             next: (response: any) => {
-                console.log('Reward deleted successfully:', response);
+              
                 this.alertService.displayAlert('success', 'Recompensa eliminada exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyRewards();
             },
             error: (error: any) => {
                 console.error('Error deleting reward:', error);
                 this.alertService.displayAlert('error', 'No se ha podido eliminar recompensa', 'center', 'top', ['error-snackbar']);
+            }
+        });
+    }
+    
+
+
+
+    redeemRewards(reward: IReward): void {
+        this.redeemPoint(`redeem/${reward.id}`, { page: this.search.page, size: this.search.size }).subscribe({
+            next: (response: any) => {
+                this.alertService.displayAlert('success', 'Recompensa reclamada exitosamente', 'center', 'top', ['success-snackbar']);
+                // Refresh both rewards and user data to show updated points
+                this.getAllActiveRewards(); 
+                this.profileService.getUserInfoSignal(); // Update user points
+            },
+            error: (error: any) => {
+                console.error('Error fetching my rewards:', error);
+                this.alertService.displayAlert('error', 'No se ha podido Redimir su recompensas..', 'center', 'top', ['error-snackbar']);
             }
         });
     }

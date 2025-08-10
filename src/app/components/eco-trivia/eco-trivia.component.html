@@ -1,0 +1,72 @@
+<div class="eco-trivia-retos">
+  <h2>Mis Retos con EcoTrivia</h2>
+
+
+  <p class="puntos-totales">🏅 Total de puntos acumulados: {{ userPoints }}</p>
+
+
+ <ng-container *ngIf="ecoTriviaChallenges.length > 0; else noRetos">
+  <div class="card" *ngFor="let reto of ecoTriviaChallenges; let i = index">
+      <img [src]="'/assets/img/challenges/imagen-reto2.png'" alt="Imagen del reto" class="reto-img" />
+      <h2>Reto: {{ reto.description }}</h2>
+      <p>Puntos a ganar: {{ reto.points }}</p>
+
+      <div *ngIf="reto.id != null && !completedChallenges.has(reto.id)">
+
+      <div class="pregunta">
+        <p><strong>Pregunta {{ currentQuestionIndex[i] + 1 }}:</strong></p>
+        <div class="pregunta-con-audio">
+          <p class="texto-pregunta">{{ questions[i][currentQuestionIndex[i]]?.question }}</p>
+          <button class="btn-audio" (click)="speak(questions[i][currentQuestionIndex[i]]?.question)">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+        </div>
+      </div>
+
+
+        <div class="texto-opcion" *ngFor="let option of questions[i][currentQuestionIndex[i]]?.options">
+            <button
+              [class.seleccionada]="option === selectedOption[i]"
+              (click)="selectOption(option, i)"
+            >
+              {{ option }}
+            </button>
+            <button class="btn-audio" (click)="speak(option)">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+
+
+        <div class="boton-siguiente">
+          <button (click)="submitAnswer(i, reto)" [disabled]="!selectedOption[i]">Responder</button>
+        </div>
+
+        <div *ngIf="respuestaCorrecta[i] !== null" class="feedback">
+          <p [ngClass]="{ correcto: respuestaCorrecta[i], incorrecto: !respuestaCorrecta[i] }">
+            {{ respuestaCorrecta[i] ? '¡Correcto! ✅' : 'Ups, incorrecto ❌' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Si ya se completó -->
+     <div *ngIf="completedChallenges.has(reto.id!)">
+      <p class="completado">{{ mensajeFinal[i] }}</p>
+    </div>
+    </div>
+  </ng-container>
+
+  <ng-template #noRetos>
+    <p style="color: red;">❌ No tenés retos asignados de tipo ECO TRIVIA. Pedile a tus padres que lo asignen.</p>
+  </ng-template>
+</div>
+
+
+ <div class="actions">
+      <button  class="button" [routerLink]="['/app/trivias-intro']"><i class="fa-solid fa-award"></i>Volver</button>
+      <button  class="button" [routerLink]="['/app/rewards' ]"><i class="fa-solid fa-trophy"></i>Ver recompensas</button>
+  </div>
+
+
+  
+
+

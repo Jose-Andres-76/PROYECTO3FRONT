@@ -2,8 +2,10 @@ import { inject, Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
 import { ISearch, IChallenge } from '../interfaces';
 import { Observable, catchError, tap, throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AlertService } from './alert.service';
 import { AuthService } from './auth.service';
+import { ProfileService } from './profile.service';
 
 @Injectable({
     providedIn: 'root',
@@ -13,6 +15,7 @@ export class ChallengeService extends BaseService<IChallenge> {
     private challengeListSignal = signal<IChallenge[]>([]);
     private authService: AuthService = inject(AuthService);
     private currentUserId: number | null = null;
+    private profileService = inject(ProfileService);
 
     get challenges$() {
         return this.challengeListSignal;
@@ -20,7 +23,7 @@ export class ChallengeService extends BaseService<IChallenge> {
 
     public search: ISearch = {
         page: 1,
-        size: 5
+        size: 3
     }
 
     public totalItems: any = [];
@@ -28,7 +31,7 @@ export class ChallengeService extends BaseService<IChallenge> {
 
     constructor() {
         super();
-        console.log('ChallengeService initialized');
+   
         this.monitorUserChanges();
     }
 
@@ -41,18 +44,15 @@ export class ChallengeService extends BaseService<IChallenge> {
     }
 
     clearChallenges(): void {
-        console.log('Clearing challenges data...');
+  
         this.challengeListSignal.set([]);
         this.search = {
             page: 1,
-            size: 5
+            size: 3
         };
         this.totalItems = [];
     }
-
     getMyChallenges(): void {
-        console.log('Fetching my challenges...');
-
         this.monitorUserChanges();
         const userId = this.authService.getUser()?.id;
         if (!userId) {
@@ -61,18 +61,26 @@ export class ChallengeService extends BaseService<IChallenge> {
             return;
         }
 
-        this.findAllWithParamsAndCustomSource(`my-challenges/${userId}`, { page: this.search.page, size: this.search.size }).subscribe({
+        this.findAllWithParamsAndCustomSource(`my-challenges/${userId}`, { 
+            page: this.search.page, 
+            size: this.search.size 
+        }).subscribe({
             next: (response: any) => {
-                console.log('My challenges response:', response);
-                console.log('My challenges data:', response.data);
-                
                 if (!response.data || response.data.length === 0) {
                     this.clearChallenges();
                     return;
                 }
                 
-                this.search = { ...this.search, ...response.meta };
-                this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
+                this.search = { 
+                    ...this.search, 
+                    ...response.meta,
+                    pageNumber: response.meta.pageNumber || this.search.page // Ensure pageNumber is set
+                };
+                
+                this.totalItems = Array.from({ 
+                    length: this.search.totalPages ? this.search.totalPages : 0 
+                }, (_, i) => i + 1);
+                
                 this.challengeListSignal.set(response.data);
             },
             error: (error: any) => {
@@ -82,35 +90,53 @@ export class ChallengeService extends BaseService<IChallenge> {
         });
     }
 
-    getAll() {
-        console.log('Fetching all challenges...');
-
-        if (!this.authService.isAdmin()) {
-            this.getMyChallenges();
+    getAllActiveChallenges() {
+        this.monitorUserChanges();
+        const userId = this.authService.getUser()?.id;
+        if (!userId) {
+            this.alertService.displayAlert('error', 'Usuario no encontrado...', 'center', 'top', ['error-snackbar']);
+            console.error('User ID not found');
             return;
         }
 
-        this.findAllWithParams({ page: this.search.page, size: this.search.size }).subscribe({
+        this.findAllWithParamsAndCustomSource(`active/${userId}`, { 
+            page: this.search.page, 
+            size: this.search.size 
+        }).subscribe({
             next: (response: any) => {
-                console.log('All challenges response:', response);
-                console.log('All challenges data:', response.data);
-                this.search = { ...this.search, ...response.meta };
-                this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
+                if (!response.data || response.data.length === 0) {
+                    this.clearChallenges();
+                    return;
+                }
+                
+                this.search = { 
+                    ...this.search, 
+                    ...response.meta,
+                    pageNumber: response.meta.pageNumber || this.search.page 
+                };
+                
+                this.totalItems = Array.from({ 
+                    length: this.search.totalPages ? this.search.totalPages : 0 
+                }, (_, i) => i + 1);
+                
                 this.challengeListSignal.set(response.data);
+                this.profileService.getUserInfoSignal(); 
             },
             error: (error: any) => {
-                console.error('Error fetching all challenges:', error);
-                this.alertService.displayAlert('error', 'No se han podido traer los desafíos...', 'center', 'top', ['error-snackbar']);
+                console.error('Error fetching my Challenges:', error);
+                this.alertService.displayAlert('error', 'No se ha podido traer los desafíos..', 'center', 'top', ['error-snackbar']);
             }
-        });     
+        });
     }
+
+   
 
     save(challenge: IChallenge) {
         this.add(challenge).subscribe({
             next: (response: any) => {
-                console.log('Challenge saved successfully:', response);
+   
                 this.alertService.displayAlert('success', 'Desafío guardado exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyChallenges();
             },
             error: (error: any) => {
                 console.error('Error saving challenge:', error);
@@ -122,9 +148,9 @@ export class ChallengeService extends BaseService<IChallenge> {
     update(challenge: IChallenge) {
         this.edit(challenge.id, challenge).subscribe({
             next: (response: any) => {
-                console.log('Challenge updated successfully:', response);
+       
                 this.alertService.displayAlert('success', 'Desafío actualizado exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyChallenges();
             },
             error: (error: any) => {
                 console.error('Error updating challenge:', error);
@@ -136,9 +162,9 @@ export class ChallengeService extends BaseService<IChallenge> {
     delete(challenge: IChallenge) {
         this.delCustomSource(`${challenge.id}`).subscribe({
             next: (response: any) => {
-                console.log('Challenge deleted successfully:', response);
+           
                 this.alertService.displayAlert('success', 'Desafío eliminado exitosamente', 'center', 'top', ['success-snackbar']);
-                this.getAll();
+                this.getMyChallenges();
             },
             error: (error: any) => {
                 console.error('Error deleting challenge:', error);
@@ -146,4 +172,55 @@ export class ChallengeService extends BaseService<IChallenge> {
             }
         });
     }
+
+
+    completeChallenge(challengeId: number): Observable<any> {
+        const updatedChallenge = {
+            challengeStatus: false
+        };
+
+        return this.edit(challengeId, updatedChallenge).pipe(
+            tap((response: any) => {
+              
+                this.alertService.displayAlert('success', 
+                    '¡Desafío completado exitosamente!', 'center', 'top', ['success-snackbar']);
+            }),
+            catchError((error: any) => {
+                console.error('Error completing challenge:', error);
+                this.alertService.displayAlert('error', 
+                    'Error completando el desafío', 'center', 'top', ['error-snackbar']);
+                return throwError(() => error);
+            })
+        );
+    }
+
+    getActiveChallengesByUserAndGame(userId: number, gameId?: number): Observable<any> {
+        return this.findAllWithParamsAndCustomSource(`my-challenges/${userId}`, {}).pipe(
+            map((response: any) => {
+                const challenges = response.data || [];
+                
+                let activeChallenges = challenges.filter((challenge: IChallenge) => 
+                    challenge.challengeStatus === true
+                );
+                
+                if (gameId) {
+                    activeChallenges = activeChallenges.filter((challenge: IChallenge) => 
+                        challenge.game?.id === gameId
+                    );
+                }
+                
+                return activeChallenges;
+            }),
+            catchError((error: any) => {
+                console.error('Error fetching active challenges:', error);
+                return throwError(() => error);
+            })
+        );
+    }
+
+    changePage(page: number): void {
+        this.search.page = page;
+        this.search.pageNumber = page; 
+    }
 }
+

@@ -1,0 +1,66 @@
+<div class="modal-overlay" 
+     *ngIf="isVisible">
+  <div class="modal-content" 
+       (click)="onModalContentClick($event)">
+    
+    <div class="modal-header">
+      <div class="victory-icon">
+        <i class="fas fa-trophy"></i>
+      </div>
+      <h2 class="modal-title">¡Felicitaciones!</h2>
+    </div>
+
+    <div class="modal-body">
+      <div class="victory-message">
+        <p class="primary-message">
+          ¡Has clasificado todos los objetos correctamente!
+        </p>
+        <div class="achievement-summary">
+          <div class="achievement-icon">
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="achievement-text">
+            <p class="achievement-title">¡Eres un experto en reciclaje!</p>
+            <p class="achievement-detail">{{ totalObjects }} objetos clasificados perfectamente</p>
+            <p class="points-earned" *ngIf="pointsEarned > 0">
+              <i class="fas fa-coins"></i>
+              +{{ pointsEarned }} puntos ganados
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="celebration-content">
+        <div class="success-message">
+          <p class="eco-message">
+            <i class="fas fa-leaf"></i>
+            Gracias por cuidar nuestro planeta
+          </p>
+          <p class="motivation-text">
+            Cada acción cuenta para un mundo más limpio y sostenible
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn--secondary" 
+              (click)="onPlayAgain()" 
+              type="button">
+        <span class="btn-icon">
+          <i class="fas fa-redo"></i>
+        </span>
+        <span class="btn-text">Jugar de Nuevo</span>
+      </button>
+      
+      <button class="btn btn--primary" 
+              (click)="onGoToModule()" 
+              type="button">
+        <span class="btn-icon">
+          <i class="fas fa-home"></i>
+        </span>
+        <span class="btn-text">Módulo Infantil</span>
+      </button>
+    </div>
+  </div>
+</div>
