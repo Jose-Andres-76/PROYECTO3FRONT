@@ -215,7 +215,11 @@ export class UserFormComponent {
             name: member.name,
             lastname: member.lastname,
             email: member.email,
+            password: member.password,
             age: member.age,
+            points: member.points,
+            role: member.role,
+
             ...response.data,
             ...response.user,
             ...response.authUser
